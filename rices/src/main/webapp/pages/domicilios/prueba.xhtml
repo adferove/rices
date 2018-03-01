@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/principal.xhtml">
+
+	<ui:define name="body">
+		<h:form id="form">
+			<div align="center">
+				<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+					<p:panel id="tb">
+						<div align="center">
+							<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+								<f:facet name="header">
+									<p:graphicImage
+										name="demo/images/car/#{dataListView.selectedCar.brand}-big.gif" />
+								</f:facet>
+								<p:outputLabel value="Subtotal:" />
+								<p:outputLabel value="#{dataListView.selectedCar.id}" />
+								<p:outputLabel value="Iva:" />
+								<p:outputLabel value="#{dataListView.selectedCar.year}" />
+								<p:outputLabel value="Cargo domicilio:" />
+								<p:outputLabel value="#{dataListView.selectedCar.color}"
+									style="color:#{dataListView.selectedCar.color}" />
+								<p:outputLabel value="Total:" />
+								<p:outputLabel value="$#{dataListView.selectedCar.price}" />
+							</p:panelGrid>
+						</div>
+					</p:panel>
+
+
+
+
+					<p:panel header="Selecciona tu combo">
+						<div align="center">
+							<p:repeat value="#{dataListView.cars1}" var="car">
+								<p:panelGrid columns="2" style="width:80%"
+									columnClasses="logo,detail" styleClass="ui-panelgrid-blank">
+									<p:commandLink update=":form:carDetail"
+										oncomplete="PF('carDialog').show()">
+										<f:setPropertyActionListener value="#{car}"
+											target="#{dataListView.selectedCar}" />
+										<p:graphicImage name="demo/images/car/#{car.brand}-big.gif" />
+									</p:commandLink>
+									<p:outputPanel>
+										<p:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="" />
+											<h:outputText value="#{car.brand}" style="font-weight: bold" />
+
+											<h:outputText value="Precio:" />
+											<h:outputText value="#{car.price}" style="font-weight: bold" />
+
+											<h:outputText value="Rating:" />
+											<p:rating value="4" readonly="true" />
+										</p:panelGrid>
+									</p:outputPanel>
+								</p:panelGrid>
+								<hr />
+							</p:repeat>
+						</div>
+					</p:panel>
+
+
+
+				</p:panelGrid>
+			</div>
+
+			<p:dialog header="Agregar producto" widgetVar="carDialog"
+				modal="true" showEffect="blind" hideEffect="explode"
+				resizable="false">
+				<p:outputPanel id="carDetail" style="text-align:center;">
+
+					<div align="center">
+						<p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
+							<p:commandButton value="-" />
+							<p:inputText size="2" readonly="true" />
+							<p:commandButton value="+" />
+						</p:panelGrid>
+					</div>
+
+					<div align="center">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank"
+							rendered="#{not empty dataListView.selectedCar}">
+							<f:facet name="header">
+								<p:graphicImage
+									name="demo/images/car/#{dataListView.selectedCar.brand}-big.gif" />
+							</f:facet>
+
+							<p:outputLabel value="Id:" />
+							<p:outputLabel value="#{dataListView.selectedCar.id}" />
+
+							<p:outputLabel value="Year" />
+							<p:outputLabel value="#{dataListView.selectedCar.year}" />
+
+							<p:outputLabel value="Color:" />
+							<p:outputLabel value="#{dataListView.selectedCar.color}"
+								style="color:#{dataListView.selectedCar.color}" />
+
+							<p:outputLabel value="Price" />
+							<p:outputLabel value="$#{dataListView.selectedCar.price}" />
+						</p:panelGrid>
+					</div>
+					<div style="height: 10px"></div>
+					<div align="center">
+						<p:commandButton value="Agregar a la orden" />
+					</div>
+
+				</p:outputPanel>
+			</p:dialog>
+
+			<p:sticky target="tb" />
+
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/principal.xhtml">
+
+	<ui:define name="body">
+		<h:form id="form">
+			<div align="center">
+				<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+					<p:panel header="Selecciona tu combo">
+						<div align="center">
+							<p:repeat value="#{dataListView.cars1}" var="car">
+								<p:panelGrid columns="2" style="width:50%"
+									columnClasses="logo,detail" styleClass="ui-panelgrid-blank">
+									<p:commandLink update=":form:carDetail"
+										oncomplete="PF('carDialog').show()">
+										<f:setPropertyActionListener value="#{car}"
+											target="#{dataListView.selectedCar}" />
+										<p:graphicImage name="demo/images/car/#{car.brand}-big.gif" />
+									</p:commandLink>
+									<p:outputPanel>
+										<p:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Id:" />
+											<h:outputText value="#{car.id}" style="font-weight: bold" />
+
+											<h:outputText value="Year:" />
+											<h:outputText value="#{car.year}" style="font-weight: bold" />
+
+											<h:outputText value="Color:" />
+											<h:outputText value="#{car.color}" style="font-weight: bold" />
+										</p:panelGrid>
+									</p:outputPanel>
+								</p:panelGrid>
+								<hr />
+							</p:repeat>
+						</div>
+					</p:panel>
+
+					<p:panel id="tb" header="Selecciona tu combo" style="width:500px;">
+						<p:toolbar>
+							<f:facet name="left">
+								<p:commandButton type="button" value="New"
+									icon="ui-icon-document" />
+								<p:commandButton type="button" value="Open"
+									icon="ui-icon-folder-open" />
+							</f:facet>
+							<f:facet name="right">
+								<p:commandButton type="button" title="Save" icon="ui-icon-disk" />
+								<p:commandButton type="button" title="Delete"
+									icon="ui-icon-trash" />
+								<p:commandButton type="button" title="Print"
+									icon="ui-icon-print" />
+							</f:facet>
+						</p:toolbar>
+						<div align="center">
+							<p:panelGrid columns="2">
+								<f:facet name="header">
+									<p:graphicImage
+										name="demo/images/car/#{dataListView.selectedCar.brand}-big.gif" />
+								</f:facet>
+								<p:outputLabel value="Id:" />
+								<p:outputLabel value="#{dataListView.selectedCar.id}" />
+								<p:outputLabel value="Year" />
+								<p:outputLabel value="#{dataListView.selectedCar.year}" />
+								<p:outputLabel value="Color:" />
+								<p:outputLabel value="#{dataListView.selectedCar.color}"
+									style="color:#{dataListView.selectedCar.color}" />
+								<p:outputLabel value="Price" />
+								<p:outputLabel value="$#{dataListView.selectedCar.price}" />
+							</p:panelGrid>
+						</div>
+					</p:panel>
+				</p:panelGrid>
+			</div>
+
+			<p:sticky target="tb" />
+
+			<div style="height: 800px"></div>
+
+			<p:dialog header="Car Info" widgetVar="carDialog" modal="true"
+				showEffect="blind" hideEffect="explode" resizable="false">
+				<p:outputPanel id="carDetail" style="text-align:center;">
+					<p:panelGrid columns="2"
+						rendered="#{not empty dataListView.selectedCar}">
+						<f:facet name="header">
+							<p:graphicImage
+								name="demo/images/car/#{dataListView.selectedCar.brand}-big.gif" />
+						</f:facet>
+
+						<p:outputLabel value="Id:" />
+						<p:outputLabel value="#{dataListView.selectedCar.id}" />
+
+						<p:outputLabel value="Year" />
+						<p:outputLabel value="#{dataListView.selectedCar.year}" />
+
+						<p:outputLabel value="Color:" />
+						<p:outputLabel value="#{dataListView.selectedCar.color}"
+							style="color:#{dataListView.selectedCar.color}" />
+
+						<p:outputLabel value="Price" />
+						<p:outputLabel value="$#{dataListView.selectedCar.price}" />
+					</p:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

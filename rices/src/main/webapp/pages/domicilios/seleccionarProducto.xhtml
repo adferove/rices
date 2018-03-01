@@ -1,0 +1,396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/principal.xhtml">
+
+	<ui:define name="body">
+		<h:form id="form">
+			<p:messages id="messages" showDetail="true" closable="true" />
+			<p:outputPanel
+				rendered="#{administrarOrdenCompra.showSeleccionarProducto}">
+				<div class="container">
+					<div class="row">
+						<div class="product-item col-md-12">
+							<div class="row">
+								<div class="col-md-8">
+									<p:panel header="Selecciona tu combo">
+										<div align="center">
+											<p:repeat value="#{administrarOrdenCompra.listadoProducto}"
+												var="producto">
+												<p:panelGrid columns="2" style="width:80%"
+													columnClasses="logo,detail" styleClass="ui-panelgrid-blank">
+													<p:commandLink update=":form:productDetail"
+														actionListener="#{administrarOrdenCompra.seleccionarCantidad(producto)}">
+														<p:graphicImage
+															name="demo/images/#{producto.rutaImagen}.gif" />
+													</p:commandLink>
+													<p:outputPanel>
+														<p:panelGrid columns="2" cellpadding="5">
+															<h:outputText value="#{producto.nombre}"
+																style="font-weight: bold; color:#c7578f;" />
+															<h:outputText value="#{producto.descripcion}"
+																style="font-weight: bold" />
+															<h:outputText value="Precio:" />
+															<h:outputText value="#{producto.productoPrecio.precio}"
+																style="font-weight: bold" />
+															<h:outputText value="Rating:" />
+															<p:rating value="#{producto.rating}" readonly="true" />
+														</p:panelGrid>
+													</p:outputPanel>
+												</p:panelGrid>
+												<hr />
+											</p:repeat>
+										</div>
+									</p:panel>
+								</div>
+								<div class="col-md-4">
+									<p:panel id="tb">
+										<div align="center">
+											<p:dataTable id="tbAgregado" var="detalle"
+												rendered="#{not empty administrarOrdenCompra.listadoDetallePedido}"
+												value="#{administrarOrdenCompra.listadoDetallePedido}">
+												<p:column headerText="Item" style="font-size:11px;">
+													<h:outputText value="#{detalle.producto.nombre}"
+														style="font-size:11px;" />
+												</p:column>
+
+												<p:column headerText="Cantidad" style="font-size:11px;">
+													<div align="center">
+														<p:commandLink update="form:tb,form:idStcky"
+															action="#{administrarOrdenCompra.restarCantidad(detalle)}"
+															value="-" title="Restar"
+															style="font-size:14px; font-weight:bold; color:red;" />
+														<p:spacer width="10" />
+														<h:outputText value="#{detalle.cantidad}"
+															style="font-size:11px;" />
+														<p:spacer width="10" />
+														<p:commandLink update="form:tb,form:idStcky"
+															action="#{administrarOrdenCompra.sumarCantidad(detalle)}"
+															value="+" title="Agregar"
+															style="font-size:14px; font-weight:bold; color:green;" />
+													</div>
+												</p:column>
+
+												<p:column headerText="Precio" style="font-size:11px;">
+													<div align="right">
+														<h:outputText value="$#{detalle.precio}"
+															style="font-size:11px;" />
+														<p:spacer width="10" />
+														<p:commandLink update="form:tb,form:idStcky"
+															action="#{administrarOrdenCompra.quitarDetalle(detalle)}"
+															value="X" title="Eliminar"
+															style="font-size:12px; font-weight:bold; color:red;" />
+													</div>
+												</p:column>
+
+											</p:dataTable>
+
+											<p:spacer height="10" />
+
+											<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+												<p:outputLabel value="Subtotal:" />
+												<h:outputText
+													value="$#{administrarOrdenCompra.pedidoPersiste.subtotal}"
+													style="font-weight: bold" />
+												<p:outputLabel value="Iva:" />
+												<p:outputLabel
+													value="$#{administrarOrdenCompra.pedidoPersiste.iva}" />
+												<p:outputLabel value="Cargo domicilio:" />
+												<p:outputLabel
+													value="$#{administrarOrdenCompra.pedidoPersiste.cargoDomicilio}" />
+												<p:outputLabel value="Total:" />
+												<p:outputLabel
+													value="$#{administrarOrdenCompra.pedidoPersiste.total}" />
+											</p:panelGrid>
+										</div>
+										<div style="height: 10px"></div>
+										<div align="center">
+											<p:commandButton id="btnCheckOut" icon="fa fa-check"
+												style="font-size:14px; font-weight: normal !important;"
+												action="#{administrarOrdenCompra.validarProductoSeleccionado()}"
+												value="Checkout" update=":form">
+											</p:commandButton>
+											<p:blockUI block=":form" trigger="btnCheckOut" />
+										</div>
+
+									</p:panel>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<p:dialog header="Agregar producto" widgetVar="productDialog"
+					modal="true" showEffect="blind" hideEffect="explode"
+					resizable="false">
+					<p:outputPanel id="productDetail" style="text-align:center;">
+						<div align="center">
+							<p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
+								<p:commandButton icon="fa fa-chevron-left"
+									action="#{administrarOrdenCompra.restarSumarCantidad(0)}"
+									update="productDetail" />
+								<p:inputText readonly="true" size="1"
+									value="#{administrarOrdenCompra.detallePedido.cantidad}" />
+								<p:commandButton icon="fa fa-chevron-right"
+									action="#{administrarOrdenCompra.restarSumarCantidad(1)}"
+									update="productDetail" />
+							</p:panelGrid>
+						</div>
+
+						<div align="center">
+							<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+								<f:facet name="header">
+									<p:graphicImage
+										name="demo/images/#{administrarOrdenCompra.detallePedido.producto.rutaImagen}.gif" />
+								</f:facet>
+								<p:outputLabel
+									value="#{administrarOrdenCompra.detallePedido.producto.nombre}" />
+								<p:outputLabel
+									value="Precio: $#{administrarOrdenCompra.detallePedido.precio}" />
+							</p:panelGrid>
+						</div>
+						<div style="height: 10px"></div>
+						<div align="center">
+							<p:commandButton value="Agregar a la orden" update="tb,idStcky"
+								action="#{administrarOrdenCompra.agregarProductoOrden()}" />
+						</div>
+
+					</p:outputPanel>
+				</p:dialog>
+
+				<p:sticky id="idStcky" target="tb" />
+
+			</p:outputPanel>
+
+			<p:outputPanel rendered="#{administrarOrdenCompra.showCheckout}">
+				<div class="container">
+					<div class="row">
+						<div class="product-item col-md-12">
+							<div class="row">
+								<div class="col-md-8">
+									<p:panel header="Checkout">
+										<div align="left">
+											<p:outputLabel value="#{mensaje.ingresaDatoPedido}" />
+											<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+												<h:outputText value="e-mail*:" />
+												<p:inputText
+													style="font-size:11px; text-transform:lowercase;" size="50"
+													maxlength="50"
+													value="#{administrarOrdenCompra.pedidoPersiste.cliente.email}" />
+												<h:outputText value="Nombre*:" />
+												<p:inputText
+													style="font-size:11px; text-transform:uppercase;" size="50"
+													maxlength="50"
+													value="#{administrarOrdenCompra.pedidoPersiste.cliente.nombre}" />
+												<h:outputText value="#{mensaje.Direccion}*:" />
+												<p:inputText
+													style="font-size:11px; text-transform:uppercase;" size="50"
+													maxlength="50"
+													value="#{administrarOrdenCompra.pedidoPersiste.cliente.direccion}" />
+												<h:outputText value="Barrio*:" />
+												<p:inputText
+													style="font-size:11px; text-transform:uppercase;" size="50"
+													maxlength="50"
+													value="#{administrarOrdenCompra.pedidoPersiste.cliente.barrio}" />
+												<h:outputText value="#{mensaje.Telefono}/Celular*:" />
+												<p:inputText style="font-size:11px; " size="50"
+													maxlength="50"
+													value="#{administrarOrdenCompra.pedidoPersiste.cliente.celular}" />
+												<h:outputText value="" />
+												<h:outputText value="#{mensaje.RicesContacta}"
+													style="color:#8f949a;font-size:12px;" />
+											</p:panelGrid>
+											<div style="height: 10px;"></div>
+											<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+												<p:outputLabel value="#{mensaje.DeseaGuardarDato}:" />
+												<p:selectBooleanCheckbox
+													value="#{administrarOrdenCompra.pedidoPersiste.cliente.guardaDatos}" />
+											</p:panelGrid>
+											<h:outputText value="#{mensaje.msjGuardaDato}"
+												style="color:#8f949a;font-size:12px;" />
+										</div>
+										<div style="height: 20px"></div>
+										<div align="center">
+											<p:commandButton id="btnConfimar"
+												style="font-size:14px; font-weight: normal !important;"
+												action="#{administrarOrdenCompra.confirmarPedido()}"
+												value="Confirmar" update=":form" icon="fa fa-truck">
+											</p:commandButton>
+											<p:blockUI block=":form" trigger="btnConfimar" />
+										</div>
+									</p:panel>
+								</div>
+								<div class="col-md-4">
+									<p:panel id="tb2">
+										<div align="center">
+											<p:dataTable var="detalle"
+												rendered="#{not empty administrarOrdenCompra.listadoDetallePedido}"
+												value="#{administrarOrdenCompra.listadoDetallePedido}">
+												<p:column headerText="Item" style="font-size:11px;">
+													<h:outputText value="#{detalle.producto.nombre}"
+														style="font-size:11px;" />
+												</p:column>
+
+												<p:column headerText="Cantidad" style="font-size:11px;">
+													<div align="center">
+														<p:commandLink update=":form:tb2"
+															action="#{administrarOrdenCompra.restarCantidad(detalle)}"
+															value="-" title="Restar"
+															style="font-size:14px; font-weight:bold; color:red;" />
+														<p:spacer width="10" />
+														<h:outputText value="#{detalle.cantidad}"
+															style="font-size:11px;" />
+														<p:spacer width="10" />
+														<p:commandLink update=":form:tb2"
+															action="#{administrarOrdenCompra.sumarCantidad(detalle)}"
+															value="+" title="Agregar"
+															style="font-size:14px; font-weight:bold; color:green;" />
+													</div>
+												</p:column>
+
+												<p:column headerText="Precio" style="font-size:11px;">
+													<div align="right">
+														<h:outputText value="$#{detalle.precio}"
+															style="font-size:11px;" />
+													</div>
+												</p:column>
+
+											</p:dataTable>
+
+											<p:spacer height="10" />
+
+											<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+												<p:outputLabel value="Subtotal:" />
+												<h:outputText
+													value="$#{administrarOrdenCompra.pedidoPersiste.subtotal}"
+													style="font-weight: bold" />
+												<p:outputLabel value="Iva:" />
+												<p:outputLabel
+													value="$#{administrarOrdenCompra.pedidoPersiste.iva}" />
+												<p:outputLabel value="Cargo domicilio:" />
+												<p:outputLabel
+													value="$#{administrarOrdenCompra.pedidoPersiste.cargoDomicilio}" />
+												<p:outputLabel value="Total:" />
+												<p:outputLabel
+													value="$#{administrarOrdenCompra.pedidoPersiste.total}" />
+											</p:panelGrid>
+										</div>
+										<div style="height: 10px"></div>
+										<div align="center">
+											<p:commandButton id="btnRegresar" icon="fa fa-arrow-left"
+												style="font-size:14px; font-weight: normal !important;"
+												action="#{administrarOrdenCompra.regresarSeleccionProducto()}"
+												value="Regresar al #{mensaje.menu}" update=":form">
+											</p:commandButton>
+											<p:blockUI block=":form" trigger="btnRegresar" />
+										</div>
+
+									</p:panel>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:outputPanel>
+
+
+			<p:outputPanel
+				rendered="#{administrarOrdenCompra.showPedidoRegistrado}">
+				<div class="container">
+					<div class="row">
+						<div class="product-item col-md-12">
+							<div class="row">
+								<div class="col-md-8">
+									<p:outputLabel value="#{mensaje.PedidoRegistrado}"
+										style="color:#c7578f;font-size:16px;" />
+									<div style="height: 10px;"></div>
+									<p:panel header="#{mensaje.InformacionCliente}">
+										<div align="left">
+											<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+												<h:outputText value="e-mail" />
+												<p:outputLabel style="font-size:11px;"
+													value="#{administrarOrdenCompra.pedidoPersiste.cliente.email}" />
+												<h:outputText value="Nombre" />
+												<p:outputLabel style="font-size:11px;"
+													value="#{administrarOrdenCompra.pedidoPersiste.cliente.nombre}" />
+												<h:outputText value="#{mensaje.Direccion}" />
+												<p:outputLabel style="font-size:11px;"
+													value="#{administrarOrdenCompra.pedidoPersiste.cliente.direccion}" />
+												<h:outputText value="Barrio" />
+												<p:outputLabel style="font-size:11px;"
+													value="#{administrarOrdenCompra.pedidoPersiste.cliente.barrio}" />
+												<h:outputText value="#{mensaje.Telefono}/Celular" />
+												<p:outputLabel style="font-size:11px;"
+													value="#{administrarOrdenCompra.pedidoPersiste.cliente.celular}" />
+											</p:panelGrid>
+										</div>
+										<div style="height: 20px"></div>
+										<div align="center">
+											<p:commandButton id="btnSalir"
+												style="font-size:14px; font-weight: normal !important;"
+												action="#{administrarOrdenCompra.cerrarPedido()}"
+												value="Salir" update=":form" icon="fa fa-truck">
+											</p:commandButton>
+											<p:blockUI block=":form" trigger="btnSalir" />
+										</div>
+									</p:panel>
+								</div>
+								<div class="col-md-4">
+									<p:panel id="tb3" header="Detalle del pedido">
+										<div align="center">
+											<p:dataTable var="detalle"
+												rendered="#{not empty administrarOrdenCompra.listadoDetallePedido}"
+												value="#{administrarOrdenCompra.listadoDetallePedido}">
+												<p:column headerText="Item" style="font-size:11px;">
+													<h:outputText value="#{detalle.producto.nombre}"
+														style="font-size:11px;" />
+												</p:column>
+
+												<p:column headerText="Cantidad" style="font-size:11px;">
+													<div align="center">
+														<h:outputText value="#{detalle.cantidad}"
+															style="font-size:11px;" />
+													</div>
+												</p:column>
+
+												<p:column headerText="Precio" style="font-size:11px;">
+													<div align="right">
+														<h:outputText value="$#{detalle.precio}"
+															style="font-size:11px;" />
+													</div>
+												</p:column>
+
+											</p:dataTable>
+
+											<p:spacer height="10" />
+
+											<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+												<p:outputLabel value="Subtotal:" />
+												<h:outputText
+													value="$#{administrarOrdenCompra.pedidoPersiste.subtotal}"
+													style="font-weight: bold" />
+												<p:outputLabel value="Iva:" />
+												<p:outputLabel
+													value="$#{administrarOrdenCompra.pedidoPersiste.iva}" />
+												<p:outputLabel value="Cargo domicilio:" />
+												<p:outputLabel
+													value="$#{administrarOrdenCompra.pedidoPersiste.cargoDomicilio}" />
+												<p:outputLabel value="Total:" />
+												<p:outputLabel
+													value="$#{administrarOrdenCompra.pedidoPersiste.total}" />
+											</p:panelGrid>
+										</div>
+									</p:panel>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:outputPanel>
+
+
+		</h:form>
+	</ui:define>
+</ui:composition>

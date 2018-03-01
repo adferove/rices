@@ -1,0 +1,707 @@
+.tituloPrincipal {
+	font-size: 20px;
+}
+
+.ui-spinner-input {
+	width: 70px;
+}
+
+body {
+	font-size: 11px;
+}
+
+input {
+	border: 1px solid #BBBBBB;
+	font-size: 11px;
+	background: #F0F8FF;
+	color: black;
+}
+
+textarea {
+	border: #bed6f8 1px solid;
+	font-size: 11px;
+	background: #F0F8FF;
+	color: black;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+/**
+input[type='submit'], input[type='button'] {
+	background: #4477AA;
+	color: white;
+	margin: 5px;
+	border-color: gray;
+	font-family: Arial,sans-serif;
+	
+	background: url(../img/iconos/guardar.gif) no-repeat; background-position:0 -22px;}
+.guardar_btn:hover {background-position: 0 0;}
+
+
+}
+*/
+input[type="submit"], input[type="button"] {
+	/* border: 1px solid #BED6F8;  #999*/
+	font-weight: bold;
+	padding: 2px 10px;
+	font-family: Arial, sans-serif;
+	margin: 5px;
+	font-size: 11px;
+	text-align: center;
+	color: #616161;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover {
+	border-bottom: 1px solid black;
+	border-right: 1px solid black;
+	color: black;
+	cursor: pointer;
+}
+
+/**
+ textarea {
+	border: #bed6f8 1px solid;
+	background : #ecf4fe;
+	font-family : Arial,Verdana,sans-serif;
+	color : #000;
+	display : block;
+}*/
+.tableControl, .actionButtons {
+	width: 100%;
+}
+
+.tableControl a {
+	padding-left: 10px;
+}
+
+.tableControl {
+	text-align: right;
+}
+
+.rich-table {
+	width: 100%;
+}
+
+body {
+	margin: 0px;
+	font-family: Arial, sans-serif;
+	color: #616161;
+}
+
+.body {
+	padding: 30px;
+}
+
+.columnHeader:hover {
+	color: #FF6600;
+}
+
+.message {
+	border: 1px solid red;
+	padding: 5px;
+	margin-top: -10px;
+	margin-bottom: -5px;
+	margin-left: -35px;
+	margin-right: 5px;
+	background-color: #F0F8FF;
+	font-size: 11px;
+	text-align: center;
+}
+
+.name {
+	vertical-align: top;
+	font-weight: bold;
+	float: left;
+	margin-top: 3px;
+	clear: left;
+}
+
+.value {
+	float: left;
+	padding-left: 5px; //
+	padding-right: 5px;
+}
+
+.error {
+	float: left;
+	padding: 5px;
+}
+
+.errors {
+	color: red;
+	vertical-align: middle;
+}
+
+img.errors {
+	padding-right: 5px;
+}
+
+.errors input {
+	border: 1px solid red;
+}
+
+.errors textarea {
+	border: 1px solid red;
+}
+
+.required {
+	color: red;
+	padding-left: 2px;
+}
+
+.rich-stglpanel-body {
+	overflow: auto;
+}
+
+.titulo {
+	font-size: 16px;
+	font-weight: bold;
+	font-family: Arial;
+	text-align: center;
+	color: #616161;
+}
+
+.subtitulo {
+	font-size: 12px;
+	font-weight: bold;
+	font-family: Arial;
+	text-align: left;
+	color: #616161;
+}
+
+.subtituloCentrado {
+	font-size: 12px;
+	font-weight: bold;
+	font-family: Arial;
+	text-align: center;
+	color: #616161;
+}
+
+.etiqueta {
+	font-size: 11px;
+	font-weight: normal;
+	font-family: Arial;
+	text-align: left;
+	color: black;
+}
+
+.etiquetaNumeros {
+	font-size: 11px;
+	font-weight: normal;
+	font-family: Arial;
+	text-align: right;
+	color: black;
+}
+
+.etiquetaCentrada {
+	font-size: 11px;
+	font-weight: normal;
+	font-family: Arial;
+	text-align: center;
+	color: black;
+}
+
+.etiquetaColumna {
+	font-size: 11px;
+	font-weight: bold;
+	font-family: Arial;
+	text-align: center;
+	color: black;
+}
+
+.etiquetaNegrita {
+	font-size: 11px;
+	font-weight: bold;
+	font-family: Arial;
+	text-align: left;
+	color: black;
+}
+
+.etiquetaNegritaCentrada {
+	font-size: 11px;
+	font-weight: bold;
+	font-family: Arial;
+	text-align: center;
+	color: black;
+}
+
+.etiquetaNegritaNumeros {
+	font-size: 11px;
+	font-weight: bold;
+	font-family: Arial;
+	text-align: right;
+	color: black;
+}
+
+.etiquetaNavegacion {
+	font-size: 11px;
+	font-weight: normal;
+	font-family: Arial;
+	text-align: left;
+	color: white;
+}
+
+.mostrar {
+	font-size: 11px;
+	font-weight: normal;
+	font-family: Arial;
+	text-align: left;
+	color: black;
+}
+
+/* Perfil Proyecto */
+.scroll {
+	overflow: scroll;
+	background: white;
+	height: 120px;
+}
+
+.scrollFoto {
+	overflow: scroll;
+	background: white;
+	height: 500px;
+}
+
+.etiquetaCombo {
+	font-size: 11px;
+	font-weight: normal;
+	font-family: Arial;
+	text-align: left;
+	color: black;
+	width: 700px;
+}
+
+.consultarFormato {
+	font-size: 12px;
+	padding: 0% 5% 0% 5%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%;
+}
+
+.consultarFormato td {
+	text-align: left;
+}
+
+.consultarRegistro {
+	font-size: 13px;
+	/*padding: 0% 15% 0% 15%; */
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 90%;
+}
+
+.imgAyuda {
+	cursor: pointer;
+}
+
+.dr-rich-tool-tip {
+	background-color: #FAE6B0;
+	border: 1px solid #E5973E;
+	display: none;
+	float: left;
+	font-family: Arial, Verdana, sans-serif;
+	font-size: 11px;
+	padding: 7px;
+	position: absolute;
+}
+
+.tooltip {
+	background-color: white;
+	border-width: 3px;
+	padding: 10px;
+}
+
+.tooltip-text {
+	width: 300px;
+	cursor: arrow;
+	border-width: 2px;
+	text-align: justify;
+	display: table-cell;
+	vertical-align: middle;
+	overflow: -moz-scrollbars-vertical;
+}
+
+.tooltipData {
+	font-weight: bold;
+}
+
+.etiquetaNavegacionSeleccionada {
+	font-weight: bold;
+	font-size: 12px;
+	color: DarkRed;
+}
+
+.buscador {
+	font-weight: bold;
+	font-size: 13px;
+	text-align: center;
+	padding: 0% 5% 0% 5%;
+}
+
+.observacion {
+	color: Brown;
+	font-size: 10px;
+}
+
+.contadorCaracteres {
+	vertical-align: bottom;
+	background: white;
+	color: black;
+	font-size: 8px;
+}
+
+.navegacion {
+	font-size: 11px;
+	color: #0000EE;
+}
+
+.nodoSeleccionado {
+	background: #F0F8FF;
+}
+
+.anchoPagina {
+	width: 1024;
+}
+
+.iconosAccion {
+	height: 15px;
+}
+
+.messageExito {
+	background-color: #EDFAED;
+	border: 2px solid green;
+	font-size: 13px;
+	color: #616161;
+	font-weight: bold;
+	list-style: none outside none;
+	margin: 5px 5px 5px 5px;
+	/*margin: -10px 5px -5px -35px;*/
+	padding: 5px;
+	text-align: center;
+}
+
+.messageAdvertencia {
+	background-color: #F8E7D0;
+	border: 2px solid orange;
+	font-size: 13px;
+	color: #616161;
+	font-weight: bold;
+	list-style: none outside none;
+	margin: 5px 5px 5px 5px;
+	/*margin: -10px 5px -5px -35px;*/
+	padding: 5px;
+	text-align: center;
+}
+
+.messageError {
+	background-color: #F0F8FF;
+	border: 2px solid red;
+	font-size: 13px;
+	color: #616161;
+	font-weight: bold;
+	list-style: none outside none;
+	margin: 5px 5px 5px 5px;
+	/*margin: -10px 5px -5px -35px;*/
+	padding: 5px;
+	text-align: center;
+}
+
+/**
+.messageExito {
+	background-color: #EDFAED;
+    border: 2px solid green;
+    font-size: 13px;
+    color: #616161;
+    font-weight: bold;
+    list-style: none outside none;
+    margin: -10px 5px -5px -35px;
+    padding: 5px;
+    text-align: center;
+}
+
+.messageAdvertencia {
+	background-color: #F8E7D0;
+    border: 2px solid orange;
+    font-size: 13px;
+    color: #616161;
+    font-weight: bold;
+    list-style: none outside none;
+    margin: -10px 5px -5px -35px;
+    padding: 5px;
+    text-align: center;
+}
+
+.messageError {
+	border: 1px solid red;
+	padding: 0px;
+	margin-top: 0px;
+	margin-bottom: -15px;
+	margin-left: 5px;
+	margin-right: 5px;
+	background-color: #F0F8FF;
+	font-size: 11px;
+	text-align: center;
+}
+**/
+.iconoAccion {
+	width: 18px;
+	height: 18px;
+	border: 0px;
+	padding-left: 1px;
+	padding-right: 1px;
+	cursor: pointer;
+	vertical-align: bottom;
+}
+
+.inputMantenimiento {
+	width: 450px;
+}
+
+/** columnas del panelGrid*/
+.ecol1 {
+	vertical-align: top;
+	width: 80%;
+}
+
+.ecol2 {
+	vertical-align: top;
+	width: 20%;
+}
+
+.ecol3 {
+	vertical-align: top;
+	width: 300px;
+}
+
+/* Largos */
+.W80P {
+	width: 80px;
+}
+
+.W100P {
+	width: 100px;
+}
+
+.W110P {
+	width: 110px;
+}
+
+.W120P {
+	width: 120px;
+}
+
+.W130P {
+	width: 130px;
+}
+
+.W140P {
+	width: 140px;
+}
+
+.W150P {
+	width: 150px;
+}
+
+.W160P {
+	width: 160px;
+}
+
+.W170P {
+	width: 170px;
+}
+
+.W180P {
+	width: 180px;
+}
+
+.W190P {
+	width: 190px;
+}
+
+.W200P {
+	width: 200px;
+}
+
+.W210P {
+	width: 210px;
+}
+
+.W220P {
+	width: 220px;
+}
+
+.W230P {
+	width: 230px;
+}
+
+.W240P {
+	width: 240px;
+}
+
+.W250P {
+	width: 250px;
+}
+
+.W260P {
+	width: 260px;
+}
+
+.W270P {
+	width: 270px;
+}
+
+.W280P {
+	width: 280px;
+}
+
+.W290P {
+	width: 290px;
+}
+
+.W300P {
+	width: 300px;
+}
+
+.W330P {
+	width: 330px;
+}
+
+.W400P {
+	width: 400px;
+}
+
+.W500P {
+	width: 500px;
+}
+
+.W600P {
+	width: 600px;
+}
+
+.W700P {
+	width: 700px;
+}
+
+.W800P {
+	width: 800px;
+}
+
+.W850P {
+	width: 850px;
+}
+
+.W900P {
+	width: 900px;
+}
+
+.W950P {
+	width: 950px;
+}
+
+.pagina {
+	width: 900px;
+}
+
+.iconoCorto {
+	width: 10px;
+	height: 10px;
+	border: 0px;
+	padding-left: 1px;
+	padding-right: 1px;
+	cursor: pointer;
+	vertical-align: bottom;
+}
+
+.etiquetaGris {
+	font-size: 10px;
+	font-weight: normal;
+	font-family: Arial;
+	text-align: left;
+	color: gray;
+}
+
+.etiquetaVerde {
+	font-size: 10px;
+	font-weight: normal;
+	font-family: Arial;
+	text-align: center;
+	color: green;
+	vertical-align: text-bottom;
+}
+
+.etiquetaCafe {
+	font-size: 10px;
+	font-weight: normal;
+	font-family: Arial;
+	text-align: center;
+	color: brown;
+	vertical-align: text-bottom;
+}
+
+.etiquetaInformacionRequerida {
+	font-size: 12px;
+	font-weight: normal;
+	font-family: Arial;
+	text-align: left;
+	color: black;
+}
+
+.iconoEliminar {
+	background-origin: content-box;
+	background-image: url('../imagenes/icono-eliminar.gif');
+	background-size: cover;
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	vertical-align: bottom;
+	border: 0;
+	background-color: transparent
+}
+
+.derecha {
+	text-align: right;
+}
+
+.mostrarTextos {
+	width: 600px;
+	font-size: 11px;
+	font-weight: normal;
+	font-family: Arial;
+	text-align: justify;
+	color: black
+}
+
+.asignaturaAprobadaEstilo {
+	background-color: #8CEE8C; /*verde claro*/
+}
+
+.asignaturaPerdidaEstilo {
+	background-color: #FB9696; /*rojo claro*/
+}
+
+.asignaturaPorCursarEstilo {
+	background-color: #F3F781; /*amarillo*/
+}
+
+.sinAsignaturaPlan {
+	background-color: #FFFFFF; /*blanco*/
+}
+
+.cargando{
+	background-image: url('/arquilab/images/cargando.gif');
+	background-repeat: no-repeat;
+}
+
+.verDetalle{
+	background-image: url('/estudiantesWebJ8/imagenes/ver_detalle.png');
+	background-repeat: no-repeat;
+	background-size: cover; 
+	width:16px; 
+	height:16px; 
+	vertical-align:bottom; 
+	border:0; 
+	background-color:transparent;
+	background-origin: content-box;
+}

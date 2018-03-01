@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	metadata-complete="false">
+	<display-name>rices</display-name>
+
+
+	<!-- MODO DE TRABAJO, DESARROLLO O PRODUCCIÓN -->
+	<!-- Desarrollo: Development -->
+	<!-- Producción: Production -->
+	<context-param>
+		<param-name>javax.faces.PROJECT_STAGE</param-name>
+		<param-value>Development</param-value>
+	</context-param>
+	<!-- TEMA DE PRIMEFACES USADO -->
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>black-tie</param-value>
+	</context-param>
+
+	<!-- CAPTCHA -->
+	<context-param>
+		<param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
+		<param-value>6Le6_RUUAAAAAANqKgZFY3ExQSSbC2mT4VvVOR1X</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>
+		<param-value>6Le6_RUUAAAAABNB8xKTnCrg1dmGJfZIKlHxCBcq</param-value>
+	</context-param>
+
+	<!-- EXTENSION A USAR -->
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>
+	<!-- PAGINAS DE ERROR -->
+	<error-page>
+		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+		<location>/index.jsf</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/index.jsf</location>
+	</error-page>
+	<error-page>
+		<error-code>400</error-code>
+		<location>/index.jsf</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/index.jsf</location>
+	</error-page>
+	<!-- fuentes aewosome -->
+	<context-param>
+		<param-name>primefaces.FONT_AWESOME</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<mime-mapping>
+		<extension>xhtml</extension>
+		<mime-type>text/html</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>ttf</extension>
+		<mime-type>application/x-font-ttf</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>woff</extension>
+		<mime-type>application/x-font-woff</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>woff2</extension>
+		<mime-type>application/x-font-woff2</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>eot</extension>
+		<mime-type>application/x-font-eot</mime-type>
+	</mime-mapping>
+	<!-- TIEMPO SESION -->
+	<session-config>
+		<!-- Session idle timeout in min. -->
+		<session-timeout>60</session-timeout>
+	</session-config>
+	<!-- pagina inicial -->
+	<welcome-file-list>
+		<welcome-file>index.jsf</welcome-file>
+	</welcome-file-list>
+
+
+</web-app>
