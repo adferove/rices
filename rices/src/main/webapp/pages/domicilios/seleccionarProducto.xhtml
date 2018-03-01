@@ -307,21 +307,21 @@
 										style="color:#c7578f;font-size:16px;" />
 									<div style="height: 10px;"></div>
 									<p:panel header="#{mensaje.InformacionCliente}">
-										<div align="left">
+										<div align="center">
 											<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
-												<h:outputText value="e-mail" />
+												<h:outputText value="e-mail:" />
 												<p:outputLabel style="font-size:11px;"
 													value="#{administrarOrdenCompra.pedidoPersiste.cliente.email}" />
-												<h:outputText value="Nombre" />
+												<h:outputText value="Nombre:" />
 												<p:outputLabel style="font-size:11px;"
 													value="#{administrarOrdenCompra.pedidoPersiste.cliente.nombre}" />
 												<h:outputText value="#{mensaje.Direccion}" />
 												<p:outputLabel style="font-size:11px;"
 													value="#{administrarOrdenCompra.pedidoPersiste.cliente.direccion}" />
-												<h:outputText value="Barrio" />
+												<h:outputText value="Barrio:" />
 												<p:outputLabel style="font-size:11px;"
 													value="#{administrarOrdenCompra.pedidoPersiste.cliente.barrio}" />
-												<h:outputText value="#{mensaje.Telefono}/Celular" />
+												<h:outputText value="#{mensaje.Telefono}/Celular:" />
 												<p:outputLabel style="font-size:11px;"
 													value="#{administrarOrdenCompra.pedidoPersiste.cliente.celular}" />
 											</p:panelGrid>
@@ -331,7 +331,7 @@
 											<p:commandButton id="btnSalir"
 												style="font-size:14px; font-weight: normal !important;"
 												action="#{administrarOrdenCompra.cerrarPedido()}"
-												value="Salir" update=":form" icon="fa fa-truck">
+												value="Salir" update=":form" icon="fa fa-sign-out">
 											</p:commandButton>
 											<p:blockUI block=":form" trigger="btnSalir" />
 										</div>

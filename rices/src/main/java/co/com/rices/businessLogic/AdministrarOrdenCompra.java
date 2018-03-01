@@ -181,6 +181,11 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 			}
 
 			if(!error){
+				this.pedidoPersiste.getCliente().setEmail(this.pedidoPersiste.getCliente().getEmail().trim().toLowerCase());
+				this.pedidoPersiste.getCliente().setNombre(this.pedidoPersiste.getCliente().getNombre().trim().toUpperCase());
+				this.pedidoPersiste.getCliente().setCelular(this.pedidoPersiste.getCliente().getCelular().trim());
+				this.pedidoPersiste.getCliente().setDireccion(this.pedidoPersiste.getCliente().getDireccion().trim().toUpperCase());
+				this.pedidoPersiste.getCliente().setBarrio(this.pedidoPersiste.getCliente().getBarrio().trim().toUpperCase());
 				this.showCheckout         = false;
 				this.showPedidoRegistrado = true;
 			}
