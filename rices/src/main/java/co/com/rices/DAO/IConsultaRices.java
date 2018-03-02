@@ -18,18 +18,56 @@ import co.com.rices.beans.ProductoPrecio;
 
 public interface IConsultaRices {
 
-	public static List<Producto> getProductoPorEstado(String pEstado)  throws Exception{
-		List<Producto> resultados = new ArrayList<Producto>();
+	public static List<DetallePedido> getDetallePedidoPorId(Integer pId)  throws Exception{
+		List<DetallePedido> resultado=new ArrayList<DetallePedido>();
 		try{
 			StringBuilder builder=new StringBuilder();
-			builder.append(" SELECT id_producto, nombre_producto, descripcion_producto, fecha_creacion,  ");
-			builder.append("        estado, login_usuario                                                ");
-			builder.append(" FROM   rices.productos                                                      ");
-			builder.append(" WHERE  35 = 35                                                              ");
+			builder.append("SELECT id_detalle_pedido, id_pedido, id_producto, cantidad, observacion  ");
+			builder.append("rices.detalle_pedidos ");
+			builder.append(" WHERE  id_pedido = ? ");
+
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setInt(1, pId);
+				rs = cs.executeQuery();
+				while(rs.next()){
+					DetallePedido detallepedido = new DetallePedido();
+					detallepedido.setId(rs.getInt("id_detalle_pedido"));
+					detallepedido.setIdpedido(rs.getInt("id_pedido"));
+					detallepedido.setIdproducto(rs.getInt("id_producto"));
+					detallepedido.setCantidad(rs.getInt("cantidad"));
+					detallepedido.setObservacion(rs.getString("observacion"));
+					resultado.add(detallepedido);
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}
+
+	public static List<Producto> getProductoPorEstado(String pEstado)  throws Exception{
+		List<Producto> resultados=new ArrayList<Producto>();
+		try{
+			StringBuilder builder=new StringBuilder();
+			builder.append(" SELECT id_producto, nombre_producto, descripcion_producto, fecha_creacion, "); 
+			builder.append("        estado, login_usuario, ranking, ruta_imagen                         ");
+			builder.append(" FROM   rices.productos                                                     ");
+			builder.append(" WHERE  35 = 35   ");
 			Map<Integer, Object> parametros=new HashMap<Integer,Object>();
 			int i=1;
 			if (pEstado!=null && !pEstado.trim().equals("")){
-				builder.append(" AND estado=?");
+				builder.append(" AND estado = ? ");
 				parametros.put(i++, pEstado);
 			}
 			Conexion conexion    = null;
@@ -50,6 +88,8 @@ public interface IConsultaRices {
 					producto.setFechacreacion(rs.getDate("fecha_creacion"));
 					producto.setEstado(rs.getString("estado"));
 					producto.setLoginusuario(rs.getString("login_usuario"));
+					producto.setRating(rs.getInt("ranking"));
+					producto.setRutaImagen(rs.getString("ruta_imagen"));
 					resultados.add(producto);
 				}
 			}catch(SQLException sq){
@@ -66,17 +106,17 @@ public interface IConsultaRices {
 	}
 
 	public static List<Pedido> getPedidoPorEstado(String pEstado)  throws Exception{
-		List<Pedido> resultados = new ArrayList<Pedido>();
+		List<Pedido> resultados=new ArrayList<Pedido>();
 		try{
 			StringBuilder builder=new StringBuilder();
-			builder.append(" SELECT id_pedido, id_cliente, total_pedido, fecha_pedido, hora_pedido, ");
-			builder.append("        estado_pedido                                                   ");
-			builder.append(" FROM   rices.Pedidos                                                   ");
-			builder.append(" WHERE  35 = 35                                                         ");
+			builder.append("SELECT id_pedido, id_cliente, total_pedido, fecha_pedido, hora_pedido, ");
+			builder.append("estado_pedido ");
+			builder.append("FROM rices.Pedidos ");
+			builder.append("WHERE  35 = 35   ");
 			Map<Integer, Object> parametros=new HashMap<Integer,Object>();
 			int i=1;
 			if (pEstado!=null && !pEstado.trim().equals("")){
-				builder.append(" AND estado = ? ");
+				builder.append(" AND estado=?");
 				parametros.put(i++, pEstado);
 			}
 			builder.append("ORDEN  fecha_pedido ASC ");
@@ -119,7 +159,7 @@ public interface IConsultaRices {
 		try{
 			StringBuilder builder = new StringBuilder();
 			builder.append(" SELECT id_cliente, nombres_cliente, apellidos_cliente, correo_cliente,"); 
-			builder.append("        direccion_cliente, telefono_cliente, barrio_cliente            ");
+			builder.append(" direccion_cliente, telefono_cliente, barrio_cliente,registrado        ");
 			builder.append(" FROM   rices.clientes                                                 ");
 			builder.append(" WHERE  35 = 35                                                        ");
 			Map<Integer, Object> parametros = new HashMap<Integer, Object>();
@@ -129,8 +169,8 @@ public interface IConsultaRices {
 				parametros.put(i++, pId);
 			}
 			if(pEmail!=null && !pEmail.trim().equals("")){
-				builder.append(" AND correo = ? ");
-				parametros.put(i++, pEmail);
+				builder.append(" AND correo_cliente = ? ");
+				parametros.put(i++, pEmail.trim().toLowerCase());
 			}
 			Conexion conexion    = null;
 			CallableStatement cs = null;
@@ -151,6 +191,7 @@ public interface IConsultaRices {
 					cliente.setDireccion(rs.getString("direccion_cliente"));
 					cliente.setBarrio(rs.getString("barrio_cliente"));
 					cliente.setCelular(rs.getString("telefono_cliente"));
+					cliente.setGuardaDatos(rs.getBoolean("registrado"));
 					resultados.add(cliente);
 				}
 			}catch(SQLException sq){
@@ -171,12 +212,14 @@ public interface IConsultaRices {
 		try{
 			StringBuilder builder = new StringBuilder();
 
-			builder.append(" SELECT id_producto, nombre_producto, descripcion_producto, fecha_creacion,"); 
-			builder.append("        estado, login_usuario                                              ");
-			builder.append(" FROM   rices.productos_precio                                             ");
-			builder.append(" WHERE  id_producto = ?                                                    ");
-			builder.append(" AND    estado = ?                                                         ");
-			builder.append(" ORDEN  fecha_crea DESC                                                    ") ;
+			builder.append(" SELECT id_producto_precio, id_producto, precio_producto, estado_producto_precio, "); 
+			builder.append(" fecha_creacion_producto_precio, fecha_actualizacion_producto_precio,             ");
+			builder.append(" usuario_creacion, usuario_actualiza                                              ");
+			builder.append(" FROM rices.producto_precios                                                      ");
+			builder.append(" WHERE  id_producto = ?                                                           ");
+			builder.append(" AND    estado_producto_precio = ?                                                ");
+			builder.append(" ORDEN  fecha_creacion_producto_precio DESC                                       ") ;
+
 
 			Conexion conexion    = null;
 			CallableStatement cs = null;
@@ -190,43 +233,12 @@ public interface IConsultaRices {
 				if(rs.next()){
 					resultado = new ProductoPrecio();
 					resultado.setId(rs.getInt("id_producto_precio"));
-					resultado.setPrecio(rs.getBigDecimal("precio"));
-				}
-			}catch(SQLException sq){
-				IConstants.log.error(sq.toString(),sq);
-			}finally{
-				rs.close();
-				cs.close();
-				conexion.cerrarConexion();
-			}
-		}catch(Exception e){
-			throw new Exception(e);
-		}
-		return resultado;
-	}
-	public static DetallePedido getDetallePedidoPorId(Integer pId)  throws Exception{
-		DetallePedido resultado=null;
-		try{
-			StringBuilder builder = new StringBuilder();
-			builder.append("id_detalle_pedido, id_pedido, id_producto, cantidad, observacion  ");
-			builder.append("rices.detalle_pedidos ");
-			builder.append(" WHERE  id_pedido = ? ");
-
-			Conexion conexion    = null;
-			CallableStatement cs = null;
-			ResultSet rs         = null;
-			try{
-				conexion = new Conexion();
-				cs = conexion.getConnection().prepareCall(builder.toString());
-				cs.setInt(1, pId);
-				rs = cs.executeQuery();
-				if(rs.next()){
-					DetallePedido detallepedido = new DetallePedido();
-					detallepedido.setId(rs.getInt("id_detalle_pedido"));
-					detallepedido.setIdpedido(rs.getInt("id_pedido"));
-					detallepedido.setIdproducto(rs.getInt("id_producto"));
-					detallepedido.setCantidad(rs.getInt("cantidad"));
-					detallepedido.setObservacion(rs.getString("observacion"));
+					resultado.setIdProducto(rs.getInt("id_producto"));
+					resultado.setPrecio(rs.getBigDecimal("precio_producto"));
+					resultado.setEstado(rs.getString("estado_producto_precio"));
+					resultado.setFechaCrea(rs.getTime("fecha_creacion_producto_precio"));
+					resultado.setUsuarioCrea(rs.getString("usuario_creacion"));
+					resultado.setUsuarioActualiza(rs.getString("usuario_actualiza"));
 				}
 			}catch(SQLException sq){
 				IConstants.log.error(sq.toString(),sq);
@@ -240,4 +252,83 @@ public interface IConsultaRices {
 		}
 		return resultado;
 	}	
+	
+	public static ProductoPrecio getPrecioPorProductoActivo(Integer pIdProducto)throws Exception{
+		ProductoPrecio resultado = null;
+		try{
+			StringBuilder builder = new StringBuilder();
+			builder.append(" SELECT precio_producto                        "); 
+			builder.append(" FROM   rices.producto_precios                 ");
+			builder.append(" WHERE  id_producto = ?                        ");
+			builder.append(" AND    estado_producto_precio = ?             ");
+			builder.append(" ORDER  BY fecha_creacion_producto_precio DESC ") ;
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setInt(1, pIdProducto);
+				cs.setString(2, "A");
+				rs = cs.executeQuery();
+				if(rs.next()){
+					resultado = new ProductoPrecio();
+					resultado.setPrecio(rs.getBigDecimal("precio_producto"));
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}	
+	
+	public static List<Producto> getProductoActivo()  throws Exception{
+		List<Producto> resultados=new ArrayList<Producto>();
+		try{
+			StringBuilder builder=new StringBuilder();
+			builder.append(" SELECT p.id_producto, p.nombre_producto, p.descripcion_producto, "); 
+			builder.append("        p.ranking, p.ruta_imagen, v.precio_producto               ");             
+			builder.append(" FROM   rices.productos p, rices.producto_precios v               ");                                         
+			builder.append(" WHERE  v.id_producto = p.id_producto                             ");
+			builder.append(" AND    p.estado = ?                                              ");
+			builder.append(" AND    v.estado_producto_precio = ?                              ");
+			builder.append(" ORDER  BY v.fecha_creacion_producto_precio DESC                  "); 
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setString(1, "A");
+				cs.setString(2, "A");
+				rs = cs.executeQuery();
+				while(rs.next()){
+					Producto producto = new Producto();
+					producto.setId(rs.getInt("id_producto"));
+					producto.setNombre(rs.getString("nombre_producto"));
+					producto.setDescripcion(rs.getString("descripcion_producto"));
+					producto.setRating(rs.getInt("ranking"));
+					producto.setRutaImagen(rs.getString("ruta_imagen"));
+					producto.setProductoPrecio(new ProductoPrecio());
+					producto.getProductoPrecio().setPrecio(rs.getBigDecimal("precio_producto"));
+					resultados.add(producto);
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultados;
+	}
 }

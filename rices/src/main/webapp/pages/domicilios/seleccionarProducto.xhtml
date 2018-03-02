@@ -34,7 +34,7 @@
 															<h:outputText value="#{producto.descripcion}"
 																style="font-weight: bold" />
 															<h:outputText value="Precio:" />
-															<h:outputText value="#{producto.productoPrecio.precio}"
+															<h:outputText value="$#{producto.productoPrecio.precio}"
 																style="font-weight: bold" />
 															<h:outputText value="Rating:" />
 															<p:rating value="#{producto.rating}" readonly="true" />
@@ -173,12 +173,16 @@
 									<p:panel header="Checkout">
 										<div align="left">
 											<p:outputLabel value="#{mensaje.ingresaDatoPedido}" />
-											<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+											<p:panelGrid id="datoCheckout" columns="1"
+												styleClass="ui-panelgrid-blank">
 												<h:outputText value="e-mail*:" />
 												<p:inputText
 													style="font-size:11px; text-transform:lowercase;" size="50"
 													maxlength="50"
-													value="#{administrarOrdenCompra.pedidoPersiste.cliente.email}" />
+													value="#{administrarOrdenCompra.pedidoPersiste.cliente.email}">
+													<p:ajax update="datoCheckout,guardaDatoCheckout"
+														listener="#{administrarOrdenCompra.onChangeMail()}" />
+												</p:inputText>
 												<h:outputText value="Nombre*:" />
 												<p:inputText
 													style="font-size:11px; text-transform:uppercase;" size="50"
@@ -203,7 +207,8 @@
 													style="color:#8f949a;font-size:12px;" />
 											</p:panelGrid>
 											<div style="height: 10px;"></div>
-											<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+											<p:panelGrid id="guardaDatoCheckout" columns="2"
+												styleClass="ui-panelgrid-blank">
 												<p:outputLabel value="#{mensaje.DeseaGuardarDato}:" />
 												<p:selectBooleanCheckbox
 													value="#{administrarOrdenCompra.pedidoPersiste.cliente.guardaDatos}" />

@@ -28,13 +28,10 @@ public class Conexion implements Serializable{
 	 */
 	public Conexion() {
 		try {
-
 			InitialContext ctx = new InitialContext();
-			//DataSource ds = (DataSource) ctx.lookup("java:/PostgresDS");
-			DataSource ds = (DataSource) ctx.lookup("java:jboss/datasources/PostgreSQLDS");
-			con = ds.getConnection();
-			con.setAutoCommit(true);
-
+			DataSource ds = (DataSource) ctx.lookup("java:/ricesDS");
+			this.con = ds.getConnection();
+			this.con.setAutoCommit(true);
 		} catch (Exception e) {
 			IConstants.log.error(e, e);
 		}

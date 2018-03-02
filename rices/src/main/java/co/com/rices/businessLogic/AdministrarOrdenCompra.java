@@ -10,11 +10,12 @@ import javax.faces.bean.SessionScoped;
 
 import co.com.rices.ConsultarFuncionesAPI;
 import co.com.rices.IConstants;
+import co.com.rices.DAO.IActualizaRices;
+import co.com.rices.DAO.IConsultaRices;
 import co.com.rices.beans.Cliente;
 import co.com.rices.beans.DetallePedido;
 import co.com.rices.beans.Pedido;
 import co.com.rices.beans.Producto;
-import co.com.rices.beans.ProductoPrecio;
 import co.com.rices.general.RicesTools;
 
 @ManagedBean
@@ -35,35 +36,21 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 	
 	@PostConstruct
 	public void init(){
-		this.showSeleccionarProducto = true;
-		this.listadoProducto = new ArrayList<Producto>();
-		Producto producto = new Producto();
-		producto.setId(1);
-		producto.setNombre("Combo mix");
-		producto.setDescripcion("Arroz mixto + bebida + papas");
-		producto.setProductoPrecio(new ProductoPrecio());
-		producto.getProductoPrecio().setPrecio(new BigDecimal(5500));
-		producto.setRating(4);
-		producto.setRutaImagen("combo_mix");
-		this.listadoProducto.add(producto);
-		Producto producto2 = new Producto();
-		producto2.setId(2);
-		producto2.setDescripcion("Arroz especial + bebida + papas");
-		producto2.setNombre("Combo rices");
-		producto2.setProductoPrecio(new ProductoPrecio());
-		producto2.getProductoPrecio().setPrecio(new BigDecimal(6500));
-		producto2.setRating(3);
-		producto2.setRutaImagen("combo_rices");
-		this.listadoProducto.add(producto2);
-		
-		this.pedidoPersiste = new Pedido();
-		this.pedidoPersiste.setCliente(new Cliente());
-		this.pedidoPersiste.setCargoDomicilio(new BigDecimal(0));
-		this.pedidoPersiste.setSubtotal(new BigDecimal(0));
-		this.pedidoPersiste.setIva(new BigDecimal(0));
-		this.pedidoPersiste.setTotal(new BigDecimal(0));
-		this.detallePedido = new DetallePedido();
-		this.listadoDetallePedido = new ArrayList<DetallePedido>();
+		try{
+			this.showSeleccionarProducto = true;
+			this.listadoProducto = IConsultaRices.getProductoActivo();
+			this.pedidoPersiste = new Pedido();
+			this.pedidoPersiste.setCliente(new Cliente());
+			this.pedidoPersiste.setCargoDomicilio(new BigDecimal(0));
+			this.pedidoPersiste.setSubtotal(new BigDecimal(0));
+			this.pedidoPersiste.setIva(new BigDecimal(0));
+			this.pedidoPersiste.setTotal(new BigDecimal(0));
+			this.pedidoPersiste.setEstado("R");
+			this.detallePedido = new DetallePedido();
+			this.listadoDetallePedido = new ArrayList<DetallePedido>();
+		}catch(Exception e){
+			IConstants.log.error(e.toString(),e);
+		}
 	}
 	
 	public void agregarProductoOrden(){
@@ -186,8 +173,68 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 				this.pedidoPersiste.getCliente().setCelular(this.pedidoPersiste.getCliente().getCelular().trim());
 				this.pedidoPersiste.getCliente().setDireccion(this.pedidoPersiste.getCliente().getDireccion().trim().toUpperCase());
 				this.pedidoPersiste.getCliente().setBarrio(this.pedidoPersiste.getCliente().getBarrio().trim().toUpperCase());
-				this.showCheckout         = false;
-				this.showPedidoRegistrado = true;
+				
+				
+				boolean exito = false;
+				//REGISTRA EL CLIENTE
+				if(this.pedidoPersiste.getCliente().getId()==null){
+					Integer idCliente = IActualizaRices.registrarCliente(this.pedidoPersiste.getCliente());
+					if(idCliente!=null){
+						this.pedidoPersiste.getCliente().setId(idCliente);
+						exito = true;
+					}else{
+						this.mostrarMensajeGlobal("noRegistraCliente", "error");
+					}
+				}else{
+					exito = IActualizaRices.actualizarCliente(this.pedidoPersiste.getCliente());
+				}
+				if(exito){
+					//REGISTRA EL PEDIDO
+					Integer idPedido = IActualizaRices.registrarPedido(this.pedidoPersiste);
+					if(idPedido!=null){
+						//REGISTRA DETALLE
+						for(DetallePedido dp: this.listadoDetallePedido){
+							dp.setIdpedido(idPedido);
+							if(!IActualizaRices.registrarDetallePedido(dp)){
+								exito = false;
+								break;
+							}
+						}
+					}else{
+						exito = false;
+						this.mostrarMensajeGlobal("noRegistraPedido", "error");
+					}
+				}else{
+					this.mostrarMensajeGlobal("noRegistraCliente", "advertencia");
+				}
+				if(exito){
+					this.showCheckout         = false;
+					this.showPedidoRegistrado = true;
+				}else{
+					this.mostrarMensajeGlobal("noRegistraDetalle", "advertencia");
+				}
+			}
+		}catch(Exception e){
+			IConstants.log.error(e.toString(),e);
+		}
+	}
+	
+	public void onChangeMail(){
+		try{
+			if(this.pedidoPersiste.getCliente().getEmail()!=null && !this.pedidoPersiste.getCliente().getEmail().trim().equals("")){
+				String pEmail = this.pedidoPersiste.getCliente().getEmail().trim().toLowerCase();
+				List<Cliente> resultados = IConsultaRices.getClientesPorParametro(null, pEmail);
+				if(resultados.size()>0){
+					Cliente pCliente = resultados.get(0);
+					if(pCliente.isGuardaDatos()){
+						this.pedidoPersiste.setCliente(pCliente);
+					}else{
+						this.pedidoPersiste.getCliente().setId(pCliente.getId());
+					}
+				}else{
+					this.pedidoPersiste.setCliente(new Cliente());
+					this.pedidoPersiste.getCliente().setEmail(pEmail);
+				}
 			}
 		}catch(Exception e){
 			IConstants.log.error(e.toString(),e);
