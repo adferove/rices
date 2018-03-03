@@ -9,7 +9,7 @@
 	<ui:define name="body">
 		<h:form id="form">
 			<p:messages id="messages" showDetail="true" closable="true" />
-			<p:outputPanel
+			<p:outputPanel id="pnl1"
 				rendered="#{administrarOrdenCompra.showSeleccionarProducto}">
 				<div class="container">
 					<div class="row">
@@ -164,7 +164,8 @@
 
 			</p:outputPanel>
 
-			<p:outputPanel rendered="#{administrarOrdenCompra.showCheckout}">
+			<p:outputPanel id="pnl2"
+				rendered="#{administrarOrdenCompra.showCheckout}">
 				<div class="container">
 					<div class="row">
 						<div class="product-item col-md-12">
@@ -301,7 +302,7 @@
 			</p:outputPanel>
 
 
-			<p:outputPanel
+			<p:outputPanel id="pnl3"
 				rendered="#{administrarOrdenCompra.showPedidoRegistrado}">
 				<div class="container">
 					<div class="row">
