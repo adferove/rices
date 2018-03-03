@@ -12,6 +12,7 @@ import co.com.rices.Conexion;
 import co.com.rices.IConstants;
 import co.com.rices.beans.Cliente;
 import co.com.rices.beans.DetallePedido;
+import co.com.rices.beans.EstructuraMenu;
 import co.com.rices.beans.Pedido;
 import co.com.rices.beans.Producto;
 import co.com.rices.beans.ProductoPrecio;
@@ -318,6 +319,51 @@ public interface IConsultaRices {
 					producto.setProductoPrecio(new ProductoPrecio());
 					producto.getProductoPrecio().setPrecio(rs.getBigDecimal("precio_producto"));
 					resultados.add(producto);
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultados;
+	}
+	
+	public static List<EstructuraMenu> getEsctructuraPorRol(Integer pRol)throws Exception{
+		List<EstructuraMenu> resultados = new ArrayList<EstructuraMenu>();
+		try{
+			Conexion conexion = new Conexion();
+			CallableStatement cs  = null;
+			ResultSet         rs  = null;
+			StringBuilder builder = new StringBuilder();
+			builder.append(" SELECT m.id_menu, m.descripcion, m.orden, "); 
+			builder.append("    m.url, m.estado, m.id_menu_sup         ");
+			builder.append(" FROM   rices.menus m, rices.menu_rol r    ");
+			builder.append(" WHERE  m.id_menu = r.id_menu              "); 
+			builder.append(" AND    m.estado = ?                       ");
+			builder.append(" AND    r.estado = ?                       "); 
+			builder.append(" AND    r.id_rol = ?                       ");
+			try{
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setString(1, "A");
+				cs.setString(2, "A");
+				cs.setInt(3, pRol);
+				rs = cs.executeQuery();
+				while(rs.next()){
+					EstructuraMenu estructuraMenu = new EstructuraMenu();
+					estructuraMenu.setIdMenu(rs.getInt("id_menu"));
+					estructuraMenu.setDescripcion(rs.getString("descripcion"));
+					estructuraMenu.setOrden(rs.getInt("orden"));
+					if(rs.getObject("id_menu_sup")!=null){
+						estructuraMenu.setIdMenuSuperior(rs.getInt("id_menu_sup"));
+					}
+					estructuraMenu.setUrl(rs.getString("url"));
+					estructuraMenu.setEstado(rs.getString("estado"));
+					resultados.add(estructuraMenu);
 				}
 			}catch(SQLException sq){
 				IConstants.log.error(sq.toString(),sq);
