@@ -33,7 +33,7 @@ public class Conexion implements Serializable{
 			this.con = ds.getConnection();
 			this.con.setAutoCommit(true);
 		} catch (Exception e) {
-			IConstants.log.error(e, e);
+			IConstants.log.error(e.toString(), e);
 		}
 
 	}
