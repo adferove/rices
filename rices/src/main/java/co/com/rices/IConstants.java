@@ -6,4 +6,5 @@ public interface IConstants {
 	Logger	log			= Logger.getLogger("rices");
 	String	ACTIVO		= "A";
 	String	INACTIVO	= "I";
+	Integer ROL_ADMINISTRADOR = 1;
 }

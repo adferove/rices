@@ -91,6 +91,10 @@ public interface IConsultaRices {
 					producto.setLoginusuario(rs.getString("login_usuario"));
 					producto.setRating(rs.getInt("ranking"));
 					producto.setRutaImagen(rs.getString("ruta_imagen"));
+					producto.setProductoPrecio(IConsultaRices.getProductoPrecioPorProducto(producto.getId()));
+					if(producto.getProductoPrecio()==null){
+						producto.setProductoPrecio(new ProductoPrecio());
+					}
 					resultados.add(producto);
 				}
 			}catch(SQLException sq){
@@ -120,7 +124,7 @@ public interface IConsultaRices {
 				builder.append(" AND estado=?");
 				parametros.put(i++, pEstado);
 			}
-			builder.append("ORDEN  fecha_pedido ASC ");
+			builder.append("ORDER  BY fecha_pedido ASC ");
 			Conexion conexion    = null;
 			CallableStatement cs = null;
 			ResultSet rs         = null;
@@ -219,7 +223,7 @@ public interface IConsultaRices {
 			builder.append(" FROM rices.producto_precios                                                      ");
 			builder.append(" WHERE  id_producto = ?                                                           ");
 			builder.append(" AND    estado_producto_precio = ?                                                ");
-			builder.append(" ORDEN  fecha_creacion_producto_precio DESC                                       ") ;
+			builder.append(" ORDER  BY fecha_creacion_producto_precio DESC                                    ") ;
 
 
 			Conexion conexion    = null;

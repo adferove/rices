@@ -10,6 +10,113 @@
 		<h:form id="form">
 			<p:messages id="messages" showDetail="true" closable="true" />
 
+			<p:toolbar>
+				<f:facet name="right">
+					<p:commandLink value="Nuevo producto" update="form"
+						rendered="#{administrarProducto.showConsulta}"
+						action="#{administrarProducto.nuevoProducto()}" />
+				</f:facet>
+			</p:toolbar>
+
+			<!-- INICIO INGRESO CRITERIOS CONSULTA -->
+			<p:outputPanel id="pnlIngresoDatos"
+				rendered="#{administrarProducto.showConsulta}">
+
+				<p:panel header="Consulta de productos" style="text-align:center;">
+					<div align="center">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel value="Nombre producto: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtNombreProducto" style="font-size:14px;"
+								maxlength="50"
+								value="#{administrarProducto.productoConsulta.nombre}" />
+
+							<p:outputLabel value="#{mensaje.Descripcion} producto: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtDescripcionProducto" style="font-size:14px;"
+								maxlength="50"
+								value="#{administrarProducto.productoConsulta.descripcion}" />
+						</p:panelGrid>
+					</div>
+				</p:panel>
+
+				<p:spacer height="10" />
+
+				<div align="center">
+					<p:commandButton id="btnConsultarProducto"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{administrarProducto.consultarProducto()}"
+						value="Consultar" update=":form">
+					</p:commandButton>
+					<p:blockUI block=":form" trigger="btnConsultarProducto" />
+				</div>
+
+				<p:spacer height="10" />
+
+				<div align="center">
+					<p:panel header="Productos"
+						rendered="#{administrarProducto.listadoProducto!=null and administrarProducto.listadoProducto.size()>0}">
+
+						<p:dataTable var="loc" id="dtlListadoAspiranteWeb"
+							widgetVar="dtlListadoAspiranteWeb"
+							value="#{administrarProducto.listadoProducto}" reflow="true"
+							emptyMessage="#{mensaje.noExistenciaRegistro}">
+							<p:column headerText="ID">
+								<div align="center">
+									<p:graphicImage name="demo/images/#{loc.rutaImagen}.gif" />
+								</div>
+							</p:column>
+							<p:column headerText="ID">
+								<div align="center">
+									<h:outputText value="#{loc.id}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Nombre">
+								<div align="center">
+									<h:outputText value="#{loc.nombre}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="#{mensaje.Descripcion}">
+								<div align="center">
+									<h:outputText value="#{loc.descripcion}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Precio">
+								<div align="center">
+									<h:outputText value="#{loc.productoPrecio.precio}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Estado">
+								<div align="center">
+									<h:outputText value="#{loc.estado}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Acciones" width="10%">
+								<div align="center">
+
+									<p:commandButton id="btnVerDetalle" icon="ui-icon-search"
+										action="#{administrarProducto.verDetalleProducto(loc)}"
+										update="form" title="Ver detalle del producto" />
+
+									<p:blockUI id="idBlockProducto" block=":form"
+										trigger="btnVerDetalle" />
+
+								</div>
+							</p:column>
+
+
+						</p:dataTable>
+					</p:panel>
+				</div>
+
+			</p:outputPanel>
+
 
 		</h:form>
 	</ui:define>
