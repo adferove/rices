@@ -65,5 +65,16 @@ public class ProductoPrecio implements Serializable{
 	public void setFechaActualiza(Date fechaActualiza) {
 		this.fechaActualiza = fechaActualiza;
 	}
-	
+	public ProductoPrecio clon(){
+		ProductoPrecio clon = new ProductoPrecio();
+		clon.setId(new Integer(this.id));
+		clon.setIdProducto(new Integer(this.idProducto));
+		clon.setPrecio(this.precio);
+		clon.setEstado(new String(this.estado));
+		clon.setUsuarioCrea(new String(this.usuarioCrea));
+		clon.setFechaCrea((Date) this.fechaCrea.clone());
+		clon.setUsuarioActualiza(new String(this.usuarioActualiza));
+		clon.setFechaActualiza((Date) this.fechaActualiza.clone());
+		return clon;
+	}
 }

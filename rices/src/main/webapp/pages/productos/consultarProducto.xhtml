@@ -10,14 +10,14 @@
 		<h:form id="form">
 			<p:messages id="messages" showDetail="true" closable="true" />
 
-			<p:toolbar>
-				<f:facet name="right">
+			<p:toolbar rendered="#{administrarProducto.showConsulta}">
+				<f:facet name="left">
 					<p:commandLink value="Nuevo producto" update="form"
-						rendered="#{administrarProducto.showConsulta}"
-						action="#{administrarProducto.nuevoProducto()}" />
+						action="#{administrarProducto.nuevoProducto()}"
+						style="text-decoration:underline;" />
 				</f:facet>
 			</p:toolbar>
-
+			<p:spacer height="10" />
 			<!-- INICIO INGRESO CRITERIOS CONSULTA -->
 			<p:outputPanel id="pnlIngresoDatos"
 				rendered="#{administrarProducto.showConsulta}">
@@ -62,7 +62,7 @@
 							widgetVar="dtlListadoAspiranteWeb"
 							value="#{administrarProducto.listadoProducto}" reflow="true"
 							emptyMessage="#{mensaje.noExistenciaRegistro}">
-							<p:column headerText="ID">
+							<p:column headerText="">
 								<div align="center">
 									<p:graphicImage name="demo/images/#{loc.rutaImagen}.gif" />
 								</div>
@@ -93,7 +93,10 @@
 
 							<p:column headerText="Estado">
 								<div align="center">
-									<h:outputText value="#{loc.estado}" />
+									<h:outputText value="Activo"
+										rendered="#{loc.estado.equals('A')}" />
+									<h:outputText value="Inactivo"
+										rendered="#{loc.estado.equals('I')}" />
 								</div>
 							</p:column>
 
@@ -113,6 +116,146 @@
 
 						</p:dataTable>
 					</p:panel>
+				</div>
+
+			</p:outputPanel>
+
+			<p:outputPanel id="pnlCreaProducto"
+				rendered="#{administrarProducto.showCrear}">
+
+				<p:panel header="Crear nuevo producto" style="text-align:center;">
+					<div align="center">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel value="Nombre producto: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtNombreCreaProducto" style="font-size:14px;"
+								maxlength="20"
+								value="#{administrarProducto.productoPersiste.nombre}" />
+
+							<p:outputLabel value="#{mensaje.Descripcion} producto: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtDescripcionCreaProducto"
+								style="font-size:14px;" maxlength="50"
+								value="#{administrarProducto.productoPersiste.descripcion}" />
+
+							<p:outputLabel value="Estado: "
+								style="font-weight:bold; font-size:14px" />
+							<p:selectOneMenu id="slctCreaProducto"
+								style="padding-right: 1em;"
+								value="#{administrarProducto.productoPersiste.estado}">
+								<f:selectItem itemLabel="Activo" itemValue="A" />
+								<f:selectItem itemLabel="Inactivo" itemValue="I" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Rating: "
+								style="font-weight:bold; font-size:14px" />
+							<p:selectOneMenu id="txtCreaRating" style="padding-right: 1em;"
+								value="#{administrarProducto.productoPersiste.rating}">
+								<f:selectItem itemLabel="1" itemValue="1" />
+								<f:selectItem itemLabel="2" itemValue="2" />
+								<f:selectItem itemLabel="3" itemValue="3" />
+								<f:selectItem itemLabel="4" itemValue="4" />
+								<f:selectItem itemLabel="5" itemValue="5" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Ruta imagen: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtImagenCreaProducto" style="font-size:14px;"
+								maxlength="12"
+								value="#{administrarProducto.productoPersiste.rutaImagen}" />
+
+							<p:outputLabel value="Precio: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputNumber id="txtPrecioCreaProducto" style="font-size:14px;"
+								value="#{administrarProducto.productoPersiste.productoPrecio.precio}" />
+						</p:panelGrid>
+					</div>
+				</p:panel>
+				<p:spacer height="10" />
+				<div align="center">
+					<p:commandButton id="btnCrearProducto"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{administrarProducto.registrarProducto()}"
+						value="Registrar" update=":form">
+					</p:commandButton>
+					<p:spacer width="10" />
+					<p:commandButton id="btnRegresar1"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{administrarProducto.regresar(1)}" value="Regresar"
+						update=":form">
+					</p:commandButton>
+					<p:blockUI block=":form" trigger="btnCrearProducto,btnRegresar1" />
+				</div>
+
+			</p:outputPanel>
+
+			<p:outputPanel id="pnlEditaProducto"
+				rendered="#{administrarProducto.showEditar}">
+
+				<p:panel header="Editar producto" style="text-align:center;">
+					<div align="center">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel value="Nombre producto: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtNombreEditProducto" style="font-size:14px;"
+								maxlength="20"
+								value="#{administrarProducto.productoClon.nombre}" />
+
+							<p:outputLabel value="#{mensaje.Descripcion} producto: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtDescripcionEditProducto"
+								style="font-size:14px;" maxlength="50"
+								value="#{administrarProducto.productoClon.descripcion}" />
+
+							<p:outputLabel value="Estado: "
+								style="font-weight:bold; font-size:14px" />
+							<p:selectOneMenu id="slctEditProducto"
+								style="padding-right: 1em;"
+								value="#{administrarProducto.productoClon.estado}">
+								<f:selectItem itemLabel="Activo" itemValue="A" />
+								<f:selectItem itemLabel="Inactivo" itemValue="I" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Rating: "
+								style="font-weight:bold; font-size:14px" />
+							<p:selectOneMenu id="txtEditRating" style="padding-right: 1em;"
+								value="#{administrarProducto.productoClon.rating}">
+								<f:selectItem itemLabel="1" itemValue="1" />
+								<f:selectItem itemLabel="2" itemValue="2" />
+								<f:selectItem itemLabel="3" itemValue="3" />
+								<f:selectItem itemLabel="4" itemValue="4" />
+								<f:selectItem itemLabel="5" itemValue="5" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Ruta imagen: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtImagenEditProducto" style="font-size:14px;"
+								maxlength="12"
+								value="#{administrarProducto.productoClon.rutaImagen}" />
+
+							<p:outputLabel value="Precio: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputNumber id="txtPrecioEditProducto" style="font-size:14px;"
+								value="#{administrarProducto.productoClon.productoPrecio.precio}" />
+						</p:panelGrid>
+					</div>
+				</p:panel>
+				<p:spacer height="10" />
+				<div align="center">
+					<p:commandButton id="btnEditarProducto"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{administrarProducto.editarProducto()}" value="Editar"
+						update=":form">
+					</p:commandButton>
+					<p:spacer width="10" />
+					<p:commandButton id="btnRegresar2"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{administrarProducto.regresar(2)}" value="Regresar"
+						update=":form">
+					</p:commandButton>
+					<p:blockUI block=":form" trigger="btnEditarProducto,btnRegresar2" />
 				</div>
 
 			</p:outputPanel>

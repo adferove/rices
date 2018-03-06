@@ -39,5 +39,12 @@ public class RicesTools {
         return matcher.matches();
     }
     
-    
+    public static boolean isNumber(String pValor){
+    	try{
+    		new Double(pValor);
+    	}catch(NumberFormatException e){
+    		return false;
+    	}
+    	return true;
+    }
 }

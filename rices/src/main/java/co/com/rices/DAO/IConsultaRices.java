@@ -71,6 +71,7 @@ public interface IConsultaRices {
 				builder.append(" AND estado = ? ");
 				parametros.put(i++, pEstado);
 			}
+			builder.append("ORDER BY estado ");
 			Conexion conexion    = null;
 			CallableStatement cs = null;
 			ResultSet rs         = null;
@@ -242,6 +243,7 @@ public interface IConsultaRices {
 					resultado.setPrecio(rs.getBigDecimal("precio_producto"));
 					resultado.setEstado(rs.getString("estado_producto_precio"));
 					resultado.setFechaCrea(rs.getTime("fecha_creacion_producto_precio"));
+					resultado.setFechaActualiza(rs.getDate("fecha_actualizacion_producto_precio"));
 					resultado.setUsuarioCrea(rs.getString("usuario_creacion"));
 					resultado.setUsuarioActualiza(rs.getString("usuario_actualiza"));
 				}

@@ -73,4 +73,17 @@ public class Producto implements Serializable{
 		this.rutaImagen = rutaImagen;
 	}
 	
+	public Producto clon(){
+		Producto clon = new Producto();
+		clon.setId(new Integer(this.id));
+		clon.setNombre(new String(this.nombre));
+		clon.setDescripcion(new String(this.descripcion));
+		clon.setFechacreacion((Date) this.fechacreacion.clone());
+		clon.setEstado(new String(this.estado));
+		clon.setLoginusuario(new String(this.loginusuario));
+		clon.setRating(new Integer(this.rating));
+		clon.setRutaImagen(new String(this.rutaImagen));
+		clon.setProductoPrecio(this.productoPrecio.clon());
+		return clon;
+	}
 }

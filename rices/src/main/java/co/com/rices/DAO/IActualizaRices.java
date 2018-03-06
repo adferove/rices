@@ -10,6 +10,8 @@ import co.com.rices.IConstants;
 import co.com.rices.beans.Cliente;
 import co.com.rices.beans.DetallePedido;
 import co.com.rices.beans.Pedido;
+import co.com.rices.beans.Producto;
+import co.com.rices.beans.ProductoPrecio;
 
 public interface IActualizaRices {
 
@@ -164,5 +166,159 @@ public interface IActualizaRices {
 		}
 		return resultado;
 	}
+	
+	public static Integer registrarProducto(Producto pProducto)throws Exception{
+		Integer resultado = null;
+		try{
+			StringBuilder builder = new StringBuilder();
 
+			builder.append(" INSERT INTO rices.productos(                                   ");
+			builder.append("         nombre_producto, descripcion_producto, fecha_creacion, "); 
+			builder.append("         estado, login_usuario, ranking, ruta_imagen)           ");
+			builder.append(" VALUES (?, ?, ?, ?, ?, ?, ?)                                   ");
+			builder.append(" RETURNING id_producto;                                         ");
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet         rs = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setObject(1, pProducto.getNombre().trim());
+				cs.setObject(2, pProducto.getDescripcion().trim());
+				cs.setObject(3, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+				cs.setObject(4, pProducto.getEstado());
+				cs.setObject(5, pProducto.getLoginusuario().trim());
+				cs.setObject(6, pProducto.getRating());
+				cs.setObject(7, pProducto.getRutaImagen());
+				cs.execute();
+				rs = cs.getResultSet();
+				if(rs.next()){
+					resultado = rs.getInt(1);
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}
+
+	public static Integer registrarProductoPrecio(ProductoPrecio pProductoPrecio)throws Exception{
+		Integer resultado = null;
+		try{
+			StringBuilder builder = new StringBuilder();
+			
+			builder.append(" INSERT INTO rices.producto_precios(                                           ");
+			builder.append("         id_producto, precio_producto, estado_producto_precio,                 ");
+			builder.append("         fecha_creacion_producto_precio, fecha_actualizacion_producto_precio,  ");
+			builder.append("         usuario_creacion, usuario_actualiza)                                  ");
+			builder.append(" VALUES (?, ?, ?, ?, ?, ?, ?)                                                  ");
+			builder.append(" RETURNING id_producto_precio;                                         ");
+			
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet         rs = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setInt(1, pProductoPrecio.getIdProducto());
+				cs.setObject(2, pProductoPrecio.getPrecio());
+				cs.setObject(3, pProductoPrecio.getEstado());
+				cs.setObject(4, new java.sql.Date(pProductoPrecio.getFechaCrea().getTime()));
+				cs.setObject(5, new java.sql.Date(pProductoPrecio.getFechaActualiza().getTime()));
+				cs.setObject(6, pProductoPrecio.getUsuarioCrea().trim());
+				cs.setObject(7, pProductoPrecio.getUsuarioActualiza().trim());
+				cs.execute();
+				rs = cs.getResultSet();
+				if(rs.next()){
+					resultado = rs.getInt(1);
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}
+	
+	public static boolean actualizarProductoPrecio(ProductoPrecio pProductoPrecio)throws Exception{
+		boolean resultado = false;
+		try{
+			StringBuilder builder = new StringBuilder();
+			
+			builder.append(" UPDATE rices.producto_precios                    ");
+			builder.append(" SET    estado_producto_precio = ?,               "); 
+			builder.append("        fecha_actualizacion_producto_precio = ?,  ");
+			builder.append("        usuario_actualiza = ?                     ");
+			builder.append(" WHERE  id_producto_precio = ?                    ");
+			
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setString(1, pProductoPrecio.getEstado().toUpperCase());
+				cs.setObject(2, new java.sql.Date(pProductoPrecio.getFechaActualiza().getTime()));
+				cs.setObject(3, pProductoPrecio.getUsuarioActualiza().toLowerCase());
+				cs.setInt(4, pProductoPrecio.getId());
+				int value = cs.executeUpdate();
+				if(value==1){
+					resultado = true;
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}
+	
+	public static boolean actualizarProducto(Producto pProducto)throws Exception{
+		boolean resultado = false;
+		try{
+			StringBuilder builder = new StringBuilder();
+			
+			builder.append(" UPDATE rices.productos                             ");
+			builder.append(" SET    nombre_producto=?, descripcion_producto=?,  ");
+			builder.append("        estado=?, ranking=?, ruta_imagen=?          ");
+			builder.append(" WHERE id_producto = ?                              ");
+			
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setObject(1, pProducto.getNombre().trim());
+				cs.setObject(2, pProducto.getDescripcion().trim());
+				cs.setObject(3, pProducto.getEstado());
+				cs.setObject(4, pProducto.getRating());
+				cs.setObject(5, pProducto.getRutaImagen());
+				cs.setInt(6, pProducto.getId());
+				int value = cs.executeUpdate();
+				if(value==1){
+					resultado = true;
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}
 }
