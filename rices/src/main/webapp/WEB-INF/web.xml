@@ -17,7 +17,7 @@
 	<!-- TEMA DE PRIMEFACES USADO -->
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
-		<param-value>black-tie</param-value>
+		<param-value>rocket</param-value>
 	</context-param>
 
 	<!-- CAPTCHA -->

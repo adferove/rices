@@ -14,6 +14,7 @@ import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
 
+import co.com.rices.ConsultarFuncionesAPI;
 import co.com.rices.IConstants;
 import co.com.rices.DAO.IConsultaRices;
 import co.com.rices.beans.EstructuraMenu;
@@ -21,8 +22,9 @@ import co.com.rices.beans.EstructuraMenu;
 
 @ManagedBean
 @SessionScoped
-public class Menu {
+public class Menu extends ConsultarFuncionesAPI{
 
+	private static final long serialVersionUID = 3163117800154798178L;
 	private MenuModel model;
 	private Map<Integer, List<EstructuraMenu>> hijos;
 

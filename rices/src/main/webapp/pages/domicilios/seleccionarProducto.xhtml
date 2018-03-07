@@ -211,8 +211,9 @@
 											<p:panelGrid id="guardaDatoCheckout" columns="2"
 												styleClass="ui-panelgrid-blank">
 												<p:outputLabel value="#{mensaje.DeseaGuardarDato}:" />
-												<p:selectBooleanCheckbox
-													value="#{administrarOrdenCompra.pedidoPersiste.cliente.guardaDatos}" />
+												<p:selectBooleanButton id="value1"
+													value="#{administrarOrdenCompra.pedidoPersiste.cliente.guardaDatos}"
+													onLabel="Si" offLabel="No" style="width:60px" />
 											</p:panelGrid>
 											<h:outputText value="#{mensaje.msjGuardaDato}"
 												style="color:#8f949a;font-size:12px;" />

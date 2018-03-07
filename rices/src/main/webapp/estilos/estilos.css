@@ -689,19 +689,19 @@ img.errors {
 	background-color: #FFFFFF; /*blanco*/
 }
 
-.cargando{
+.cargando {
 	background-image: url('/arquilab/images/cargando.gif');
 	background-repeat: no-repeat;
 }
 
-.verDetalle{
+.verDetalle {
 	background-image: url('/estudiantesWebJ8/imagenes/ver_detalle.png');
 	background-repeat: no-repeat;
-	background-size: cover; 
-	width:16px; 
-	height:16px; 
-	vertical-align:bottom; 
-	border:0; 
-	background-color:transparent;
+	background-size: cover;
+	width: 16px;
+	height: 16px;
+	vertical-align: bottom;
+	border: 0;
+	background-color: transparent;
 	background-origin: content-box;
 }
