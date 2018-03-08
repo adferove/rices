@@ -1,8 +1,11 @@
 package co.com.rices.businessLogic;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -16,6 +19,7 @@ import co.com.rices.IConstants;
 import co.com.rices.DAO.IActualizaRices;
 import co.com.rices.DAO.IConsultaRices;
 import co.com.rices.beans.Cliente;
+import co.com.rices.beans.CuponCliente;
 import co.com.rices.beans.DetallePedido;
 import co.com.rices.beans.Pedido;
 import co.com.rices.beans.Producto;
@@ -31,9 +35,17 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 	private boolean        showCheckout;
 	private boolean        showPedidoRegistrado;
 	private boolean        pedidoRegistrado;
+	
+	private String         codigoCupon;
+	private String         mostraMensajeError;
+	private String         mensajeError;
+	
 
 	private Pedido         pedidoPersiste;
 	private DetallePedido  detallePedido;
+	
+	private Map<String, List<Cliente>> mapClienteByMail;
+	private Map<String, CuponCliente> mapCuponByIdCliente;
 
 	private List<Producto> listadoProducto;
 	private List<DetallePedido> listadoDetallePedido;
@@ -42,10 +54,12 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 	@PostConstruct
 	public void init(){
 		try{
-			
-			this.pedidoRegistrado = false;
+			this.mapCuponByIdCliente     = new HashMap<String, CuponCliente>();
+			this.mapClienteByMail        = new HashMap<String, List<Cliente>>();
+			this.mostraMensajeError      = "display:none;";
+			this.pedidoRegistrado        = false;
 			this.showSeleccionarProducto = true;
-			this.pedidoPersiste = new Pedido();
+			this.pedidoPersiste          = new Pedido();
 			this.pedidoPersiste.setCliente(new Cliente());
 			this.pedidoPersiste.setCargoDomicilio(new BigDecimal(0));
 			this.pedidoPersiste.setSubtotal(new BigDecimal(0));
@@ -83,8 +97,14 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 	}
 
 	public void agregarProductoOrden(){
-		this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().add(this.detallePedido.getPrecio()));
 		this.pedidoPersiste.setSubtotal(this.pedidoPersiste.getSubtotal().add(this.detallePedido.getPrecio()));
+		if(this.pedidoPersiste.getMultiplicador()!=null){
+			this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal().multiply(this.pedidoPersiste.getMultiplicador()));
+			this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().setScale(2, RoundingMode.HALF_DOWN));
+		}else{
+			this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal());
+		}
+		
 		//SE VALIDA QUE EL PRODUCTO NO SE ENCUENTRE EN LA LISTA Y SI ESTÁ USA CANTIDAD Y PRECIO
 		boolean esta = false;
 		for(DetallePedido dp: this.listadoDetallePedido){
@@ -131,7 +151,12 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 
 	public void quitarDetalle(DetallePedido pDetalle){
 		this.pedidoPersiste.setSubtotal(this.pedidoPersiste.getSubtotal().subtract(pDetalle.getPrecio()));
-		this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().subtract(pDetalle.getPrecio()));
+		if(this.pedidoPersiste.getMultiplicador()!=null){
+			this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal().multiply(this.pedidoPersiste.getMultiplicador()));
+			this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().setScale(2, RoundingMode.HALF_DOWN));
+		}else{
+			this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal());
+		}
 		this.listadoDetallePedido.remove(pDetalle);
 	}
 
@@ -140,7 +165,12 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 			pDetalle.setCantidad(pDetalle.getCantidad()-1);
 			pDetalle.setPrecio(pDetalle.getPrecio().subtract(pDetalle.getProducto().getProductoPrecio().getPrecio()));
 			this.pedidoPersiste.setSubtotal(this.pedidoPersiste.getSubtotal().subtract(pDetalle.getProducto().getProductoPrecio().getPrecio()));
-			this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().subtract(pDetalle.getProducto().getProductoPrecio().getPrecio()));
+			if(this.pedidoPersiste.getMultiplicador()!=null){
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal().multiply(this.pedidoPersiste.getMultiplicador()));
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().setScale(2, RoundingMode.HALF_DOWN));
+			}else{
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal());
+			}
 		}
 	}
 
@@ -149,7 +179,12 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 			pDetalle.setCantidad(pDetalle.getCantidad()+1);
 			pDetalle.setPrecio(pDetalle.getPrecio().add(pDetalle.getProducto().getProductoPrecio().getPrecio()));
 			this.pedidoPersiste.setSubtotal(this.pedidoPersiste.getSubtotal().add(pDetalle.getProducto().getProductoPrecio().getPrecio()));
-			this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().add(pDetalle.getProducto().getProductoPrecio().getPrecio()));
+			if(this.pedidoPersiste.getMultiplicador()!=null){
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal().multiply(this.pedidoPersiste.getMultiplicador()));
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().setScale(2, RoundingMode.HALF_DOWN));
+			}else{
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal());
+			}
 		}
 	}
 
@@ -229,6 +264,11 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 								break;
 							}
 						}
+						//SI UTILIZÓ CUPON LO INHABILITA
+						if(this.pedidoPersiste.getTransientCuponCliente()!=null){
+							this.pedidoPersiste.getTransientCuponCliente().setUsado("S");
+							IActualizaRices.actualizarEstadoCupon(this.pedidoPersiste.getTransientCuponCliente());
+						}
 					}else{
 						exito = false;
 						this.mostrarMensajeGlobal("noRegistraPedido", "error");
@@ -259,7 +299,11 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 		try{
 			if(this.pedidoPersiste.getCliente().getEmail()!=null && !this.pedidoPersiste.getCliente().getEmail().trim().equals("")){
 				String pEmail = this.pedidoPersiste.getCliente().getEmail().trim().toLowerCase();
-				List<Cliente> resultados = IConsultaRices.getClientesPorParametro(null, pEmail);
+				
+				if(this.mapClienteByMail.get(pEmail)==null){
+					this.mapClienteByMail.put(pEmail, IConsultaRices.getClientesPorParametro(null, pEmail));
+				}
+				List<Cliente> resultados = this.mapClienteByMail.get(pEmail);
 				if(resultados.size()>0){
 					Cliente pCliente = resultados.get(0);
 					if(pCliente.isGuardaDatos()){
@@ -267,10 +311,26 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 					}else{
 						this.pedidoPersiste.getCliente().setId(pCliente.getId());
 					}
+					if(this.mapCuponByIdCliente.get(this.pedidoPersiste.getCliente().getId().intValue())==null){
+						this.pedidoPersiste.setDescuento(null);
+						this.pedidoPersiste.setMultiplicador(null);
+						this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal());
+						this.pedidoPersiste.setTransientCuponCliente(null);
+					}
 				}else{
 					this.pedidoPersiste.setCliente(new Cliente());
 					this.pedidoPersiste.getCliente().setEmail(pEmail);
+					this.pedidoPersiste.setDescuento(null);
+					this.pedidoPersiste.setMultiplicador(null);
+					this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal());
+					this.pedidoPersiste.setTransientCuponCliente(null);
 				}
+			}else{
+				this.pedidoPersiste.setCliente(new Cliente());
+				this.pedidoPersiste.setDescuento(null);
+				this.pedidoPersiste.setMultiplicador(null);
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal());
+				this.pedidoPersiste.setTransientCuponCliente(null);
 			}
 		}catch(Exception e){
 			IConstants.log.error(e.toString(),e);
@@ -304,7 +364,47 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 	}
 	
 	public void aplicarCupon(){
-		
+		try{
+			this.mensajeError = "";
+			boolean error = false;
+			if(this.codigoCupon==null || this.codigoCupon.trim().equals("")){
+				error = true;
+				this.mensajeError = this.getMensaje("ingresaCupon");
+				this.mostraMensajeError="display:;";
+			}else if(this.pedidoPersiste.getCliente().getId()==null){
+				error = true;
+				this.mensajeError = this.getMensaje("noClienteRegistrado");
+				this.mostraMensajeError="display:;";
+			}
+			if(!error){
+				String clave = this.pedidoPersiste.getCliente().getId().toString()+this.codigoCupon.trim().toUpperCase();
+				if(this.mapCuponByIdCliente.get(clave)==null){
+					this.mapCuponByIdCliente.put(clave, IConsultaRices.getCuponCliente(this.pedidoPersiste.getCliente().getId(), this.codigoCupon.trim().toUpperCase()));
+				}
+				CuponCliente cuponCliente = this.mapCuponByIdCliente.get(clave);
+				if(cuponCliente==null){
+					this.mensajeError = this.getMensaje("cuponNoValido");
+					this.mostraMensajeError="display:;";
+					error = true;
+				}else if(cuponCliente.getUsado().equals("S")){
+					this.mensajeError = this.getMensaje("cuponUtilizado");
+					this.mostraMensajeError="display:;";
+					error = true;
+				}else{
+					this.mensajeError = "";
+					this.mostraMensajeError="display:none;";
+					this.pedidoPersiste.setDescuento(cuponCliente.getTransientCupon().getPorcentaje());
+					BigDecimal valorSobreCien = cuponCliente.getTransientCupon().getPorcentaje().divide(new BigDecimal(100));
+					BigDecimal valorMultiplica = (new BigDecimal(1)).subtract(valorSobreCien);
+					this.pedidoPersiste.setMultiplicador(valorMultiplica);
+					this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal().multiply(valorMultiplica));
+					this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().setScale(2, RoundingMode.HALF_DOWN));
+					this.pedidoPersiste.setTransientCuponCliente(cuponCliente);
+				}
+			}
+		}catch(Exception e){
+			IConstants.log.error(e.toString(),e);
+		}
 	}
 
 	public List<Producto> getListadoProducto() {
@@ -345,6 +445,22 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 
 	public boolean isShowPedidoRegistrado() {
 		return showPedidoRegistrado;
+	}
+
+	public String getCodigoCupon() {
+		return codigoCupon;
+	}
+
+	public void setCodigoCupon(String codigoCupon) {
+		this.codigoCupon = codigoCupon;
+	}
+
+	public String getMostraMensajeError() {
+		return mostraMensajeError;
+	}
+
+	public String getMensajeError() {
+		return mensajeError;
 	}
 
 }

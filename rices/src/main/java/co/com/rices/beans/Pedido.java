@@ -19,6 +19,8 @@ public class Pedido implements Serializable{
 	private BigDecimal iva;
 	private Cliente    cliente;
 	private BigDecimal descuento;
+	private BigDecimal multiplicador;
+	private CuponCliente transientCuponCliente;
 	
 	public Integer getId() {
 		return id;
@@ -85,6 +87,18 @@ public class Pedido implements Serializable{
 	}
 	public void setDescuento(BigDecimal descuento) {
 		this.descuento = descuento;
+	}
+	public BigDecimal getMultiplicador() {
+		return multiplicador;
+	}
+	public void setMultiplicador(BigDecimal multiplicador) {
+		this.multiplicador = multiplicador;
+	}
+	public CuponCliente getTransientCuponCliente() {
+		return transientCuponCliente;
+	}
+	public void setTransientCuponCliente(CuponCliente transientCuponCliente) {
+		this.transientCuponCliente = transientCuponCliente;
 	}
 
 }

@@ -11,6 +11,8 @@ import co.com.rices.IConstants;
 import co.com.rices.DAO.IActualizaRices;
 import co.com.rices.DAO.IConsultaRices;
 import co.com.rices.beans.Cliente;
+import co.com.rices.beans.Cupon;
+import co.com.rices.beans.CuponCliente;
 import co.com.rices.general.RicesTools;
 
 @ManagedBean
@@ -72,11 +74,22 @@ public class AdministrarInicio extends ConsultarFuncionesAPI{
 					this.clientePersiste.setCelular(this.clientePersiste.getCelular().trim());
 					this.clientePersiste.setDireccion(this.clientePersiste.getDireccion().trim().toUpperCase());
 					this.clientePersiste.setBarrio(this.clientePersiste.getBarrio().trim().toUpperCase());
+					this.clientePersiste.setGuardaDatos(true);
 					
 					Integer idCliente = IActualizaRices.registrarCliente(this.clientePersiste);
 					if(idCliente>0){
+						//Consulta el cupón y registra el cuponcliente
+						Cupon cupon = IConsultaRices.getCuponActivoByCupon(IConstants.CUPON_REGISTRO);
+						if(cupon!=null){
+							CuponCliente cuponCliente = new CuponCliente();
+							cuponCliente.setCupon(IConstants.CUPON_REGISTRO);
+							cuponCliente.setIdCliente(idCliente);
+							cuponCliente.setUsado("N");
+							IActualizaRices.registrarCuponCliente(cuponCliente);
+						}
+						
 						this.cerrarModal("mdlDescuento");
-						this.mostrarMensajeGlobal("clienteRegistradoDescuento", "error");
+						this.mostrarMensajeGlobal("clienteRegistradoDescuento", "exito");
 					}
 				}
 			}	

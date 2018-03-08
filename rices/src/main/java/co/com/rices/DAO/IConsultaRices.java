@@ -11,6 +11,8 @@ import java.util.Map;
 import co.com.rices.Conexion;
 import co.com.rices.IConstants;
 import co.com.rices.beans.Cliente;
+import co.com.rices.beans.Cupon;
+import co.com.rices.beans.CuponCliente;
 import co.com.rices.beans.DetallePedido;
 import co.com.rices.beans.EstructuraMenu;
 import co.com.rices.beans.Pedido;
@@ -116,9 +118,9 @@ public interface IConsultaRices {
 		try{
 			StringBuilder builder=new StringBuilder();
 			builder.append("SELECT id_pedido, id_cliente, total_pedido, fecha_pedido, hora_pedido, ");
-			builder.append("estado_pedido ");
-			builder.append("FROM rices.Pedidos ");
-			builder.append("WHERE  35 = 35   ");
+			builder.append("       estado_pedido, descuento                                        ");
+			builder.append("FROM   rices.Pedidos                                                   ");
+			builder.append("WHERE  35 = 35                                                         ");
 			Map<Integer, Object> parametros=new HashMap<Integer,Object>();
 			int i=1;
 			if (pEstado!=null && !pEstado.trim().equals("")){
@@ -144,6 +146,7 @@ public interface IConsultaRices {
 					pedido.setFecha(rs.getDate("fecha_pedido"));
 					pedido.setHora(rs.getDate("hora_pedido"));
 					pedido.setEstado(rs.getString("estado_pedido"));
+					pedido.setDescuento(rs.getBigDecimal("descuento"));
 					resultados.add(pedido);
 				}
 			}catch(SQLException sq){
@@ -383,4 +386,88 @@ public interface IConsultaRices {
 		}
 		return resultados;
 	}
+	
+	public static Cupon getCuponActivoByCupon(String pCupon)throws Exception{
+		Cupon resultado = null;
+		try{
+			StringBuilder builder = new StringBuilder();
+			builder.append("  SELECT cupon, descripcion, porcentaje, estado, "); 
+			builder.append("         usuario_crea, fecha_crea, hora_crea     ");
+			builder.append("  FROM   rices.cupones                           ");
+			builder.append("  WHERE  cupon   = ?                             ");   
+			builder.append("  AND    estado  = ?                             ");
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setString(1, pCupon);
+				cs.setString(2, "A");
+				rs = cs.executeQuery();
+				if(rs.next()){
+					resultado = new Cupon();
+					resultado.setCupon(rs.getString("cupon"));
+					resultado.setDescripcion(rs.getString("descripcion"));
+					resultado.setPorcentaje(rs.getBigDecimal("porcentaje"));
+					resultado.setEstado(rs.getString("estado"));
+					resultado.setUsuarioCrea(rs.getString("usuario_crea"));
+					resultado.setFechaCrea(rs.getDate("fecha_crea"));
+					resultado.setHoraCrea(rs.getDate("hora_crea"));
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}
+	
+	public static CuponCliente getCuponCliente(Integer pIdCliente, String pCupon)throws Exception{
+		CuponCliente resultado = null;
+		try{
+			StringBuilder builder = new StringBuilder();
+			builder.append("  SELECT d.descripcion, d.porcentaje, c.usado    ");
+			builder.append("  FROM   rices.cupones d, rices.cupon_clientes c ");
+			builder.append("  WHERE  c.cupon = d.cupon                       ");
+			builder.append("  AND    c.id_cliente = ?                        ");
+			builder.append("  AND    d.cupon      = ?                        ");
+			builder.append("  AND    d.estado     = ?                        ");
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setInt(   1, pIdCliente);
+				cs.setString(2, pCupon);
+				cs.setString(3, "A");
+				rs = cs.executeQuery();
+				if(rs.next()){
+					resultado = new CuponCliente();
+					resultado.setIdCliente(pIdCliente);
+					resultado.setCupon(pCupon);
+					resultado.setUsado(rs.getString("usado"));
+					resultado.setTransientCupon(new Cupon());
+					resultado.getTransientCupon().setDescripcion(rs.getString("descripcion"));
+					resultado.getTransientCupon().setPorcentaje(rs.getBigDecimal("porcentaje"));
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}	
+	
 }

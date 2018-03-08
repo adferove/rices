@@ -7,4 +7,5 @@ public interface IConstants {
 	String	ACTIVO		= "A";
 	String	INACTIVO	= "I";
 	Integer ROL_ADMINISTRADOR = 1;
+	String  CUPON_REGISTRO = "RICESTOGO";
 }

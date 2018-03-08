@@ -8,6 +8,7 @@ import java.util.Calendar;
 import co.com.rices.Conexion;
 import co.com.rices.IConstants;
 import co.com.rices.beans.Cliente;
+import co.com.rices.beans.CuponCliente;
 import co.com.rices.beans.DetallePedido;
 import co.com.rices.beans.Pedido;
 import co.com.rices.beans.Producto;
@@ -99,8 +100,8 @@ public interface IActualizaRices {
 			StringBuilder builder = new StringBuilder();
 			builder.append(" INSERT INTO rices.pedidos(                                           ");
 			builder.append("         id_cliente, total_pedido, subtotal_pedido, cargo_domicilio,  ");
-			builder.append("         iva, fecha_pedido, hora_pedido, estado_pedido)               ");
-			builder.append(" VALUES (?, ?, ?, ?, ?, ?, ?, ?)                                      ");
+			builder.append("         iva, fecha_pedido, hora_pedido, estado_pedido, descuento)    ");
+			builder.append(" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)                                   ");
 			builder.append(" RETURNING id_pedido;                                                 ");
 			Conexion conexion    = null;
 			CallableStatement cs = null;
@@ -116,6 +117,7 @@ public interface IActualizaRices {
 				cs.setObject(6, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
 				cs.setObject(7, new java.sql.Time(Calendar.getInstance().getTime().getTime()));
 				cs.setString(8, pPedido.getEstado());
+				cs.setObject(9, pPedido.getDescuento());
 				cs.execute();
 				rs = cs.getResultSet();
 				if(rs.next()){
@@ -306,6 +308,69 @@ public interface IActualizaRices {
 				cs.setObject(4, pProducto.getRating());
 				cs.setObject(5, pProducto.getRutaImagen());
 				cs.setInt(6, pProducto.getId());
+				int value = cs.executeUpdate();
+				if(value==1){
+					resultado = true;
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}
+	
+	public static boolean actualizarEstadoCupon(CuponCliente pCuponCliente)throws Exception{
+		boolean resultado = false;
+		try{
+			StringBuilder builder = new StringBuilder();
+			builder.append(" UPDATE rices.cupon_clientes ");
+			builder.append(" SET    usado=?              ");
+			builder.append(" WHERE  id_cliente=?         ");
+			builder.append(" AND    cupon=?              ");
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setString(1, pCuponCliente.getUsado());
+				cs.setInt(2, pCuponCliente.getIdCliente());
+				cs.setString(3, pCuponCliente.getCupon());
+				int value = cs.executeUpdate();
+				if(value==1){
+					resultado = true;
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}
+	
+	public static boolean registrarCuponCliente(CuponCliente pCuponCliente)throws Exception{
+		boolean resultado = false;
+		try{
+			StringBuilder builder = new StringBuilder();
+			builder.append(" INSERT INTO rices.cupon_clientes(  ");
+			builder.append("          id_cliente, cupon, usado) ");
+			builder.append(" VALUES   (?, ?, ?);                "); 
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setInt(1, pCuponCliente.getIdCliente());
+				cs.setString(2, pCuponCliente.getCupon());
+				cs.setString(3, pCuponCliente.getUsado());
 				int value = cs.executeUpdate();
 				if(value==1){
 					resultado = true;
