@@ -295,6 +295,25 @@
 										</div>
 
 									</p:panel>
+									<p:accordionPanel activeIndex="-1">
+										<p:tab title="#{mensaje.Cupon} de descuento">
+											<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+												<p:inputText id="idCupon" style="font-size:11px; " size="50"
+													maxlength="50" value="" />
+												<p:watermark for="idCupon"
+													value="Ingresa el #{mensaje.Cupon} de descuento"
+													id="watermarkCupon" />
+												<p:commandButton id="btnAplicar" icon="fa fa-money"
+													style="font-size:14px; font-weight: normal !important;"
+													action="#{administrarOrdenCompra.aplicarCupon()}"
+													value="Aplicar #{mensaje.Cupon}" update=":form:tb2">
+												</p:commandButton>
+												<p:blockUI block=":form" trigger="btnAplicar" />
+											</p:panelGrid>
+										</p:tab>
+									</p:accordionPanel>
+
+
 								</div>
 							</div>
 						</div>

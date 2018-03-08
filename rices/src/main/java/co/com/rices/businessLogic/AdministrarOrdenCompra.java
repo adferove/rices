@@ -302,6 +302,10 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 			}
 		}
 	}
+	
+	public void aplicarCupon(){
+		
+	}
 
 	public List<Producto> getListadoProducto() {
 		return listadoProducto;
