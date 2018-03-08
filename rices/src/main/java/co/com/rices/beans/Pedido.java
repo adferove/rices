@@ -18,6 +18,7 @@ public class Pedido implements Serializable{
 	private BigDecimal cargoDomicilio;
 	private BigDecimal iva;
 	private Cliente    cliente;
+	private BigDecimal descuento;
 	
 	public Integer getId() {
 		return id;
@@ -78,6 +79,12 @@ public class Pedido implements Serializable{
 	}
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+	public BigDecimal getDescuento() {
+		return descuento;
+	}
+	public void setDescuento(BigDecimal descuento) {
+		this.descuento = descuento;
 	}
 
 }
