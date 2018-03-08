@@ -286,7 +286,7 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 				sesion=null;
 			}
 			ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-			externalContext.redirect("/rices/pages/domicilios/seleccionarProducto.jsf");
+			externalContext.redirect("/rices/");
 		}catch(Exception e){
 			IConstants.log.error(e.toString(),e);
 		}

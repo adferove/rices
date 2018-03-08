@@ -9,7 +9,7 @@
 	<ui:define name="body">
 		<h:form id="form">
 
-			<p:messages id="messages" showDetail="true" closable="true" />
+			<p:growl id="messages" showDetail="true" closable="true" />
 
 			<div id="slider">
 				<div class="flexslider">
@@ -43,16 +43,73 @@
 			<!-- End Map section -->
 
 			<p:dialog id="mdlDescuento" widgetVar="mdlDescuento" modal="true"
-				showHeader="false" resizable="false">
-				<div style="height: 10px;"></div>
-				<div align="center">
-					<p:outputLabel style="font-size:20px;"
-						value="#{mensaje.RegistroDescuento}" />
-				</div>
-				<div align="center" class="logo">
-					<a href="#"><img src="/rices/images/logo.png"
-						title="Rices fusion y mas" alt="Rices to go" /></a>
-				</div>
+				showHeader="false" resizable="false" draggable="true">
+				<p:panel id="panelRegistraCliente">
+					<div style="height: 10px;"></div>
+					<div align="center">
+						<p:outputLabel style="font-size:20px;"
+							value="#{mensaje.RegistroDescuento}" />
+					</div>
+					<div align="center" class="logo">
+						<a href="#"><img src="/rices/images/logo.png"
+							title="Rices fusion y mas" alt="Rices to go" /></a>
+					</div>
+
+
+					<div align="center" class="logo">
+						<p:panelGrid id="datoCheckout" columns="1"
+							styleClass="ui-panelgrid-blank">
+							<p:inputText id="idEmail" style="font-size:11px; " size="50"
+								maxlength="50"
+								value="#{administrarInicio.clientePersiste.email}" />
+							<p:watermark for="idEmail" value="CORREO #{mensaje.ELECTRONICO}"
+								id="watermarkEmail" />
+
+							<p:inputText id="idNombre"
+								style="font-size:11px; text-transform:uppercase;" size="50"
+								maxlength="50"
+								value="#{administrarInicio.clientePersiste.nombre}" />
+							<p:watermark for="idNombre" value="Nombre" id="watermarkNombre" />
+
+							<p:inputText id="idDireccion"
+								style="font-size:11px; text-transform:uppercase;" size="50"
+								maxlength="50"
+								value="#{administrarInicio.clientePersiste.direccion}" />
+							<p:watermark for="idDireccion" value="#{mensaje.Direccion}"
+								id="watermarkDireccion" />
+
+							<p:inputText id="idBarrio"
+								style="font-size:11px; text-transform:uppercase;" size="50"
+								maxlength="50"
+								value="#{administrarInicio.clientePersiste.barrio}" />
+							<p:watermark for="idBarrio" value="Barrio" id="watermarkBarrio" />
+
+							<p:inputText id="idCelular"
+								style="font-size:11px; text-transform:uppercase;" size="50"
+								maxlength="50"
+								value="#{administrarInicio.clientePersiste.celular}" />
+							<p:watermark for="idCelular" value="#{mensaje.Telefono}/Celular"
+								id="watermarkCelular" />
+
+						</p:panelGrid>
+
+						<div align="center">
+							<p:commandButton id="btnConfimar"
+								style="font-size:14px; font-weight: normal !important;"
+								action="#{administrarInicio.registrarCliente()}" value="Aceptar"
+								update=":form:panelRegistraCliente,:form:messages"
+								icon="fa fa-sign-in">
+							</p:commandButton>
+							<p:spacer width="10" />
+							<p:commandButton id="btnSalir"
+								style="font-size:14px; font-weight: normal !important;"
+								action="#{administrarInicio.cerrarPedido()}" value="No, Salir"
+								update=":form:mdlDescuento" icon="fa fa-sign-out">
+							</p:commandButton>
+							<p:blockUI block=":form" trigger="btnConfimar,btnSalir" />
+						</div>
+					</div>
+				</p:panel>
 			</p:dialog>
 		</h:form>
 	</ui:define>
