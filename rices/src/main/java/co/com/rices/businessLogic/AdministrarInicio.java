@@ -24,7 +24,7 @@ public class AdministrarInicio extends ConsultarFuncionesAPI{
 	private Cliente clientePersiste;
 	private String  email;
 	private boolean aceptaTerminos;
-	
+		
 	@PostConstruct
 	public void init(){
 		
@@ -89,9 +89,11 @@ public class AdministrarInicio extends ConsultarFuncionesAPI{
 							cuponCliente.setUsado("N");
 							IActualizaRices.registrarCuponCliente(cuponCliente);
 						}
-						
 						this.cerrarModal("mdlDescuento");
 						this.mostrarMensajeGlobal("clienteRegistradoDescuento", "exito");
+						String args[] = new String[1];
+						args[0] = IConstants.CUPON_REGISTRO;
+						this.mostrarMensajeGlobalParametros("tuCuponDescuento", "exito", args);
 					}
 				}
 			}	
@@ -145,6 +147,5 @@ public class AdministrarInicio extends ConsultarFuncionesAPI{
 	public void setAceptaTerminos(boolean aceptaTerminos) {
 		this.aceptaTerminos = aceptaTerminos;
 	}
-	
 	
 }

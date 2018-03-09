@@ -9,7 +9,7 @@
 	<ui:define name="body">
 		<h:form id="form">
 
-			<p:growl id="messages" showDetail="true" closable="true" />
+			<p:messages id="messages" showDetail="true" closable="true" />
 
 			<div id="slider">
 				<div class="flexslider">
@@ -45,6 +45,7 @@
 			<p:dialog id="mdlDescuento" widgetVar="mdlDescuento" modal="true"
 				showHeader="false" resizable="false" draggable="true">
 				<p:panel id="panelRegistraCliente">
+					<p:messages id="messages2" showDetail="true" closable="true" />
 					<div style="height: 10px;"></div>
 					<div align="center">
 						<p:outputLabel style="font-size:20px;"
@@ -104,7 +105,7 @@
 							<p:commandButton id="btnSalir"
 								style="font-size:14px; font-weight: normal !important;"
 								action="#{administrarInicio.cerrarPedido()}" value="No, Salir"
-								update=":form:mdlDescuento" icon="fa fa-sign-out">
+								update=":form:mdlDescuento,:form:messages" icon="fa fa-sign-out">
 							</p:commandButton>
 							<p:blockUI block=":form" trigger="btnConfimar,btnSalir" />
 						</div>
