@@ -22,6 +22,8 @@ public class AdministrarInicio extends ConsultarFuncionesAPI{
 	private static final long serialVersionUID = -247498233455725789L;
 	
 	private Cliente clientePersiste;
+	private String  email;
+	private boolean aceptaTerminos;
 	
 	@PostConstruct
 	public void init(){
@@ -103,6 +105,20 @@ public class AdministrarInicio extends ConsultarFuncionesAPI{
 		this.cerrarModal("mdlDescuento");
 	}
 	
+	public void suscribirse(){
+		if(this.aceptaTerminos){
+			if(!RicesTools.validateEmail(this.email.trim().toLowerCase())){
+				this.mostrarMensajeGlobal("ingresaEmailValido", "error");
+			}else{
+				this.mostrarMensajeGlobal("listoSuscrito", "exito");
+				this.email = "";
+				this.aceptaTerminos = false;
+			}
+		}else{
+			this.mostrarMensajeGlobal("debeAceptarTerminos", "advertencia");
+		}
+	}
+	
 	public Cliente getClientePersiste() {
 		if(this.clientePersiste==null){
 			this.clientePersiste = new Cliente();
@@ -112,6 +128,22 @@ public class AdministrarInicio extends ConsultarFuncionesAPI{
 
 	public void setClientePersiste(Cliente clientePersiste) {
 		this.clientePersiste = clientePersiste;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public boolean isAceptaTerminos() {
+		return aceptaTerminos;
+	}
+
+	public void setAceptaTerminos(boolean aceptaTerminos) {
+		this.aceptaTerminos = aceptaTerminos;
 	}
 	
 	
