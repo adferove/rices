@@ -18,6 +18,7 @@ import co.com.rices.beans.EstructuraMenu;
 import co.com.rices.beans.Pedido;
 import co.com.rices.beans.Producto;
 import co.com.rices.beans.ProductoPrecio;
+import co.com.rices.beans.Usuario;
 
 public interface IConsultaRices {
 
@@ -245,7 +246,7 @@ public interface IConsultaRices {
 					resultado.setIdProducto(rs.getInt("id_producto"));
 					resultado.setPrecio(rs.getBigDecimal("precio_producto"));
 					resultado.setEstado(rs.getString("estado_producto_precio"));
-					resultado.setFechaCrea(rs.getTime("fecha_creacion_producto_precio"));
+					resultado.setFechaCrea(rs.getDate("fecha_creacion_producto_precio"));
 					resultado.setFechaActualiza(rs.getDate("fecha_actualizacion_producto_precio"));
 					resultado.setUsuarioCrea(rs.getString("usuario_creacion"));
 					resultado.setUsuarioActualiza(rs.getString("usuario_actualiza"));
@@ -342,7 +343,7 @@ public interface IConsultaRices {
 		return resultados;
 	}
 	
-	public static List<EstructuraMenu> getEsctructuraPorRol(Integer pRol)throws Exception{
+	public static List<EstructuraMenu> getEsctructuraPorRol(List<Integer> pRol)throws Exception{
 		List<EstructuraMenu> resultados = new ArrayList<EstructuraMenu>();
 		try{
 			Conexion conexion = new Conexion();
@@ -354,13 +355,24 @@ public interface IConsultaRices {
 			builder.append(" FROM   rices.menus m, rices.menu_rol r    ");
 			builder.append(" WHERE  m.id_menu = r.id_menu              "); 
 			builder.append(" AND    m.estado = ?                       ");
-			builder.append(" AND    r.estado = ?                       "); 
-			builder.append(" AND    r.id_rol = ?                       ");
+			builder.append(" AND    r.estado = ?                       ");
+			if(pRol!=null && pRol.size()>0){
+				builder.append(" AND    r.id_rol IN (?");
+				for(int i=1; i < pRol.size(); i++){
+					builder.append(",?");
+				}
+				builder.append(")");
+			}
 			try{
 				cs = conexion.getConnection().prepareCall(builder.toString());
 				cs.setString(1, "A");
 				cs.setString(2, "A");
-				cs.setInt(3, pRol);
+				if(pRol!=null && pRol.size()>0){
+					int i = 3;
+					for(Integer value: pRol){
+						cs.setInt(i++, value);
+					}
+				}
 				rs = cs.executeQuery();
 				while(rs.next()){
 					EstructuraMenu estructuraMenu = new EstructuraMenu();
@@ -469,5 +481,78 @@ public interface IConsultaRices {
 		}
 		return resultado;
 	}	
+	
+	public static Usuario getUsuarioByLogin(String pLogin)throws Exception{
+		Usuario resultado = null;
+		try{
+			StringBuilder builder = new StringBuilder();
+			builder.append(" SELECT login_usuario, documento_id, primer_nombre, segundo_nombre, primer_apellido,   "); 
+			builder.append("        segundo_apellido, fecha_creacion, tipo_doc_id, password_usuario, email_usuario ");
+			builder.append(" FROM   rices.usuarios                                                                 ");
+			builder.append(" WHERE  login_usuario = ?                                                              ");
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setString(1, pLogin);
+				rs = cs.executeQuery();
+				if(rs.next()){
+					resultado = new Usuario();
+					resultado.setLogin(rs.getString("login_usuario"));
+					resultado.setDocumento(rs.getLong("documento_id"));
+					resultado.setPrimernombre(rs.getString("primer_nombre"));
+					resultado.setSegundonombre(rs.getString("segundo_nombre"));
+					resultado.setPrimerapellido(rs.getString("primer_apellido"));
+					resultado.setSegundoapellido(rs.getString("segundo_apellido"));
+					resultado.setFecha(rs.getDate("fecha_creacion"));
+					resultado.setTipodocumento(rs.getShort("tipo_doc_id"));
+					resultado.setPassword(rs.getString("password_usuario"));
+					resultado.setEmail(rs.getString("email_usuario"));
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}
+	
+	public static List<Integer> getRolesByLogin(String pLogin)  throws Exception{
+		List<Integer> resultados=new ArrayList<Integer>();
+		try{
+			StringBuilder builder=new StringBuilder();
+			builder.append("  SELECT id_rol              ");
+			builder.append("  FROM   rices.roles_usuario ");
+			builder.append("  WHERE  login_usuario = ?   "); 
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setString(1, pLogin);
+				rs = cs.executeQuery();
+				while(rs.next()){
+					resultados.add(rs.getInt(1));
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultados;
+	}
 	
 }

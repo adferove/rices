@@ -34,7 +34,7 @@
 			<div class="row">
 				<div class="col-md-6">
 					<div class="home-account">
-						<a href="/rices/">Inicio</a> <a href="#">Login</a>
+						<a href="/rices/">Inicio</a>
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -58,39 +58,36 @@
 					<div class="main-menu">
 						<ul>
 							<li><a href="/rices/">Inicio</a></li>
-							<li><a
-								href="/rices/pages/domicilios/seleccionarProducto.jsf">Haz
-									tu pedido</a></li>
 						</ul>
 					</div>
 				</div>
-				<div class="col-md-3">
-					<div class="search-box">
-						<form name="search_form" method="get" class="search_form">
-							<input id="search" type="text" /> <input type="submit"
-								id="search-button" />
-						</form>
-					</div>
-				</div>
+				<div class="col-md-3"></div>
 			</div>
 		</div>
 	</div>
 	</header>
 
+
 	<div class="container">
 		<div class="row">
 			<div class="product-item col-md-12">
 				<div class="row">
+
 					<div class="col-md-3">
-						<div>
-							<ui:include src="/templates/menu.xhtml" />
-						</div>
+						<p:outputPanel rendered="#{menu.permisoMenu}">
+							<div>
+								<ui:include src="/templates/menu.xhtml" />
+							</div>
+						</p:outputPanel>
 					</div>
 					<div class="col-md-9">
-						<div>
-							<ui:insert name="body" />
-						</div>
+						<p:outputPanel rendered="#{menu.permisoPagina}">
+							<div>
+								<ui:insert name="body" />
+							</div>
+						</p:outputPanel>
 					</div>
+
 				</div>
 			</div>
 		</div>

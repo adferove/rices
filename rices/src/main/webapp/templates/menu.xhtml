@@ -10,5 +10,11 @@
 		<div align="left">
 			<p:tieredMenu model="#{menu.model}" />
 		</div>
+		<p:spacer height="20" />
+		<div align="center">
+			<p:commandButton value="Cerrar #{mensaje.sesion}"
+				style="font-size:14px" action="#{menu.cerrarSesion()}"
+				process="@this" />
+		</div>
 	</h:form>
 </ui:composition>
