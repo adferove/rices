@@ -81,7 +81,7 @@ public class ConsultarFuncionesAPI implements Serializable{
 
 		return mensaje;
 	}
-	
+
 	public String getMensajeParametros(String mensaje, String[] args) {
 		String mensajeSalida = "";
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -90,7 +90,7 @@ public class ConsultarFuncionesAPI implements Serializable{
 		mensajeSalida = MessageFormat.format(mensajeSalida, (Object[])args);
 		return mensajeSalida;
 	}
-	
+
 	public void mostrarMensajeGlobalParametros(String aIdProperties, String aTipo, String[] args) {
 		FacesContext context = FacesContext.getCurrentInstance();
 		if (aTipo == null || (aTipo != null && aTipo.equals("exito"))) {
@@ -237,5 +237,21 @@ public class ConsultarFuncionesAPI implements Serializable{
 
 		return itemsEstados;
 	}
+	public String fechaCorta(Date fecha){
+		String cadenaFormatoFecha = "MMM/dd/yyyy";
+		SimpleDateFormat formatoFecha = new SimpleDateFormat(cadenaFormatoFecha);
+		if (fecha != null) {
+			return formatoFecha.format(fecha);
+		}
+		return "";
+	}
 
+	public String horaCorta(Date fecha){
+		String cadenaFormatoFecha = "HH:mm:ss";
+		SimpleDateFormat formatoFecha = new SimpleDateFormat(cadenaFormatoFecha);
+		if (fecha != null) {
+			return formatoFecha.format(fecha);
+		}
+		return "";
+	}
 }

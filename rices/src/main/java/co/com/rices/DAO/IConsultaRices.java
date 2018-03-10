@@ -119,13 +119,13 @@ public interface IConsultaRices {
 		try{
 			StringBuilder builder=new StringBuilder();
 			builder.append("SELECT id_pedido, id_cliente, total_pedido, fecha_pedido, hora_pedido, ");
-			builder.append("       estado_pedido, descuento                                        ");
+			builder.append("       estado_pedido, descuento,subtotal_pedido                        ");
 			builder.append("FROM   rices.Pedidos                                                   ");
 			builder.append("WHERE  35 = 35                                                         ");
 			Map<Integer, Object> parametros=new HashMap<Integer,Object>();
 			int i=1;
 			if (pEstado!=null && !pEstado.trim().equals("")){
-				builder.append(" AND estado=?");
+				builder.append(" AND estado_pedido=?");
 				parametros.put(i++, pEstado);
 			}
 			builder.append("ORDER  BY fecha_pedido ASC ");
@@ -145,9 +145,10 @@ public interface IConsultaRices {
 					pedido.setIdcliente(rs.getInt("id_cliente"));
 					pedido.setTotal(rs.getBigDecimal("total_pedido"));
 					pedido.setFecha(rs.getDate("fecha_pedido"));
-					pedido.setHora(rs.getDate("hora_pedido"));
+					pedido.setHora(rs.getTime("hora_pedido"));
 					pedido.setEstado(rs.getString("estado_pedido"));
 					pedido.setDescuento(rs.getBigDecimal("descuento"));
+					pedido.setSubtotal(rs.getBigDecimal("subtotal_pedido"));
 					resultados.add(pedido);
 				}
 			}catch(SQLException sq){

@@ -67,7 +67,7 @@ public class Authenticate extends ConsultarFuncionesAPI{
 						sesion.setAttribute("RicesUser", usuario);
 						sesion.setAttribute("RicesRoles", roles);
 						ExternalContext externalContext = context.getExternalContext();
-						externalContext.redirect("/rices/pages/home.jsf");
+						externalContext.redirect("/rices/pages/pedidos/pedidoRegistrado.jsf");
 					}else{
 						this.mostrarMensajeGlobal("passwordInconrrecto", "error");
 					}
