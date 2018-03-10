@@ -416,4 +416,34 @@ public interface IActualizaRices {
 		}
 		return resultado;
 	}
+	
+	public static boolean actualizarEstadoPedido(Pedido pPedido)throws Exception{
+		boolean resultado = false;
+		try{
+			StringBuilder builder = new StringBuilder();
+			builder.append(" UPDATE rices.pedidos     ");
+			builder.append(" SET    estado_pedido = ? ");
+			builder.append(" WHERE  id_pedido = ?     ");
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setString(1, pPedido.getEstado());
+				cs.setInt(2, pPedido.getId());
+				int value = cs.executeUpdate();
+				if(value==1){
+					resultado = true;
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}
 }

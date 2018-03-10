@@ -3,24 +3,26 @@ package co.com.rices.beans;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class Pedido implements Serializable{
 
 	private static final long serialVersionUID = -7004622626932386721L;
 	
-	private Integer    id;
-	private Integer    idcliente;
-	private BigDecimal total;
-	private Date       fecha;
-	private Date       hora;
-	private String     estado;
-	private BigDecimal subtotal;
-	private BigDecimal cargoDomicilio;
-	private BigDecimal iva;
-	private Cliente    cliente;
-	private BigDecimal descuento;
-	private BigDecimal multiplicador;
-	private CuponCliente transientCuponCliente;
+	private Integer             id;
+	private Integer             idcliente;
+	private BigDecimal          total;
+	private Date                fecha;
+	private Date                hora;
+	private String              estado;
+	private BigDecimal          subtotal;
+	private BigDecimal          cargoDomicilio;
+	private BigDecimal          iva;
+	private Cliente             cliente;
+	private BigDecimal          descuento;
+	private BigDecimal          multiplicador;
+	private CuponCliente        transientCuponCliente;
+	private List<DetallePedido> listadoDetalle;
 	
 	public Integer getId() {
 		return id;
@@ -99,6 +101,12 @@ public class Pedido implements Serializable{
 	}
 	public void setTransientCuponCliente(CuponCliente transientCuponCliente) {
 		this.transientCuponCliente = transientCuponCliente;
+	}
+	public List<DetallePedido> getListadoDetalle() {
+		return listadoDetalle;
+	}
+	public void setListadoDetalle(List<DetallePedido> listadoDetalle) {
+		this.listadoDetalle = listadoDetalle;
 	}
 
 }

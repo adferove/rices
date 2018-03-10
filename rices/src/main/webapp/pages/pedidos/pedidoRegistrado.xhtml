@@ -14,37 +14,125 @@
 				<p:outputLabel value="Pedidos registrados" style="font-size:20px;" />
 			</div>
 
+			<div style="height: 20px;"></div>
+
 			<p:outputPanel id="lstPedidos">
-				<div align="center">
-					<p:dataTable var="loc" value="#{administrarPedido.listadoPedido}">
-						<p:column headerText="#">
-							<div align="right">
-								<h:outputText value="#{loc.id}" />
+
+				<div align="left">
+					<p:repeat value="#{administrarPedido.listadoPedido}" var="loc">
+
+						<div class="row">
+							<div class="col-md-5">
+								<p:outputPanel id="opPedido">
+									<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+										<h:outputText value="# pedido:" style="font-size:11px;" />
+										<h:outputText value="#{loc.id}"
+											style="font-weight: bold; font-size:11px;" />
+
+										<h:outputText value="Fecha:" style="font-size:11px;" />
+										<h:outputText
+											value="#{consultarFuncionesAPI.fechaCorta(loc.fecha)} #{consultarFuncionesAPI.horaCorta(loc.hora)}"
+											style="font-weight: bold; font-size:11px;" />
+
+										<h:outputText value="Cliente:" style="font-size:11px;" />
+										<h:outputText value="#{loc.cliente.nombre}"
+											style="font-weight: bold; font-size:11px;" />
+
+										<h:outputText value="#{mensaje.Telefono}:"
+											style="font-size:11px;" />
+										<h:outputText value="#{loc.cliente.celular}"
+											style="font-weight: bold; font-size:11px;" />
+
+										<h:outputText value="#{mensaje.Direccion}:"
+											style="font-size:11px;" />
+										<h:outputText
+											value="#{loc.cliente.direccion} #{loc.cliente.barrio}"
+											style="font-weight: bold; font-size:11px;" />
+
+										<h:outputText value="Subtotal:" style="font-size:11px;" />
+										<h:outputText value="$#{loc.subtotal}"
+											style="font-weight: bold; font-size:11px;" />
+
+										<h:outputText value="Descuento:" style="font-size:11px;" />
+										<h:outputText rendered="#{loc.descuento!=null}"
+											value="#{loc.descuento}%"
+											style="font-weight: bold; font-size:11px;" />
+										<h:outputText rendered="#{loc.descuento==null}" value="n/a"
+											style="font-weight: bold; font-size:11px;" />
+
+										<h:outputText value="Total:" style="font-size:11px;" />
+										<h:outputText value="$#{loc.total}"
+											style="font-weight: bold; font-size:11px;" />
+									</p:panelGrid>
+								</p:outputPanel>
 							</div>
-						</p:column>
-						<p:column headerText="Fecha">
-							<div align="center">
-								<h:outputText
-									value="#{consultarFuncionesAPI.fechaCorta(loc.fecha)} #{consultarFuncionesAPI.horaCorta(loc.hora)}" />
+
+							<div class="col-md-4">
+								<p:outputPanel id="opDetallePedido">
+
+									<div align="center">
+										<p:dataTable var="detalle"
+											rendered="#{not empty loc.listadoDetalle}"
+											value="#{loc.listadoDetalle}">
+											<f:facet name="header">Detalle</f:facet>
+											<p:column headerText="Item" style="font-size:11px;">
+												<h:outputText value="#{detalle.producto.nombre}"
+													style="font-size:11px;" />
+											</p:column>
+
+											<p:column headerText="Cantidad" style="font-size:11px;">
+												<div align="center">
+													<h:outputText value="#{detalle.cantidad}"
+														style="font-size:11px;" />
+												</div>
+											</p:column>
+
+											<p:column headerText="Precio" style="font-size:11px;">
+												<div align="right">
+													<h:outputText value="$#{detalle.precio}"
+														style="font-size:11px;" />
+												</div>
+											</p:column>
+
+										</p:dataTable>
+									</div>
+
+								</p:outputPanel>
 							</div>
-						</p:column>
-						<p:column headerText="Subtotal">
-							<div align="right">
-								<h:outputText value="$#{loc.subtotal}" />
+
+							<div class="col-md-3">
+								<p:outputPanel id="opActualizarPedido">
+									<p:panel header="Actualizar estado del pedido"
+										style="text-align:center;">
+										<div align="center">
+											<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+												<p:outputLabel value="Estado: "
+													style="font-weight:bold; font-size:11px" />
+												<p:selectOneMenu id="slctEditProducto"
+													style="padding-right: 1em; font-size:11px;" value="#{loc.estado}">
+													<f:selectItem itemLabel="Registrado" itemValue="R" />
+													<f:selectItem itemLabel="Cancelado" itemValue="C" />
+													<f:selectItem itemLabel="Despachado" itemValue="D" />
+												</p:selectOneMenu>
+											</p:panelGrid>
+										</div>
+									</p:panel>
+									<p:spacer height="10" />
+									<div align="center">
+										<p:commandButton id="btnEditarEstado"
+											style="font-size:14px; font-weight: normal !important;"
+											action="#{administrarPedido.actualizarEstado(loc)}"
+											value="Actualizar" update=":form">
+										</p:commandButton>
+										<p:blockUI block=":form" trigger="btnEditarEstado" />
+									</div>
+								</p:outputPanel>
 							</div>
-						</p:column>
-						<p:column headerText="Dcto">
-							<div align="right">
-								<h:outputText rendered="#{loc.descuento!=null}"
-									value="#{loc.descuento}%" />
-							</div>
-						</p:column>
-						<p:column headerText="Total">
-							<div align="right">
-								<h:outputText value="$#{loc.total}" />
-							</div>
-						</p:column>
-					</p:dataTable>
+						</div>
+
+
+						<hr />
+					</p:repeat>
 				</div>
 			</p:outputPanel>
 

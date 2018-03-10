@@ -26,8 +26,8 @@ public interface IConsultaRices {
 		List<DetallePedido> resultado=new ArrayList<DetallePedido>();
 		try{
 			StringBuilder builder=new StringBuilder();
-			builder.append("SELECT id_detalle_pedido, id_pedido, id_producto, cantidad, observacion  ");
-			builder.append("rices.detalle_pedidos ");
+			builder.append(" SELECT id_detalle_pedido, id_pedido, id_producto, cantidad, observacion, precio ");
+			builder.append(" FROM   rices.detalle_pedidos ");
 			builder.append(" WHERE  id_pedido = ? ");
 
 			Conexion conexion    = null;
@@ -45,6 +45,7 @@ public interface IConsultaRices {
 					detallepedido.setIdproducto(rs.getInt("id_producto"));
 					detallepedido.setCantidad(rs.getInt("cantidad"));
 					detallepedido.setObservacion(rs.getString("observacion"));
+					detallepedido.setPrecio(rs.getBigDecimal("precio"));
 					resultado.add(detallepedido);
 				}
 			}catch(SQLException sq){
@@ -128,7 +129,7 @@ public interface IConsultaRices {
 				builder.append(" AND estado_pedido=?");
 				parametros.put(i++, pEstado);
 			}
-			builder.append("ORDER  BY fecha_pedido ASC ");
+			builder.append("ORDER  BY fecha_pedido ASC,  hora_pedido ASC");
 			Conexion conexion    = null;
 			CallableStatement cs = null;
 			ResultSet rs         = null;
@@ -542,6 +543,50 @@ public interface IConsultaRices {
 				rs = cs.executeQuery();
 				while(rs.next()){
 					resultados.add(rs.getInt(1));
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultados;
+	}
+	
+	public static Map<Integer,Producto> getMapProductoActivo()throws Exception{
+		Map<Integer,Producto> resultados = new HashMap<Integer,Producto>();
+		try{
+			StringBuilder builder=new StringBuilder();
+			builder.append(" SELECT p.id_producto, p.nombre_producto, p.descripcion_producto, "); 
+			builder.append("        p.ranking, p.ruta_imagen, v.precio_producto               ");             
+			builder.append(" FROM   rices.productos p, rices.producto_precios v               ");                                         
+			builder.append(" WHERE  v.id_producto = p.id_producto                             ");
+			builder.append(" AND    p.estado = ?                                              ");
+			builder.append(" AND    v.estado_producto_precio = ?                              ");
+			builder.append(" ORDER  BY v.fecha_creacion_producto_precio DESC                  "); 
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setString(1, "A");
+				cs.setString(2, "A");
+				rs = cs.executeQuery();
+				while(rs.next()){
+					Producto producto = new Producto();
+					producto.setId(rs.getInt("id_producto"));
+					producto.setNombre(rs.getString("nombre_producto"));
+					producto.setDescripcion(rs.getString("descripcion_producto"));
+					producto.setRating(rs.getInt("ranking"));
+					producto.setRutaImagen(rs.getString("ruta_imagen"));
+					producto.setProductoPrecio(new ProductoPrecio());
+					producto.getProductoPrecio().setPrecio(rs.getBigDecimal("precio_producto"));
+					resultados.put(producto.getId(), producto);
 				}
 			}catch(SQLException sq){
 				IConstants.log.error(sq.toString(),sq);
