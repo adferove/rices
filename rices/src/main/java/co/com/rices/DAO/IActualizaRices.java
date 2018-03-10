@@ -386,4 +386,34 @@ public interface IActualizaRices {
 		}
 		return resultado;
 	}
+	
+	public static boolean actualizarPasswordByLogin(String pPassword, String pLogin)throws Exception{
+		boolean resultado = false;
+		try{
+			StringBuilder builder = new StringBuilder();
+			builder.append(" UPDATE rices.usuarios     ");
+			builder.append(" SET    password_usuario=? ");
+			builder.append(" WHERE  login_usuario=?    ");
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setString(1, pPassword);
+				cs.setString(2, pLogin);
+				int value = cs.executeUpdate();
+				if(value==1){
+					resultado = true;
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}
 }
