@@ -692,4 +692,57 @@ public interface IConsultaRices {
 		return resultados;
 	}
 	
+	public static List<Cliente> getClientesPorNombreEmail(String pNombre, String pEmail)throws Exception{
+		List<Cliente> resultados = new ArrayList<Cliente>();
+		try{
+			StringBuilder builder = new StringBuilder();
+			builder.append(" SELECT id_cliente, nombres_cliente, apellidos_cliente, correo_cliente,"); 
+			builder.append(" direccion_cliente, telefono_cliente, barrio_cliente,registrado        ");
+			builder.append(" FROM   rices.clientes                                                 ");
+			builder.append(" WHERE  35 = 35                                                        ");
+			Map<Integer, Object> parametros = new HashMap<Integer, Object>();
+			int i = 1;
+			if(pNombre!=null && !pNombre.trim().equals("")){
+				builder.append(" AND nombres_cliente LIKE  ? ");
+				parametros.put(i++, "%" +pNombre.trim().toUpperCase()+ "%");
+			}
+			if(pEmail!=null && !pEmail.trim().equals("")){
+				builder.append(" AND correo_cliente LIKE ? ");
+				parametros.put(i++, "%" +pEmail.trim().toLowerCase()+ "%");
+			}
+			builder.append(" ORDER BY nombres_cliente,apellidos_cliente desc");
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				for(int j: parametros.keySet()){
+					cs.setObject(j, parametros.get(j));
+				}
+				rs = cs.executeQuery();
+				while(rs.next()){
+					Cliente cliente = new Cliente();
+					cliente.setId(rs.getInt("id_cliente"));
+					cliente.setNombre(rs.getString("nombres_cliente"));
+					cliente.setApellido(rs.getString("apellidos_cliente"));
+					cliente.setEmail(rs.getString("correo_cliente"));
+					cliente.setDireccion(rs.getString("direccion_cliente"));
+					cliente.setBarrio(rs.getString("barrio_cliente"));
+					cliente.setCelular(rs.getString("telefono_cliente"));
+					cliente.setGuardaDatos(rs.getBoolean("registrado"));
+					resultados.add(cliente);
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultados;
+	}
 }

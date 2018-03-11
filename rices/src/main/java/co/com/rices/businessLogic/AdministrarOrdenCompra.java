@@ -339,14 +339,8 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 
 	public void cerrarPedido(){
 		try{
-			FacesContext context = FacesContext.getCurrentInstance();
-			HttpSession sesion = (HttpSession) context.getExternalContext().getSession(true);
-			if(sesion!=null){
-				sesion.invalidate();
-				sesion=null;
-			}
 			ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-			externalContext.redirect("/rices/");
+			externalContext.redirect("/rices/index.jsf");
 		}catch(Exception e){
 			IConstants.log.error(e.toString(),e);
 		}

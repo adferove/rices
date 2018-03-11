@@ -63,5 +63,19 @@ public class Cliente implements Serializable{
 	public void setGuardaDatos(boolean guardaDatos) {
 		this.guardaDatos = guardaDatos;
 	}
-	
+	public Cliente clon(){
+		Cliente clon = new Cliente();
+		
+		clon.setId(new Integer(this.id));
+		clon.setNombre(new String(this.nombre));
+		if(this.apellido!=null){
+			clon.setApellido(new String(this.apellido));
+		}
+		clon.setEmail(new String(this.email));
+		clon.setDireccion(new String(this.direccion));
+		clon.setCelular(new String(this.celular));
+		clon.setBarrio(new String(this.barrio));
+		clon.setGuardaDatos(this.guardaDatos);
+		return clon;
+	}
 }

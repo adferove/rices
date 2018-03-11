@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/principalAdmin.xhtml">
+
+	<ui:define name="body">
+		<h:form id="form">
+			<p:messages id="messages" showDetail="true" closable="true" />
+
+			<p:toolbar rendered="#{administrarCliente.showConsulta}">
+				<f:facet name="left">
+					<p:commandLink value="Nuevo cliente" update="form"
+						action="#{administrarCliente.nuevoCliente()}"
+						style="text-decoration:underline;" />
+				</f:facet>
+			</p:toolbar>
+			<p:spacer height="10" />
+
+			<p:outputPanel id="pnlCreaCliente"
+				rendered="#{administrarCliente.showCrear}">
+
+				<p:panel header="Crear nuevo cliente" style="text-align:center;">
+					<div align="center">
+
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+							<p:outputLabel value="Nombres:"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtNombreCreaCliente" style="font-size:14px;"
+								maxlength="20"
+								value="#{administrarCliente.clientePersiste.nombre}" />
+							<p:outputLabel value="Correo:"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtCorreoCreaCliente" style="font-size:14px;"
+								maxlength="20"
+								value="#{administrarCliente.clientePersiste.email}" />
+							<p:outputLabel value="#{mensaje.Direccion}:"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtDireccionCreaCliente" style="font-size:14px;"
+								maxlength="20"
+								value="#{administrarCliente.clientePersiste.direccion}" />
+							<p:outputLabel value="#{mensaje.Telefono}"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtCelularCreaCliente" style="font-size:14px;"
+								maxlength="20"
+								value="#{administrarCliente.clientePersiste.celular}" />
+							<p:outputLabel value="Barrio"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtBarrioCreaCliente" style="font-size:14px;"
+								maxlength="20"
+								value="#{administrarCliente.clientePersiste.barrio}" />
+						</p:panelGrid>
+						<p:spacer height="10" />
+						<div align="center">
+							<p:commandButton id="btnCrearCliente"
+								style="font-size:14px; font-weight: normal !important;"
+								action="#{administrarCliente.registrarCliente()}"
+								value="Registrar" update=":form">
+							</p:commandButton>
+							<p:spacer width="10" />
+							<p:commandButton id="btnRegresar1"
+								style="font-size:14px; font-weight: normal !important;"
+								action="#{administrarCliente.regresar(1)}" value="Regresar"
+								update=":form">
+							</p:commandButton>
+							<p:blockUI block=":form" trigger="btnCrearCliente,btnRegresar1" />
+						</div>
+					</div>
+				</p:panel>
+			</p:outputPanel>
+			<!-- INICIO INGRESO CRITERIOS CONSULTA -->
+			<p:outputPanel id="pnlIngresoDatos"
+				rendered="#{administrarCliente.showConsulta}">
+
+				<p:panel header="Consulta de clientes" style="text-align:center;">
+					<div align="center">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel value="Nombre "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtNombreCliente" style="font-size:14px;"
+								maxlength="50"
+								value="#{administrarCliente.clienteConsulta.nombre}" />
+
+							<p:outputLabel value="Email:"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtEmail" style="font-size:14px;" maxlength="50"
+								value="#{administrarCliente.clienteConsulta.email}" />
+						</p:panelGrid>
+					</div>
+				</p:panel>
+
+				<p:spacer height="10" />
+
+				<div align="center">
+					<p:commandButton id="btnConsultarCliente"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{administrarCliente.consultarCliente( administrarCliente.clienteConsulta.nombre,administrarCliente.clienteConsulta.email)}"
+						value="Consultar" update=":form">
+					</p:commandButton>
+					<p:blockUI block=":form" trigger="btnConsultarCliente" />
+				</div>
+
+				<p:spacer height="10" />
+
+				<div align="center">
+					<p:panel header="Clientes"
+						rendered="#{administrarCliente.listadoCliente!=null and administrarCliente.listadoCliente.size()>0}">
+
+						<p:dataTable var="loc" id="dtlListadoAspiranteWeb"
+							widgetVar="dtlListadoAspiranteWeb"
+							value="#{administrarCliente.listadoCliente}" reflow="true"
+							emptyMessage="#{mensaje.noExistenciaRegistro}">
+
+							<p:column headerText="ID" width="10%" style="font-size:11px;">
+								<div align="right">
+									<h:outputText value="#{loc.id}" style="font-size:11px;" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Nombre" width="20%" style="font-size:11px;">
+								<div align="left">
+									<h:outputText value="#{loc.nombre}" style="font-size:11px;" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Email" width="20%" style="font-size:11px;">
+								<div align="left">
+									<h:outputText value="#{loc.email}" style="font-size:11px;" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Celular" width="12%"
+								style="font-size:11px;">
+								<div align="right">
+									<h:outputText value="#{loc.celular}" style="font-size:11px;" />
+								</div>
+							</p:column>
+
+							<p:column headerText="#{mensaje.Direccion}" width="20%"
+								style="font-size:11px;">
+								<div align="left">
+									<h:outputText value="#{loc.direccion}" style="font-size:11px;" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Barrio" width="10%" style="font-size:11px;">
+								<div align="left">
+									<h:outputText value="#{loc.barrio}" style="font-size:11px;" />
+								</div>
+							</p:column>
+
+							<p:column headerText="" width="8%" style="font-size:11px;">
+								<div align="center">
+
+									<p:commandButton id="btnVerDetalle" icon="ui-icon-search"
+										action="#{administrarCliente.modificarCliente(loc)}"
+										update="form" title="Ver detalle del cliente" />
+
+									<p:blockUI id="idBlockCliente" block=":form"
+										trigger="btnVerDetalle" />
+
+								</div>
+							</p:column>
+
+
+						</p:dataTable>
+					</p:panel>
+				</div>
+
+			</p:outputPanel>
+			<p:outputPanel id="pnlEditaCliente"
+				rendered="#{administrarCliente.showEditar}">
+
+				<p:panel header="Editar cliente" style="text-align:center;">
+					<div align="center">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel value="Nombre "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtNombreEditCliente" style="font-size:14px;"
+								maxlength="20" value="#{administrarCliente.clienteClon.nombre}" />
+
+							<p:outputLabel value="Correo "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtCorreoEditCliente" style="font-size:14px;"
+								maxlength="50" value="#{administrarCliente.clienteClon.email}" />
+
+							<p:outputLabel value="#{mensaje.Direccion}: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtDireccionEditCliente" style="font-size:14px;"
+								maxlength="50"
+								value="#{administrarCliente.clienteClon.direccion}" />
+
+							<p:outputLabel value="#{mensaje.Telefono}: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtTelefonoEditCliente" style="font-size:14px;"
+								maxlength="50" value="#{administrarCliente.clienteClon.celular}" />
+
+							<p:outputLabel value="Barrio: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtBarrioEditCliente" style="font-size:14px;"
+								maxlength="50" value="#{administrarCliente.clienteClon.barrio}" />
+						</p:panelGrid>
+					</div>
+				</p:panel>
+				<p:spacer height="10" />
+				<div align="center">
+					<p:commandButton id="btnEditarCliente"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{administrarCliente.editarCliente()}" value="Editar"
+						update=":form">
+					</p:commandButton>
+					<p:spacer width="10" />
+					<p:commandButton id="btnRegresar2"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{administrarCliente.regresar(2)}" value="Regresar"
+						update=":form">
+					</p:commandButton>
+					<p:blockUI block=":form" trigger="btnEditarCliente,btnRegresar2" />
+				</div>
+
+			</p:outputPanel>
+
+
+		</h:form>
+	</ui:define>
+</ui:composition>
