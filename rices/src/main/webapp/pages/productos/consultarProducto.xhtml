@@ -100,12 +100,12 @@
 								</div>
 							</p:column>
 
-							<p:column headerText="Acciones" width="10%">
+							<p:column headerText="" width="10%">
 								<div align="center">
 
 									<p:commandButton id="btnVerDetalle" icon="ui-icon-search"
 										action="#{administrarProducto.verDetalleProducto(loc)}"
-										update="form" title="Ver detalle del producto" />
+										update="form" title="Ver/editar detalle del producto" />
 
 									<p:blockUI id="idBlockProducto" block=":form"
 										trigger="btnVerDetalle" />

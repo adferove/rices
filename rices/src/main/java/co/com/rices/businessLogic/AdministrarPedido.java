@@ -27,7 +27,7 @@ public class AdministrarPedido extends ConsultarFuncionesAPI{
 	@PostConstruct
 	public void init(){
 		try{
-			this.productoActivo = IConsultaRices.getMapProductoActivo();
+			this.productoActivo = IConsultaRices.getMapProductoTodos();
 			this.listadoPedido = IConsultaRices.getPedidoPorEstado("R");
 			for(Pedido p: this.listadoPedido){
 				//ASOCIA AL CLIENTE

@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -586,6 +587,96 @@ public interface IConsultaRices {
 					producto.setRutaImagen(rs.getString("ruta_imagen"));
 					producto.setProductoPrecio(new ProductoPrecio());
 					producto.getProductoPrecio().setPrecio(rs.getBigDecimal("precio_producto"));
+					resultados.put(producto.getId(), producto);
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultados;
+	}
+	
+	public static List<Pedido> getPedidoPorParametros(String pEstado, Date pFechaDesde, Date pFechaHasta)  throws Exception{
+		List<Pedido> resultados=new ArrayList<Pedido>();
+		try{
+			StringBuilder builder=new StringBuilder();
+			builder.append("SELECT id_pedido, id_cliente, total_pedido, fecha_pedido, hora_pedido, ");
+			builder.append("       estado_pedido, descuento,subtotal_pedido                        ");
+			builder.append("FROM   rices.Pedidos                                                   ");
+			builder.append("WHERE  35 = 35                                                         ");
+			Map<Integer, Object> parametros=new HashMap<Integer,Object>();
+			int i=1;
+			if (pEstado!=null && !pEstado.trim().equals("")){
+				builder.append(" AND estado_pedido=?");
+				parametros.put(i++, pEstado);
+			}
+			if(pFechaDesde!=null){
+				builder.append(" AND fecha_pedido >= ? ");
+				parametros.put(i++, new java.sql.Date(pFechaDesde.getTime()));
+			}
+			if(pFechaHasta!=null){
+				builder.append(" AND fecha_pedido <= ? ");
+				parametros.put(i++, new java.sql.Date(pFechaHasta.getTime()));
+			}
+			builder.append("ORDER  BY fecha_pedido ASC,  hora_pedido ASC LIMIT 100 ");
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				for(int j: parametros.keySet()){
+					cs.setObject(j, parametros.get(j));
+				}
+				rs = cs.executeQuery();
+				while(rs.next()){
+					Pedido pedido = new Pedido();
+					pedido.setId(rs.getInt("id_pedido"));
+					pedido.setIdcliente(rs.getInt("id_cliente"));
+					pedido.setTotal(rs.getBigDecimal("total_pedido"));
+					pedido.setFecha(rs.getDate("fecha_pedido"));
+					pedido.setHora(rs.getTime("hora_pedido"));
+					pedido.setEstado(rs.getString("estado_pedido"));
+					pedido.setDescuento(rs.getBigDecimal("descuento"));
+					pedido.setSubtotal(rs.getBigDecimal("subtotal_pedido"));
+					resultados.add(pedido);
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultados;
+	}
+	
+	public static Map<Integer,Producto> getMapProductoTodos()throws Exception{
+		Map<Integer,Producto> resultados = new HashMap<Integer,Producto>();
+		try{
+			StringBuilder builder=new StringBuilder();
+			builder.append(" SELECT p.id_producto, p.nombre_producto "); 
+			builder.append(" FROM   rices.productos p                ");                                         
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				rs = cs.executeQuery();
+				while(rs.next()){
+					Producto producto = new Producto();
+					producto.setId(rs.getInt("id_producto"));
+					producto.setNombre(rs.getString("nombre_producto"));
 					resultados.put(producto.getId(), producto);
 				}
 			}catch(SQLException sq){

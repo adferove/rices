@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/principalAdmin.xhtml">
+
+	<ui:define name="body">
+		<h:form id="form">
+			<p:messages id="messages" showDetail="true" closable="true" />
+
+			<div align="center">
+				<p:outputLabel value="Consulta de pedidos" style="font-size:20px;" />
+			</div>
+
+			<div style="height: 20px;"></div>
+
+			<!-- INICIO INGRESO CRITERIOS CONSULTA -->
+			<p:outputPanel id="pnlIngresoDatos"
+				rendered="#{consultarPedido.showConsulta}">
+
+				<p:panel header="Criterios de consulta" style="text-align:center;">
+					<div align="center">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel value="Estado: "
+								style="font-weight:bold; font-size:14px" />
+							<p:selectOneMenu id="slctEditProducto"
+								style="padding-right: 1em; font-size:14px;"
+								value="#{consultarPedido.estado}">
+								<f:selectItem noSelectionOption="true" itemLabel="Seleccione..." />
+								<f:selectItem itemLabel="Registrado" itemValue="R" />
+								<f:selectItem itemLabel="Cancelado" itemValue="C" />
+								<f:selectItem itemLabel="Despachado" itemValue="D" />
+							</p:selectOneMenu>
+
+							<p:outputLabel for="desde" value="Fecha pedido desde:" />
+							<p:calendar id="desde" value="#{consultarPedido.fechaDesde}"
+								pattern="dd-MM-yyyy" mask="true" />
+
+							<p:outputLabel for="hasta" value="Fecha pedido hasta:" />
+							<p:calendar id="hasta" value="#{consultarPedido.fechaHasta}"
+								pattern="dd-MM-yyyy" mask="true" />
+						</p:panelGrid>
+					</div>
+				</p:panel>
+
+				<p:spacer height="10" />
+
+				<div align="center">
+					<p:commandButton id="btnConsultarPedido"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{consultarPedido.consultarPedido()}" value="Consultar"
+						update=":form">
+					</p:commandButton>
+					<p:blockUI block=":form" trigger="btnConsultarPedido" />
+				</div>
+
+				<p:spacer height="10" />
+
+				<div align="center">
+					<p:panel header="Pedidos">
+
+						<p:dataTable var="loc" id="dtlListadoPedido"
+							widgetVar="dtlListadoPedido"
+							value="#{consultarPedido.listadoPedido}" reflow="true"
+							emptyMessage="#{mensaje.noExistenciaRegistro}">
+
+							<p:column headerText="# Pedido" width="20%">
+								<div align="right">
+									<h:outputText value="#{loc.id}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Fecha" width="30%">
+								<div align="center">
+									<h:outputText
+										value="#{consultarFuncionesAPI.fechaCorta(loc.fecha)} #{consultarFuncionesAPI.horaCorta(loc.hora)}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Estado" width="20%">
+								<div align="left">
+									<h:outputText value="Registrado"
+										rendered="#{loc.estado.equals('R')}" />
+									<h:outputText value="Cancelado"
+										rendered="#{loc.estado.equals('C')}" />
+									<h:outputText value="Despachado"
+										rendered="#{loc.estado.equals('D')}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Total" width="20%">
+								<div align="right">
+									<h:outputText value="$#{loc.total}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="" width="10%">
+								<div align="center">
+
+									<p:commandButton id="btnVerDetalle" icon="ui-icon-search"
+										action="#{consultarPedido.verDetallePedido(loc)}"
+										update="form" title="Ver detalle del pedido" />
+
+									<p:blockUI id="idBlockProducto" block=":form"
+										trigger="btnVerDetalle" />
+
+								</div>
+							</p:column>
+
+						</p:dataTable>
+					</p:panel>
+				</div>
+
+
+			</p:outputPanel>
+
+			<p:outputPanel id="pnlVerDetalle"
+				rendered="#{consultarPedido.showVerDetalle}">
+
+				<div class="row">
+					<div class="col-md-6">
+						<p:outputPanel id="opPedido">
+							<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+								<h:outputText value="# pedido:" style="font-size:11px;" />
+								<h:outputText value="#{consultarPedido.pedidoSeleccionado.id}"
+									style="font-weight: bold; font-size:11px;" />
+
+								<h:outputText value="Fecha:" style="font-size:11px;" />
+								<h:outputText
+									value="#{consultarFuncionesAPI.fechaCorta(consultarPedido.pedidoSeleccionado.fecha)} #{consultarFuncionesAPI.horaCorta(consultarPedido.pedidoSeleccionado.hora)}"
+									style="font-weight: bold; font-size:11px;" />
+
+								<h:outputText value="Cliente:" style="font-size:11px;" />
+								<h:outputText
+									value="#{consultarPedido.pedidoSeleccionado.cliente.nombre}"
+									style="font-weight: bold; font-size:11px;" />
+
+								<h:outputText value="#{mensaje.Telefono}:"
+									style="font-size:11px;" />
+								<h:outputText
+									value="#{consultarPedido.pedidoSeleccionado.cliente.celular}"
+									style="font-weight: bold; font-size:11px;" />
+
+								<h:outputText value="#{mensaje.Direccion}:"
+									style="font-size:11px;" />
+								<h:outputText
+									value="#{consultarPedido.pedidoSeleccionado.cliente.direccion} #{consultarPedido.pedidoSeleccionado.cliente.barrio}"
+									style="font-weight: bold; font-size:11px;" />
+
+								<h:outputText value="Subtotal:" style="font-size:11px;" />
+								<h:outputText
+									value="$#{consultarPedido.pedidoSeleccionado.subtotal}"
+									style="font-weight: bold; font-size:11px;" />
+
+								<h:outputText value="Descuento:" style="font-size:11px;" />
+								<h:outputText
+									rendered="#{consultarPedido.pedidoSeleccionado.descuento!=null}"
+									value="#{consultarPedido.pedidoSeleccionado.descuento}%"
+									style="font-weight: bold; font-size:11px;" />
+								<h:outputText
+									rendered="#{consultarPedido.pedidoSeleccionado.descuento==null}"
+									value="n/a" style="font-weight: bold; font-size:11px;" />
+
+								<h:outputText value="Total:" style="font-size:11px;" />
+								<h:outputText
+									value="$#{consultarPedido.pedidoSeleccionado.total}"
+									style="font-weight: bold; font-size:11px;" />
+
+								<h:outputText value="Estado:" style="font-size:11px;" />
+								<h:outputText value="Registrado"
+									style="font-weight: bold; font-size:11px;"
+									rendered="#{consultarPedido.pedidoSeleccionado.estado.equals('R')}" />
+								<h:outputText value="Cancelado"
+									style="font-weight: bold; font-size:11px;"
+									rendered="#{consultarPedido.pedidoSeleccionado.estado.equals('C')}" />
+								<h:outputText value="Despachado"
+									style="font-weight: bold; font-size:11px;"
+									rendered="#{consultarPedido.pedidoSeleccionado.estado.equals('D')}" />
+
+							</p:panelGrid>
+						</p:outputPanel>
+					</div>
+
+					<div class="col-md-6">
+						<p:outputPanel id="opDetallePedido">
+
+							<div align="center">
+								<p:dataTable var="detalle"
+									rendered="#{not empty consultarPedido.pedidoSeleccionado.listadoDetalle}"
+									value="#{consultarPedido.pedidoSeleccionado.listadoDetalle}">
+									<f:facet name="header">Detalle</f:facet>
+									<p:column headerText="Item" style="font-size:11px;">
+										<h:outputText value="#{detalle.producto.nombre}"
+											style="font-size:11px;" />
+									</p:column>
+
+									<p:column headerText="Cantidad" style="font-size:11px;">
+										<div align="center">
+											<h:outputText value="#{detalle.cantidad}"
+												style="font-size:11px;" />
+										</div>
+									</p:column>
+
+									<p:column headerText="Precio" style="font-size:11px;">
+										<div align="right">
+											<h:outputText value="$#{detalle.precio}"
+												style="font-size:11px;" />
+										</div>
+									</p:column>
+
+								</p:dataTable>
+							</div>
+
+						</p:outputPanel>
+					</div>
+				</div>
+
+
+				<p:spacer height="10" />
+				<div align="center">
+					<p:commandButton id="btnRegresar1"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{consultarPedido.regresar()}" value="Regresar"
+						update=":form">
+					</p:commandButton>
+					<p:blockUI block=":form" trigger="btnRegresar1" />
+				</div>
+			</p:outputPanel>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
