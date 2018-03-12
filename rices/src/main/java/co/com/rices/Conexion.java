@@ -12,9 +12,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-
 public class Conexion implements Serializable{
 
 	private static final long serialVersionUID = -8644297010476367394L;
