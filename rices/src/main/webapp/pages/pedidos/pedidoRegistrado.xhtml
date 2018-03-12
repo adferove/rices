@@ -7,6 +7,24 @@
 	template="/templates/principalAdmin.xhtml">
 
 	<ui:define name="body">
+
+		<script>
+function printPage(id)
+{
+   var html="<html>";
+   html+= document.getElementById(id).innerHTML;
+
+   html+="</html>";
+
+   var printWin = window.open('','','left=0,top=0,width=650,height=800,toolbar=0,scrollbars=0,status  =0');
+   printWin.document.write(html);
+   printWin.document.close();
+   printWin.focus();
+   printWin.print();
+   printWin.close();
+}
+</script>
+
 		<h:form id="form">
 			<p:messages id="messages" showDetail="true" closable="true" />
 
@@ -109,7 +127,8 @@
 												<p:outputLabel value="Estado: "
 													style="font-weight:bold; font-size:11px" />
 												<p:selectOneMenu id="slctEditProducto"
-													style="padding-right: 1em; font-size:11px;" value="#{loc.estado}">
+													style="padding-right: 1em; font-size:11px;"
+													value="#{loc.estado}">
 													<f:selectItem itemLabel="Registrado" itemValue="R" />
 													<f:selectItem itemLabel="Cancelado" itemValue="C" />
 													<f:selectItem itemLabel="Despachado" itemValue="D" />
@@ -136,6 +155,10 @@
 				</div>
 			</p:outputPanel>
 
+			<p:dialog header="Modal Dialog" widgetVar="dlg2" modal="true"
+				height="100">
+				<div id='block1'></div>
+			</p:dialog>
 
 		</h:form>
 	</ui:define>

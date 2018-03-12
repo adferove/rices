@@ -6,6 +6,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import co.com.rices.ConsultarFuncionesAPI;
 import co.com.rices.IConstants;
@@ -13,6 +15,7 @@ import co.com.rices.DAO.IActualizaRices;
 import co.com.rices.DAO.IConsultaRices;
 import co.com.rices.beans.Producto;
 import co.com.rices.beans.ProductoPrecio;
+import co.com.rices.beans.Usuario;
 
 @ManagedBean
 @ViewScoped
@@ -23,7 +26,7 @@ public class AdministrarProducto extends ConsultarFuncionesAPI{
 	private boolean showConsulta;
 	private boolean showCrear;
 	private boolean showEditar;
-	
+	private Usuario  usuario;
 	private Producto productoPersiste;
 	private Producto productoConsulta;
 	private Producto productoClon;
@@ -35,6 +38,11 @@ public class AdministrarProducto extends ConsultarFuncionesAPI{
 			this.showConsulta = true;
 			this.productoConsulta = new Producto();
 			this.listadoProducto = IConsultaRices.getProductoPorEstado(null);
+			FacesContext context = FacesContext.getCurrentInstance();
+			HttpSession sesion = (HttpSession) context.getExternalContext().getSession(true);
+			if(sesion.getAttribute("RicesUser")!=null){
+				this.usuario = (Usuario) sesion.getAttribute("RicesUser");
+			}
 		}catch(Exception e){
 			IConstants.log.error(e.toString(),e);
 		}
@@ -72,7 +80,7 @@ public class AdministrarProducto extends ConsultarFuncionesAPI{
 			}
 			if(!error){
 				this.productoPersiste.setFechacreacion(Calendar.getInstance().getTime());
-				this.productoPersiste.setLoginusuario("arodrive");
+				this.productoPersiste.setLoginusuario(this.usuario.getLogin());
 				int idProducto = IActualizaRices.registrarProducto(this.productoPersiste);
 				if(idProducto > 0){
 					this.productoPersiste.setId(idProducto);
@@ -80,8 +88,8 @@ public class AdministrarProducto extends ConsultarFuncionesAPI{
 					this.productoPersiste.getProductoPrecio().setEstado("A");
 					this.productoPersiste.getProductoPrecio().setFechaActualiza(Calendar.getInstance().getTime());
 					this.productoPersiste.getProductoPrecio().setFechaCrea(Calendar.getInstance().getTime());
-					this.productoPersiste.getProductoPrecio().setUsuarioActualiza("arodrive");
-					this.productoPersiste.getProductoPrecio().setUsuarioCrea("arodrive");
+					this.productoPersiste.getProductoPrecio().setUsuarioActualiza(this.usuario.getLogin());
+					this.productoPersiste.getProductoPrecio().setUsuarioCrea(this.usuario.getLogin());
 					if(IActualizaRices.registrarProductoPrecio(this.productoPersiste.getProductoPrecio())>0){
 						this.listadoProducto.add(this.productoPersiste);
 						this.showConsulta = true;
@@ -106,7 +114,7 @@ public class AdministrarProducto extends ConsultarFuncionesAPI{
 				if(this.productoClon.getProductoPrecio().getPrecio().compareTo(this.productoPersiste.getProductoPrecio().getPrecio())!=0){
 					this.productoClon.getProductoPrecio().setEstado("I");
 					this.productoClon.getProductoPrecio().setFechaActualiza(Calendar.getInstance().getTime());
-					this.productoClon.getProductoPrecio().setUsuarioActualiza("arodrive");
+					this.productoClon.getProductoPrecio().setUsuarioActualiza(this.usuario.getLogin());
 					
 					boolean exitoPrecio = IActualizaRices.actualizarProductoPrecio(this.productoClon.getProductoPrecio());
 					if(!exitoPrecio){
@@ -115,7 +123,7 @@ public class AdministrarProducto extends ConsultarFuncionesAPI{
 						this.productoClon.getProductoPrecio().setEstado("A");
 						this.productoClon.getProductoPrecio().setId(null);
 						this.productoClon.getProductoPrecio().setFechaCrea(Calendar.getInstance().getTime());
-						this.productoClon.getProductoPrecio().setUsuarioCrea("arodrive");
+						this.productoClon.getProductoPrecio().setUsuarioCrea(this.usuario.getLogin());
 						int idProductoPrecio = IActualizaRices.registrarProductoPrecio(this.productoClon.getProductoPrecio());
 						if(idProductoPrecio < 0){
 							this.mostrarMensajeGlobal("problemaPrecioRegistro", "advertencia");
