@@ -6,7 +6,7 @@
 	<groupId>rices</groupId>
 	<artifactId>rices</artifactId>
 	<packaging>war</packaging>
-	<version>1.0</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>rices</name>
 
 	<properties>
@@ -124,7 +124,29 @@
 			<artifactId>omnifaces</artifactId>
 			<version>2.6</version>
 		</dependency>
+
+		<!-- POSTGRES PARA LA VERSION 3 DE OPENSHIFT QUE ES CON CADENA DE CONEXION. -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.1.1</version>
+		</dependency>
+
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 	<profiles>
 		<profile>
