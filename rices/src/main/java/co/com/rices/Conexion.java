@@ -33,8 +33,11 @@ public class Conexion implements Serializable{
 			// **************openshuftV3********************
 			String DB_driver = "org.postgresql.Driver";
 
-			String url = "jdbc:postgresql://postgresql:5432/rices";
-			String username = "admin";
+//			String url = "jdbc:postgresql://postgresql:5432/rices";
+//			String username = "admin";
+//			String password = "admin";
+			String url = "jdbc:postgresql://localhost:5433/rices";
+			String username = "postgres";
 			String password = "admin";
 			Class.forName(DB_driver);
 			con = DriverManager.getConnection(url, username, password);

@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/principalAdmin.xhtml">
+
+	<ui:define name="body">
+		<h:form id="form">
+			<p:messages id="messages" showDetail="true" closable="true" />
+
+			<p:toolbar rendered="#{manageProduct.showConsulta}">
+				<f:facet name="left">
+					<p:commandLink value="Nuevo producto" update="form"
+						action="#{manageProduct.nuevoProducto()}"
+						style="text-decoration:underline;" />
+				</f:facet>
+			</p:toolbar>
+			<p:spacer height="10" />
+			<!-- INICIO INGRESO CRITERIOS CONSULTA -->
+			<p:outputPanel id="pnlIngresoDatos"
+				rendered="#{manageProduct.showConsulta}">
+
+				<p:panel header="Consulta de productos" style="text-align:center;">
+					<div align="center">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel value="Nombre producto: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtNombreProducto" style="font-size:14px;"
+								maxlength="50" value="#{manageProduct.productoConsulta.name}" />
+
+							<p:outputLabel value="#{mensaje.Description} producto: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtDescripcionProducto" style="font-size:14px;"
+								maxlength="50"
+								value="#{manageProduct.productoConsulta.description}" />
+						</p:panelGrid>
+					</div>
+				</p:panel>
+
+				<p:spacer height="10" />
+
+				<div align="center">
+					<p:commandButton id="btnConsultarProducto"
+						styleClass="btn btn-success"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{manageProduct.consultarProducto()}" value="Consultar"
+						update=":form">
+					</p:commandButton>
+					<p:blockUI block=":form" trigger="btnConsultarProducto" />
+				</div>
+
+				<p:spacer height="10" />
+
+				<div align="center">
+					<p:panel header="Productos"
+						rendered="#{manageProduct.listadoProducto!=null and manageProduct.listadoProducto.size()>0}">
+
+						<p:dataTable var="loc" id="dtlListadoAspiranteWeb"
+							widgetVar="dtlListadoAspiranteWeb"
+							value="#{manageProduct.listadoProducto}" reflow="true"
+							emptyMessage="#{mensaje.noExistenciaRegistro}">
+							<p:column headerText="">
+								<div align="center">
+									<p:graphicImage name="demo/images/#{loc.imageName}.gif"
+										styleClass="rounded-circle" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Nombre">
+								<div align="center">
+									<h:outputText value="#{loc.name}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="#{mensaje.Description}">
+								<div align="center">
+									<h:outputText value="#{loc.description}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Estado">
+								<div align="center">
+									<h:outputText value="Activo"
+										rendered="#{loc.state.equals('A')}" />
+									<h:outputText value="Inactivo"
+										rendered="#{loc.state.equals('I')}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Tipo">
+								<div align="center">
+									<h:outputText value="Principal"
+										rendered="#{loc.productType.equals('P')}" />
+									<h:outputText value="Complemento"
+										rendered="#{loc.productType.equals('C')}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="" width="10%">
+								<div align="center">
+
+									<p:commandButton id="btnVerDetalle" icon="ui-icon-search"
+										action="#{manageProduct.verDetalleProducto(loc)}"
+										update="form" title="Ver/editar detalle del producto" />
+
+									<p:blockUI id="idBlockProducto" block=":form"
+										trigger="btnVerDetalle" />
+
+								</div>
+							</p:column>
+
+
+						</p:dataTable>
+					</p:panel>
+				</div>
+
+			</p:outputPanel>
+
+			<p:outputPanel id="pnlCreaProducto"
+				rendered="#{manageProduct.showCrear}">
+
+				<p:panel header="Crear nuevo producto" style="text-align:center;">
+					<div align="center">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel value="Nombre producto: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtNombreCreaProducto"
+								style="font-size:14px; text-transform:uppercase;" maxlength="20"
+								value="#{manageProduct.productoPersiste.name}" />
+
+							<p:outputLabel value="#{mensaje.Description} producto: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtDescripcionCreaProducto"
+								style="font-size:14px;" maxlength="50"
+								value="#{manageProduct.productoPersiste.description}" />
+
+							<p:outputLabel value="Estado: "
+								style="font-weight:bold; font-size:14px" />
+							<p:selectOneMenu id="slctCreaProducto"
+								style="padding-right: 1em;"
+								value="#{manageProduct.productoPersiste.state}">
+								<f:selectItem itemLabel="Activo" itemValue="A" />
+								<f:selectItem itemLabel="Inactivo" itemValue="I" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Tipo: "
+								style="font-weight:bold; font-size:14px" />
+							<p:selectOneMenu id="txtCreaType" style="padding-right: 1em;"
+								value="#{manageProduct.productoPersiste.productType}">
+								<f:selectItem itemLabel="Complemento" itemValue="C" />
+								<f:selectItem itemLabel="Principal" itemValue="P" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Ranking: "
+								style="font-weight:bold; font-size:14px" />
+							<p:selectOneMenu id="txtCreaRanking" style="padding-right: 1em;"
+								value="#{manageProduct.productoPersiste.ranking}">
+								<f:selectItem itemLabel="1" itemValue="1" />
+								<f:selectItem itemLabel="2" itemValue="2" />
+								<f:selectItem itemLabel="3" itemValue="3" />
+								<f:selectItem itemLabel="4" itemValue="4" />
+								<f:selectItem itemLabel="5" itemValue="5" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Nombre imagen: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtImagenCreaProducto" style="font-size:14px;"
+								maxlength="12"
+								value="#{manageProduct.productoPersiste.imageName}" />
+
+							<p:outputLabel value="Ofrecido desde: "
+								style="font-weight:bold; font-size:14px" />
+							<p:calendar id="timeDesde"
+								value="#{manageProduct.productoPersiste.open}" pattern="HH:mm"
+								timeOnly="true" />
+
+							<p:outputLabel value="Ofrecido hasta: "
+								style="font-weight:bold; font-size:14px" />
+							<p:calendar id="timeHasta"
+								value="#{manageProduct.productoPersiste.closed}" pattern="HH:mm"
+								timeOnly="true" />
+
+						</p:panelGrid>
+					</div>
+				</p:panel>
+				<p:spacer height="10" />
+				<div align="center">
+					<p:commandButton id="btnCrearProducto"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{manageProduct.registrarProducto()}" value="Registrar"
+						update=":form">
+					</p:commandButton>
+					<p:spacer width="10" />
+					<p:commandButton id="btnRegresar1"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{manageProduct.regresar(1)}" value="Regresar"
+						update=":form">
+					</p:commandButton>
+					<p:blockUI block=":form" trigger="btnCrearProducto,btnRegresar1" />
+				</div>
+
+			</p:outputPanel>
+
+			<p:outputPanel id="pnlEditaProducto"
+				rendered="#{manageProduct.showEditar}">
+
+				<p:panel header="Editar producto" style="text-align:center;">
+					<div align="center">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel value="Nombre producto: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtNombreEditProducto"
+								style="font-size:14px; text-transform:uppercase;" maxlength="20"
+								value="#{manageProduct.productoClon.name}" />
+
+							<p:outputLabel value="#{mensaje.Description} producto: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtDescripcionEditProducto"
+								style="font-size:14px;" maxlength="50"
+								value="#{manageProduct.productoClon.description}" />
+
+							<p:outputLabel value="Estado: "
+								style="font-weight:bold; font-size:14px" />
+							<p:selectOneMenu id="slctEditProducto"
+								style="padding-right: 1em;"
+								value="#{manageProduct.productoClon.state}">
+								<f:selectItem itemLabel="Activo" itemValue="A" />
+								<f:selectItem itemLabel="Inactivo" itemValue="I" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Tipo: "
+								style="font-weight:bold; font-size:14px" />
+							<p:selectOneMenu id="txtEditType" style="padding-right: 1em;"
+								value="#{manageProduct.productoClon.productType}">
+								<f:selectItem itemLabel="Complemento" itemValue="C" />
+								<f:selectItem itemLabel="Principal" itemValue="P" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Ranking: "
+								style="font-weight:bold; font-size:14px" />
+							<p:selectOneMenu id="txtEditRanking" style="padding-right: 1em;"
+								value="#{manageProduct.productoClon.ranking}">
+								<f:selectItem itemLabel="1" itemValue="1" />
+								<f:selectItem itemLabel="2" itemValue="2" />
+								<f:selectItem itemLabel="3" itemValue="3" />
+								<f:selectItem itemLabel="4" itemValue="4" />
+								<f:selectItem itemLabel="5" itemValue="5" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Nombre imagen: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtImagenEditProducto" style="font-size:14px;"
+								maxlength="12" value="#{manageProduct.productoClon.imageName}" />
+
+							<p:outputLabel value="Ofrecido desde: "
+								style="font-weight:bold; font-size:14px" />
+							<p:calendar id="timeEditDesde"
+								value="#{manageProduct.productoClon.open}" pattern="HH:mm"
+								timeOnly="true" />
+
+							<p:outputLabel value="Ofrecido hasta: "
+								style="font-weight:bold; font-size:14px" />
+							<p:calendar id="timeEditHasta"
+								value="#{manageProduct.productoClon.closed}" pattern="HH:mm"
+								timeOnly="true" />
+
+						</p:panelGrid>
+					</div>
+				</p:panel>
+				<p:spacer height="10" />
+				<div align="center">
+					<p:commandButton id="btnEditarProducto"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{manageProduct.editarProducto()}" value="Editar"
+						update=":form">
+					</p:commandButton>
+					<p:spacer width="10" />
+					<p:commandButton id="btnRegresar2"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{manageProduct.regresar(2)}" value="Regresar"
+						update=":form">
+					</p:commandButton>
+					<p:blockUI block=":form" trigger="btnEditarProducto,btnRegresar2" />
+				</div>
+
+			</p:outputPanel>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
