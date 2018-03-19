@@ -9,18 +9,17 @@
 	<ui:define name="body">
 		<h:form id="form">
 			<p:messages id="messages" showDetail="true" closable="true" />
-
-			<p:toolbar rendered="#{manageProduct.showConsulta}">
-				<f:facet name="left">
-					<p:commandLink value="Nuevo producto" update="form"
-						action="#{manageProduct.nuevoProducto()}"
-						style="text-decoration:underline;" />
-				</f:facet>
-			</p:toolbar>
 			<p:spacer height="10" />
 			<!-- INICIO INGRESO CRITERIOS CONSULTA -->
 			<p:outputPanel id="pnlIngresoDatos"
 				rendered="#{manageProduct.showConsulta}">
+				<p:commandButton id="btnIdCreateProduct"
+					styleClass="btn btn-success"
+					action="#{manageProduct.nuevoProducto()}" value="Crear producto"
+					update=":form"
+					style="font-size:14px; font-weight: normal !important;" />
+
+				<div style="height: 10px;"></div>
 
 				<p:panel header="Consulta de productos" style="text-align:center;">
 					<div align="center">
@@ -31,11 +30,14 @@
 							<p:inputText id="txtNombreProducto" style="font-size:14px;"
 								maxlength="50" value="#{manageProduct.productoConsulta.name}" />
 
-							<p:outputLabel value="#{mensaje.Description} producto: "
+							<p:outputLabel value="Tipo: "
 								style="font-weight:bold; font-size:14px" />
-							<p:inputText id="txtDescripcionProducto" style="font-size:14px;"
-								maxlength="50"
-								value="#{manageProduct.productoConsulta.description}" />
+							<p:selectOneMenu id="txtQueryType" style="padding-right: 1em;"
+								value="#{manageProduct.productoConsulta.productType}">
+								<f:selectItem itemLabel="Seleccionar" noSelectionOption="true" />
+								<f:selectItem itemLabel="Complemento" itemValue="C" />
+								<f:selectItem itemLabel="Principal" itemValue="P" />
+							</p:selectOneMenu>
 						</p:panelGrid>
 					</div>
 				</p:panel>
@@ -44,7 +46,6 @@
 
 				<div align="center">
 					<p:commandButton id="btnConsultarProducto"
-						styleClass="btn btn-success"
 						style="font-size:14px; font-weight: normal !important;"
 						action="#{manageProduct.consultarProducto()}" value="Consultar"
 						update=":form">
@@ -102,9 +103,14 @@
 							<p:column headerText="" width="10%">
 								<div align="center">
 
-									<p:commandButton id="btnVerDetalle" icon="ui-icon-search"
+									<p:commandButton id="btnVerDetalle" icon="fa fa-edit"
 										action="#{manageProduct.verDetalleProducto(loc)}"
 										update="form" title="Ver/editar detalle del producto" />
+
+									<p:commandButton rendered="#{loc.productType.equals('P')}"
+										id="btnVerEleccion" icon="fa fa-cutlery"
+										action="#{manageProduct.verEleccionProducto(loc)}"
+										update="form" title="Ver/editar elecciones del producto" />
 
 									<p:blockUI id="idBlockProducto" block=":form"
 										trigger="btnVerDetalle" />
@@ -121,6 +127,14 @@
 
 			<p:outputPanel id="pnlCreaProducto"
 				rendered="#{manageProduct.showCrear}">
+
+				<p:commandButton id="btnRegresar1" styleClass="btn btn-danger"
+					style="font-size:14px; font-weight: normal !important;"
+					action="#{manageProduct.regresar(1)}" value="Regresar"
+					update=":form">
+				</p:commandButton>
+
+				<div style="height: 10px;"></div>
 
 				<p:panel header="Crear nuevo producto" style="text-align:center;">
 					<div align="center">
@@ -172,13 +186,13 @@
 								maxlength="12"
 								value="#{manageProduct.productoPersiste.imageName}" />
 
-							<p:outputLabel value="Ofrecido desde: "
+							<p:outputLabel value="Horario desde: "
 								style="font-weight:bold; font-size:14px" />
 							<p:calendar id="timeDesde"
 								value="#{manageProduct.productoPersiste.open}" pattern="HH:mm"
 								timeOnly="true" />
 
-							<p:outputLabel value="Ofrecido hasta: "
+							<p:outputLabel value="Horario hasta: "
 								style="font-weight:bold; font-size:14px" />
 							<p:calendar id="timeHasta"
 								value="#{manageProduct.productoPersiste.closed}" pattern="HH:mm"
@@ -194,12 +208,7 @@
 						action="#{manageProduct.registrarProducto()}" value="Registrar"
 						update=":form">
 					</p:commandButton>
-					<p:spacer width="10" />
-					<p:commandButton id="btnRegresar1"
-						style="font-size:14px; font-weight: normal !important;"
-						action="#{manageProduct.regresar(1)}" value="Regresar"
-						update=":form">
-					</p:commandButton>
+
 					<p:blockUI block=":form" trigger="btnCrearProducto,btnRegresar1" />
 				</div>
 
@@ -207,6 +216,13 @@
 
 			<p:outputPanel id="pnlEditaProducto"
 				rendered="#{manageProduct.showEditar}">
+				<p:commandButton id="btnRegresar2"
+					style="font-size:14px; font-weight: normal !important;"
+					action="#{manageProduct.regresar(2)}" value="Regresar"
+					update=":form" styleClass="btn btn-danger">
+				</p:commandButton>
+
+				<div style="height: 10px;"></div>
 
 				<p:panel header="Editar producto" style="text-align:center;">
 					<div align="center">
@@ -257,13 +273,13 @@
 							<p:inputText id="txtImagenEditProducto" style="font-size:14px;"
 								maxlength="12" value="#{manageProduct.productoClon.imageName}" />
 
-							<p:outputLabel value="Ofrecido desde: "
+							<p:outputLabel value="Horario desde: "
 								style="font-weight:bold; font-size:14px" />
 							<p:calendar id="timeEditDesde"
 								value="#{manageProduct.productoClon.open}" pattern="HH:mm"
 								timeOnly="true" />
 
-							<p:outputLabel value="Ofrecido hasta: "
+							<p:outputLabel value="Horario hasta: "
 								style="font-weight:bold; font-size:14px" />
 							<p:calendar id="timeEditHasta"
 								value="#{manageProduct.productoClon.closed}" pattern="HH:mm"
@@ -279,17 +295,98 @@
 						action="#{manageProduct.editarProducto()}" value="Editar"
 						update=":form">
 					</p:commandButton>
-					<p:spacer width="10" />
-					<p:commandButton id="btnRegresar2"
-						style="font-size:14px; font-weight: normal !important;"
-						action="#{manageProduct.regresar(2)}" value="Regresar"
-						update=":form">
-					</p:commandButton>
+
+
 					<p:blockUI block=":form" trigger="btnEditarProducto,btnRegresar2" />
 				</div>
 
 			</p:outputPanel>
 
+			<p:outputPanel id="pnlProductStep"
+				rendered="#{manageProduct.showProductStep}">
+				<h:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+					<p:commandButton value="Crear #{mensaje.eleccion}"
+						id="btnIdCreateStep" styleClass="btn btn-success" update=":form"
+						action="#{manageProduct.nuevaEleccion()}"
+						style="font-size:14px; font-weight: normal !important;" />
+
+					<p:commandButton value="Regresar" id="btnIdGoBackStep"
+						styleClass="btn btn-danger" update=":form"
+						action="#{manageProduct.regresar(3)}"
+						style="font-size:14px; font-weight: normal !important;" />
+				</h:panelGrid>
+				<div style="height: 10px;"></div>
+				<p:panel header="Elecciones para un producto"
+					style="text-align:center;">
+
+					<div align="center">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+							<p:outputLabel value="Producto: " style="font-weight:normal;" />
+							<p:outputLabel value="#{manageProduct.productoPersiste.name}" />
+						</p:panelGrid>
+					</div>
+
+					<div align="center">
+						<p:panel header="Elecciones"
+							rendered="#{manageProduct.listProductStep!=null and manageProduct.listProductStep.size()>0}">
+
+							<p:dataTable var="loc" id="dtlListProductStep"
+								widgetVar="dtlListProductStep"
+								value="#{manageProduct.listProductStep}" reflow="true"
+								emptyMessage="#{mensaje.noExistenciaRegistro}">
+
+								<p:column headerText="#{mensaje.Description}">
+									<div align="left">
+										<h:outputText value="#{loc.description}" />
+									</div>
+								</p:column>
+
+								<p:column headerText="Estado">
+									<div align="center">
+										<h:outputText value="Activo"
+											rendered="#{loc.state.equals('A')}" />
+										<h:outputText value="Inactivo"
+											rendered="#{loc.state.equals('I')}" />
+									</div>
+								</p:column>
+
+								<p:column headerText="Tipo #{mensaje.seleccion}">
+									<div align="center">
+										<h:outputText value="#{mensaje.Multiple}"
+											rendered="#{loc.selectType.equals('M')}" />
+										<h:outputText value="#{mensaje.Unica}"
+											rendered="#{loc.selectType.equals('U')}" />
+									</div>
+								</p:column>
+
+								<p:column headerText="Orden">
+									<div align="center">
+										<h:outputText value="#{loc.stepOrder}" />
+									</div>
+								</p:column>
+
+								<p:column headerText="" width="10%">
+									<div align="center">
+
+										<p:commandButton id="btnEditEleccion" icon="fa fa-edit"
+											action="#{manageProduct.verStepProduct(loc)}"
+											update=":formEditStep" title="Editar #{mensaje.eleccion}" />
+
+
+										<p:blockUI id="idBlockSeleccion" block=":form"
+											trigger="btnEditEleccion" />
+
+									</div>
+								</p:column>
+
+							</p:dataTable>
+						</p:panel>
+					</div>
+				</p:panel>
+			</p:outputPanel>
+
 		</h:form>
+		<ui:include src="/pages/toGo/products/mdlCreateStep.xhtml" />
+		<ui:include src="/pages/toGo/products/mdlEditStep.xhtml" />
 	</ui:define>
 </ui:composition>

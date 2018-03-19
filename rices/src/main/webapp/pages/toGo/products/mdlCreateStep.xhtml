@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formCreateStep">
+
+		<p:dialog header="Crear #{mensaje.eleccion}" widgetVar="mdlCreateStep"
+			position="center center center center" modal="true" resizable="true"
+			closable="false" responsive="true">
+			<p:panel id="pnlCreateStep">
+				<p:messages id="messages2" showDetail="true" closable="true" />
+				<div align="center">
+					<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+						<p:outputLabel value="#{mensaje.Description}: "
+							style="font-weight:bold; font-size:14px" />
+						<p:inputText id="txtDescripcionCreaStep" style="font-size:14px;"
+							maxlength="50"
+							value="#{manageProduct.productStepPersist.description}" />
+						<p:outputLabel value="Estado: "
+							style="font-weight:bold; font-size:14px" />
+						<p:selectOneMenu id="slctCreateStepState"
+							style="padding-right: 1em;"
+							value="#{manageProduct.productStepPersist.state}">
+							<f:selectItem itemLabel="Activo" itemValue="A" />
+							<f:selectItem itemLabel="Inactivo" itemValue="I" />
+						</p:selectOneMenu>
+						<p:outputLabel value="Tipo de #{mensaje.seleccion}: "
+							style="font-weight:bold; font-size:14px" />
+						<p:selectOneMenu id="slctCreateStepSelectType"
+							style="padding-right: 1em;"
+							value="#{manageProduct.productStepPersist.selectType}">
+							<f:selectItem itemLabel="#{mensaje.Multiple}" itemValue="M" />
+							<f:selectItem itemLabel="#{mensaje.Unica}" itemValue="U" />
+						</p:selectOneMenu>
+						<p:outputLabel value="Orden: "
+							style="font-weight:bold; font-size:14px" />
+						<p:inputText id="txtOrdenCreaStep" style="font-size:14px;"
+							maxlength="2"
+							value="#{manageProduct.productStepPersist.stepOrder}" />
+					</p:panelGrid>
+					<div align="center" style="height: 10px;"></div>
+					<div align="center">
+						<p:commandButton id="btnSaveStep"
+							style="font-size:14px; font-weight: normal !important;"
+							action="#{manageProduct.saveProductStep()}" value="Guardar"
+							update=":formCreateStep:pnlCreateStep,:form:dtlListProductStep,:form:messages">
+						</p:commandButton>
+
+						<p:commandButton id="btnSalir"
+							style="font-size:14px; font-weight: normal !important;"
+							action="#{manageProduct.exitCreateStep()}" value="Salir"
+							update=":formCreateStep,:form:messages">
+						</p:commandButton>
+
+						<p:blockUI block="formCreateStep:pnlCreateStep"
+							trigger="btnSaveStep" />
+					</div>
+				</div>
+
+			</p:panel>
+		</p:dialog>
+	</h:form>
+</ui:composition>

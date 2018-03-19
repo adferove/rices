@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import co.com.rices.Conexion;
 import co.com.rices.IConstants;
-import co.com.rices.businessLogic.ProductStep;
+import co.com.rices.objects.ProductStep;
 import co.com.rices.objects.Product;
 
 public interface IUpdateRices {

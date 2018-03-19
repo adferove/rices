@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import co.com.rices.Conexion;
 import co.com.rices.IConstants;
-import co.com.rices.businessLogic.ProductStep;
+import co.com.rices.objects.ProductStep;
 import co.com.rices.objects.Product;
 
 public interface IQueryRices {
@@ -39,6 +39,10 @@ public interface IQueryRices {
 				if(StringUtils.trimToNull(pParam.getState())!=null){
 					builder.append(" AND state = ? ");
 					params.put(i++, pParam.getState());
+				}
+				if(StringUtils.trimToNull(pParam.getName())!=null){
+					builder.append(" AND product_name LIKE ? ");
+					params.put(i++, "%"+pParam.getName().trim().toUpperCase()+"%");
 				}
 			}
 			Conexion conexion    = null;
@@ -89,6 +93,7 @@ public interface IQueryRices {
 			if(pActivos){
 				builder.append(" AND state = ? ");
 			}
+			builder.append(" ORDER BY step_order ");
 			Conexion conexion    = null;
 			CallableStatement cs = null;
 			ResultSet rs         = null;

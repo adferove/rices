@@ -1,4 +1,4 @@
-package co.com.rices.businessLogic;
+package co.com.rices.objects;
 
 import java.io.Serializable;
 
