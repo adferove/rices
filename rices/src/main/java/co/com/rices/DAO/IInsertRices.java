@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import co.com.rices.Conexion;
 import co.com.rices.IConstants;
 import co.com.rices.objects.ProductStep;
+import co.com.rices.objects.StepDetail;
 import co.com.rices.objects.Product;
 
 public interface IInsertRices {
@@ -76,6 +77,45 @@ public interface IInsertRices {
 				cs.setObject(3, pProductStep.getState());
 				cs.setObject(4, pProductStep.getDescription());
 				cs.setObject(5, pProductStep.getStepOrder());
+				cs.execute();
+				rs = cs.getResultSet();
+				if(rs.next()){
+					resultado = rs.getInt(1);
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}
+	
+	public static Integer saveStepDetail(StepDetail pStepDetail)throws Exception{
+		Integer resultado = null;
+		try{
+			StringBuilder builder = new StringBuilder();
+			 
+			
+			builder.append(" INSERT INTO rices.step_details( ");
+			builder.append("         product_step_id,        ");
+			builder.append("         selected_product_id,    "); 
+			builder.append("         state, price)           ");
+			builder.append(" VALUES (?, ?, ?, ?)             ");
+			builder.append(" RETURNING id;                   ");
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;  
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setObject(1, pStepDetail.getProductStepId());
+				cs.setObject(2, pStepDetail.getSelectedProductId());
+				cs.setObject(3, pStepDetail.getState());
+				cs.setObject(4, pStepDetail.getPrice());
 				cs.execute();
 				rs = cs.getResultSet();
 				if(rs.next()){

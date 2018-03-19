@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import co.com.rices.Conexion;
 import co.com.rices.IConstants;
 import co.com.rices.objects.ProductStep;
+import co.com.rices.objects.StepDetail;
 import co.com.rices.objects.Product;
 
 public interface IQueryRices {
@@ -113,6 +114,50 @@ public interface IQueryRices {
 					result.setState(rs.getString("state"));
 					result.setDescription(rs.getString("description"));
 					result.setStepOrder(rs.getInt("step_order"));
+					results.add(result);
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return results;
+	}
+	
+	
+	public static List<StepDetail> getDetailsByProductStepId(Integer pProductStepId, boolean pActivos) throws Exception{
+		List<StepDetail> results=new ArrayList<StepDetail>();
+		try{
+			StringBuilder builder=new StringBuilder();
+			builder.append(" SELECT id, product_step_id, selected_product_id, state, price ");
+			builder.append(" FROM   rices.step_details                                     ");
+			builder.append(" WHERE  product_step_id = ?                                    ");
+			if(pActivos){
+				builder.append(" AND state = ? ");
+			}
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setInt(1, pProductStepId);
+				if(pActivos){
+					cs.setString(2, "A");
+				}
+				rs = cs.executeQuery();
+				while(rs.next()){
+					StepDetail result = new StepDetail();
+					result.setId(rs.getInt("id"));
+					result.setProductStepId(rs.getInt("product_step_id"));
+					result.setSelectedProductId(rs.getInt("selected_product_id"));
+					result.setState(rs.getString("state"));
+					result.setPrice(rs.getBigDecimal("price"));
 					results.add(result);
 				}
 			}catch(SQLException sq){
