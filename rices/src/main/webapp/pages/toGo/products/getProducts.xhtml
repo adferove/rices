@@ -100,7 +100,7 @@
 								</div>
 							</p:column>
 
-							<p:column headerText="" width="10%">
+							<p:column headerText="#{mensaje.Mas}">
 								<div align="center">
 
 									<p:commandButton id="btnVerDetalle" icon="fa fa-edit"
@@ -365,15 +365,20 @@
 									</div>
 								</p:column>
 
-								<p:column headerText="" width="10%">
+								<p:column headerText="#{mensaje.Mas}">
 									<div align="center">
 
 										<p:commandButton id="btnEditEleccion" icon="fa fa-edit"
 											action="#{manageProduct.verStepProduct(loc)}"
 											update=":formEditStep" title="Editar #{mensaje.eleccion}" />
 
+										<p:commandButton id="btnGoDetail" icon="fa fa-cube"
+											action="#{manageProduct.verDetalleEleccion(loc)}"
+											update="form"
+											title="Ver/editar detalle de #{mensaje.eleccion}" />
 
-										<p:blockUI id="idBlockSeleccion" block=":form"
+
+										<p:blockUI id="idBlockDetalleEleccion" block=":form"
 											trigger="btnEditEleccion" />
 
 									</div>
@@ -385,8 +390,85 @@
 				</p:panel>
 			</p:outputPanel>
 
+			<p:outputPanel id="pnlStepDetail"
+				rendered="#{manageProduct.showStepDetail}">
+				<h:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+					<p:commandButton value="Asociar producto a #{mensaje.eleccion}"
+						id="btnIdCreateDetail" styleClass="btn btn-success"
+						update=":formCreateStepDetail"
+						action="#{manageProduct.nuevoProductoEleccion()}"
+						style="font-size:14px; font-weight: normal !important;" />
+
+					<p:commandButton value="Regresar" id="btnIdGoBackDetail"
+						styleClass="btn btn-danger" update=":form"
+						action="#{manageProduct.regresar(4)}"
+						style="font-size:14px; font-weight: normal !important;" />
+				</h:panelGrid>
+				<div style="height: 10px;"></div>
+				<p:panel header="Detalle #{mensaje.eleccion}"
+					style="text-align:center;">
+
+					<div align="center">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+							<p:outputLabel value="Producto: " style="font-weight:normal;" />
+							<p:outputLabel value="#{manageProduct.productoPersiste.name}" />
+							<p:outputLabel value="#{mensaje.Eleccion}: "
+								style="font-weight:normal;" />
+							<p:outputLabel
+								value="#{manageProduct.productStepPersist.description}" />
+						</p:panelGrid>
+					</div>
+
+					<div align="center">
+						<p:panel header="Productos asociados a #{mensaje.eleccion}" id="pnlListStepDetail"
+							rendered="#{manageProduct.listStepDetail!=null and manageProduct.listStepDetail.size()>0}">
+
+							<p:dataTable var="loc" id="dtlListStepDetail"
+								widgetVar="dtlListStepDetail"
+								value="#{manageProduct.listStepDetail}" reflow="true"
+								emptyMessage="#{mensaje.noExistenciaRegistro}">
+
+								<p:column headerText="Producto">
+									<div align="left">
+										<h:outputText value="#{loc.transientProduct.name}" />
+									</div>
+								</p:column>
+
+								<p:column headerText="Estado">
+									<div align="center">
+										<h:outputText value="Activo"
+											rendered="#{loc.state.equals('A')}" />
+										<h:outputText value="Inactivo"
+											rendered="#{loc.state.equals('I')}" />
+									</div>
+								</p:column>
+
+								<p:column headerText="Precio">
+									<div align="right">
+										<h:outputText value="#{loc.price}" />
+									</div>
+								</p:column>
+
+								<p:column headerText="#{mensaje.Mas}">
+									<div align="center">
+										<p:commandButton id="btnEditAsociatedProduct"
+											icon="fa fa-edit"
+											action="#{manageProduct.goEditStepDetail(loc)}"
+											update=":formEditStepDetail"
+											title="Editar producto asociado a #{mensaje.eleccion}" />
+									</div>
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</div>
+
+				</p:panel>
+			</p:outputPanel>
+
 		</h:form>
 		<ui:include src="/pages/toGo/products/mdlCreateStep.xhtml" />
 		<ui:include src="/pages/toGo/products/mdlEditStep.xhtml" />
+		<ui:include src="/pages/toGo/products/mdlCrearStepDetail.xhtml" />
+		<ui:include src="/pages/toGo/products/mdlEditStepDetail.xhtml" />
 	</ui:define>
 </ui:composition>

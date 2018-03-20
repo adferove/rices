@@ -1,8 +1,11 @@
 package co.com.rices.businessLogic;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -20,6 +23,7 @@ import co.com.rices.DAO.IUpdateRices;
 import co.com.rices.beans.Usuario;
 import co.com.rices.objects.Product;
 import co.com.rices.objects.ProductStep;
+import co.com.rices.objects.StepDetail;
 
 @ManagedBean
 @ViewScoped
@@ -32,26 +36,39 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 	private boolean showEditar;
 	private boolean showCreateStep;
 	private boolean showProductStep;
+	private boolean showStepDetail;
+	
+	private String   productChain;
 	
 	private Usuario  usuario;
 	
 	private Product productoPersiste;
 	private Product productoConsulta;
 	private Product productoClon;
-	
+		
 	private ProductStep productStepPersist;
 	private ProductStep productStepClone;
+	private StepDetail  stepDetailPersist;
+	private StepDetail  stepDetailClone;
 	
 	private List<Product> listadoProducto;
 	
 	private List<ProductStep> listProductStep;
+	
+	private List<StepDetail>  listStepDetail;
+	
+	private Map<Integer, String> mapProductName;
 
 	@PostConstruct
 	public void init(){
 		try{
 			this.showConsulta = true;
 			this.productoConsulta = new Product();
+			this.mapProductName = new HashMap<Integer, String>();
 			this.listadoProducto = IQueryRices.getProductsByParams(null);
+			for(Product p: this.listadoProducto){
+				this.mapProductName.put(p.getId(), p.getName());
+			}
 			FacesContext context = FacesContext.getCurrentInstance();
 			HttpSession sesion = (HttpSession) context.getExternalContext().getSession(true);
 			if(sesion.getAttribute("RicesUser")!=null){
@@ -83,7 +100,12 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 				error = true;
 				this.mostrarMensajeGlobal("ingreseNombreProducto", "error");
 			}else{
-				this.productoPersiste.setName(this.productoPersiste.getName().trim().toUpperCase());
+				if(this.productoPersiste.getName().trim().contains("-")){
+					error = true;
+					this.mostrarMensajeGlobal("ingreseNombreSinGuion", "error");
+				}else{
+					this.productoPersiste.setName(this.productoPersiste.getName().trim().toUpperCase());
+				}
 			}
 			if(this.productoPersiste.getDescription()==null || this.productoPersiste.getDescription().trim().equals("")){
 				error = true;
@@ -98,6 +120,7 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 				this.productoPersiste.setLoginUsuario(this.usuario.getLogin());
 				int idProducto = IInsertRices.saveProduct(this.productoPersiste);
 				if(idProducto > 0){
+					this.mapProductName.put(idProducto, this.productoPersiste.getName());
 					this.productoPersiste.setId(idProducto);
 					this.listadoProducto.add(this.productoPersiste);
 					this.listProductStep = new ArrayList<ProductStep>(); 
@@ -124,7 +147,12 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 				error = true;
 				this.mostrarMensajeGlobal("ingreseNombreProducto", "error");
 			}else{
-				this.productoClon.setName(this.productoClon.getName().trim().toUpperCase());
+				if(this.productoClon.getName().trim().contains("-")){
+					error = true;
+					this.mostrarMensajeGlobal("ingreseNombreSinGuion", "error");
+				}else{
+					this.productoClon.setName(this.productoClon.getName().trim().toUpperCase());
+				}
 			}
 			if(this.productoClon.getDescription()==null || this.productoClon.getDescription().trim().equals("")){
 				error = true;
@@ -136,6 +164,7 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 			}
 			if(!error){
 				if(IUpdateRices.updateProduct(this.productoClon)){
+					this.mapProductName.put(this.productoClon.getId(), this.productoClon.getName());
 					this.productoPersiste.setDescription(this.productoClon.getDescription());
 					this.productoPersiste.setState(this.productoClon.getState());
 					this.productoPersiste.setName(this.productoClon.getName());
@@ -162,6 +191,9 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 		}else if(pValor==3){
 			this.showConsulta    = true;
 			this.showProductStep = false;
+		}else if(pValor==4){
+			this.showProductStep = true;
+			this.showStepDetail  = false;
 		}
 	}
 
@@ -230,7 +262,11 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 		this.productStepPersist = productStep;
 		this.productStepClone   = this.productStepPersist.clone();
 		this.abrirModal("mdlEditStep");
-	}	
+	}
+	
+	public void exitEditStep(){
+		this.cerrarModal("mdlEditStep");
+	}
 	
 	public void updateProductStep(){
 		try{
@@ -263,8 +299,114 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 		}
 	}
 	
-	public void exitEditStep(){
-		this.cerrarModal("mdlEditStep");
+	public void nuevoProductoEleccion(){
+		this.stepDetailPersist = new StepDetail();
+		this.stepDetailPersist.setPrice(new BigDecimal(0));
+		this.stepDetailPersist.setTransientProduct(new Product());
+		this.productChain = null;
+		this.abrirModal("mdlCrearStepDetail");
+	}
+	
+	public void verDetalleEleccion(ProductStep productStep){
+		try{
+			this.productStepPersist = productStep;
+			this.listStepDetail = IQueryRices.getDetailsByProductStepId(productStep.getId(), false);
+			for(StepDetail sd: this.listStepDetail){
+				sd.setTransientProduct(new Product());
+				sd.getTransientProduct().setName(this.mapProductName.get(sd.getSelectedProductId()));
+			}
+			this.showProductStep = false;
+			this.showStepDetail  = true;
+		}catch(Exception e){
+			IConstants.log.error(e.toString(),e);
+		}
+	}
+	
+	public void saveStepDetail(){
+		try{
+			boolean error = false;
+			if(StringUtils.trimToNull(this.productChain)==null){
+				error = true;
+				this.mostrarMensajeGlobal("ingreseNombreProductoValido", "error");
+			}
+			
+			if(!error){
+				if(this.stepDetailPersist.getPrice()==null){
+					this.stepDetailPersist.setPrice(new BigDecimal(0));
+				}
+				String[] productValue = this.productChain.split("-");
+				this.stepDetailPersist.getTransientProduct().setId(new Integer(productValue[0]));
+				this.stepDetailPersist.getTransientProduct().setName(productValue[1]);
+				this.stepDetailPersist.setSelectedProductId(this.stepDetailPersist.getTransientProduct().getId());
+				this.stepDetailPersist.setProductStepId(this.productStepPersist.getId());
+				Integer idStepProduct = IInsertRices.saveStepDetail(this.stepDetailPersist);
+				if(idStepProduct!=null){
+					this.stepDetailPersist.setId(idStepProduct);
+					this.listStepDetail.add(this.stepDetailPersist);
+					this.mostrarMensajeGlobal("productoAsociadoEleccion", "exito");
+					this.cerrarModal("mdlCrearStepDetail");
+				}else{
+					this.mostrarMensajeGlobal("noFuePosibleGuardar", "error");
+				}
+			}
+		}catch(Exception e){
+			IConstants.log.error(e.toString(),e);
+		}
+	}
+	
+	public void exitCreateStepDetail(){
+		this.cerrarModal("mdlCrearStepDetail");
+	}
+	
+	public List<String> productAutoComplete(String pTexto){
+		List<String> resultados = null;
+		try{
+			if(StringUtils.trimToNull(pTexto)!=null){
+				Product p = new Product();
+				p.setName(pTexto.trim().toUpperCase());
+				List<Product> products = IQueryRices.getProductsByParams(p);
+				if(products.size()>0){
+					resultados = new ArrayList<String>();
+					for(Product prod: products){
+						resultados.add(prod.getId()+"-"+prod.getName());
+					}
+				}
+			}
+		}catch(Exception e){
+			IConstants.log.error(e.toString(),e);
+		}
+		return resultados;
+	}
+	
+	public void goEditStepDetail(StepDetail pStepDetail){
+		this.stepDetailPersist = pStepDetail;
+		this.stepDetailClone = new StepDetail();
+		this.stepDetailClone.setId(pStepDetail.getId());
+		this.stepDetailClone.setState(pStepDetail.getState());
+		this.stepDetailClone.setPrice(pStepDetail.getPrice());
+		this.abrirModal("mdlEditStepDetail");
+	}
+	
+	public void exitEditStepDetail(){
+		this.cerrarModal("mdlEditStepDetail");
+	}
+	
+	public void updateStepDetail(){
+		try{
+			if(this.stepDetailClone.getPrice()==null){
+				this.stepDetailClone.setPrice(new BigDecimal(0));
+			}
+			if(IUpdateRices.updateStepDetail(this.stepDetailClone)){
+				this.stepDetailPersist.setState(this.stepDetailClone.getState());
+				this.stepDetailPersist.setPrice(this.stepDetailClone.getPrice());
+				this.mostrarMensajeGlobal("productoAsociadoEleccionEditado", "exito");
+				this.cerrarModal("mdlEditStepDetail");
+			}else{
+				this.mostrarMensajeGlobal("noFuePosibleGuardar", "error");
+			}
+		}catch(Exception e){
+			IConstants.log.error(e.toString(),e);
+		}
 	}
 
 	public boolean isShowConsulta() {
@@ -333,6 +475,38 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 
 	public boolean isShowProductStep() {
 		return showProductStep;
+	}
+
+	public boolean isShowStepDetail() {
+		return showStepDetail;
+	}
+
+	public StepDetail getStepDetailPersist() {
+		return stepDetailPersist;
+	}
+
+	public void setStepDetailPersist(StepDetail stepDetailPersist) {
+		this.stepDetailPersist = stepDetailPersist;
+	}
+
+	public StepDetail getStepDetailClone() {
+		return stepDetailClone;
+	}
+
+	public void setStepDetailClone(StepDetail stepDetailClone) {
+		this.stepDetailClone = stepDetailClone;
+	}
+
+	public List<StepDetail> getListStepDetail() {
+		return listStepDetail;
+	}
+
+	public String getProductChain() {
+		return productChain;
+	}
+
+	public void setProductChain(String productChain) {
+		this.productChain = productChain;
 	}
 
 }

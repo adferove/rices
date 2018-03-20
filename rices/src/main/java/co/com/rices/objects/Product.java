@@ -97,7 +97,7 @@ public class Product implements Serializable{
 		product.setDescription(new String(this.description));
 		product.setImageName(new String(this.imageName));
 		product.setLoginUsuario(new String(this.loginUsuario));
-		product.setName(new String(this.imageName));
+		product.setName(new String(this.name));
 		if(this.open!=null){
 			product.setOpen((Date) this.open.clone());
 		}

@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formEditStepDetail">
+
+		<p:dialog header="Actualizar producto asociado a #{mensaje.eleccion}"
+			widgetVar="mdlEditStepDetail" position="center center center center"
+			modal="true" resizable="true" closable="false" responsive="true">
+			<p:panel id="pnlEditStepDetail">
+				<p:messages id="messages3" showDetail="true" closable="true" />
+				<div align="center">
+					<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+						<p:outputLabel value="Producto: "
+							style="font-weight:bold; font-size:14px" />
+						<p:outputLabel
+							value="#{manageProduct.stepDetailPersist.transientProduct.name} "
+							style="font-weight:normal; font-size:14px" />
+
+						<p:outputLabel value="Estado: "
+							style="font-weight:bold; font-size:14px" />
+						<p:selectOneMenu id="slctEditStepDetailState"
+							style="padding-right: 1em;"
+							value="#{manageProduct.stepDetailClone.state}">
+							<f:selectItem itemLabel="Activo" itemValue="A" />
+							<f:selectItem itemLabel="Inactivo" itemValue="I" />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Precio: "
+							style="font-weight:bold; font-size:14px" />
+						<p:inputNumber id="txtDetailEditPrice" style="font-size:14px;"
+							value="#{manageProduct.stepDetailClone.price}" />
+					</p:panelGrid>
+					<div align="center" style="height: 10px;"></div>
+					<div align="center">
+						<p:commandButton id="btnUpdateStepDetail"
+							style="font-size:14px; font-weight: normal !important;"
+							action="#{manageProduct.updateStepDetail()}" value="Guardar"
+							update=":formEditStepDetail:pnlEditStepDetail,:form:dtlListStepDetail,:form:messages">
+						</p:commandButton>
+
+						<p:commandButton id="btnSalirEditStepDetail"
+							style="font-size:14px; font-weight: normal !important;"
+							action="#{manageProduct.exitEditStepDetail()}" value="Salir"
+							update=":formEditStepDetail,:form:messages">
+						</p:commandButton>
+
+						<p:blockUI block="formEditStepDetail:pnlEditStepDetail"
+							trigger="btnUpdateStepDetail" />
+					</div>
+				</div>
+
+			</p:panel>
+		</p:dialog>
+	</h:form>
+</ui:composition>
