@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -158,6 +159,53 @@ public interface IQueryRices {
 					result.setProductStepId(rs.getInt("product_step_id"));
 					result.setSelectedProductId(rs.getInt("selected_product_id"));
 					result.setState(rs.getString("state"));
+					result.setPrice(rs.getBigDecimal("price"));
+					results.add(result);
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return results;
+	}
+	
+	public static List<Product> getProductsToSell(Product pParam)  throws Exception{
+		List<Product> results=new ArrayList<Product>();
+		try{
+			StringBuilder builder=new StringBuilder();
+			builder.append(" SELECT id, product_name, description, "); 
+			builder.append("        ranking, image_name, price     "); 
+			builder.append(" FROM   rices.products                 ");
+			builder.append(" WHERE  2018         = 2018            ");
+			builder.append(" AND    open        <= ?               ");
+			builder.append(" AND    closed      >= ?               ");
+			builder.append(" AND    state        = ?               ");
+			builder.append(" AND    product_type = ?               ");
+
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setObject(1, new java.sql.Time(Calendar.getInstance().getTime().getTime()));
+				cs.setObject(2, new java.sql.Time(Calendar.getInstance().getTime().getTime()));
+				cs.setObject(3, "A");
+				cs.setObject(4, "P");
+				rs = cs.executeQuery();
+				while(rs.next()){
+					Product result = new Product();
+					result.setId(rs.getInt("id"));
+					result.setName(rs.getString("product_name"));
+					result.setDescription(rs.getString("description"));
+					result.setRanking(rs.getInt("ranking"));
+					result.setImageName(rs.getString("image_name"));
 					result.setPrice(rs.getBigDecimal("price"));
 					results.add(result);
 				}
