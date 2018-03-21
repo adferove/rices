@@ -18,7 +18,7 @@ public interface IUpdateRices {
 			builder.append(" UPDATE rices.products                                    ");
 			builder.append(" SET    product_name=?, description=?, state=?,           ");
 			builder.append("        ranking=?, image_name=?, product_type=?, open=?,  ");
-			builder.append("        closed=?                                          "); 
+			builder.append("        closed=?, price=?                                 "); 
 			builder.append(" WHERE  id=?;                                             ");
 			Conexion conexion    = null;
 			CallableStatement cs = null;
@@ -33,7 +33,8 @@ public interface IUpdateRices {
 				cs.setObject(6, pProduct.getProductType());
 				cs.setObject(7, new java.sql.Time(pProduct.getOpen().getTime()));
 				cs.setObject(8, new java.sql.Time(pProduct.getClosed().getTime()));
-				cs.setInt(9, pProduct.getId());
+				cs.setObject(9, pProduct.getPrice());
+				cs.setInt(10, pProduct.getId());
 				int value = cs.executeUpdate();
 				if(value==1){
 					resultado = true;

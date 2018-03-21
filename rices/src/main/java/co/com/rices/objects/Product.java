@@ -1,6 +1,7 @@
 package co.com.rices.objects;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Product implements Serializable{
@@ -18,6 +19,7 @@ public class Product implements Serializable{
 	private String  productType;
 	private Date    open;
 	private Date    closed;
+	private BigDecimal price;
 
 
 	public Integer getId() {
@@ -87,6 +89,12 @@ public class Product implements Serializable{
 		this.closed = closed;
 	}
 
+	public BigDecimal getPrice() {
+		return price;
+	}
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
 	public Product clone(){
 		Product product = new Product();
 		product.setId(new Integer(this.id));
@@ -104,6 +112,10 @@ public class Product implements Serializable{
 		product.setProductType(new String(this.productType));
 		product.setRanking(new Integer(this.ranking));
 		product.setState(new String(this.state));
+		product.setPrice(new BigDecimal(0));
+		if(this.price!=null){
+			product.setPrice(product.getPrice().add(this.price));
+		}
 		return product;
 	}
 

@@ -171,6 +171,7 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 					this.productoPersiste.setRanking(this.productoClon.getRanking());
 					this.productoPersiste.setImageName(this.productoClon.getImageName());
 					this.productoPersiste.setProductType(this.productoClon.getProductType());
+					this.productoPersiste.setPrice(this.productoClon.getPrice());
 					this.showConsulta = true;
 					this.showEditar   = false;
 					this.mostrarMensajeGlobal("productoActualizado", "exito");

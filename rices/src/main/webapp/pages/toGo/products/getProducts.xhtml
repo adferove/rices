@@ -56,9 +56,7 @@
 				<p:spacer height="10" />
 
 				<div align="center">
-					<p:panel header="Productos"
-						rendered="#{manageProduct.listadoProducto!=null and manageProduct.listadoProducto.size()>0}">
-
+					<p:panel header="Productos">
 						<p:dataTable var="loc" id="dtlListadoAspiranteWeb"
 							widgetVar="dtlListadoAspiranteWeb"
 							value="#{manageProduct.listadoProducto}" reflow="true"
@@ -198,6 +196,12 @@
 								value="#{manageProduct.productoPersiste.closed}" pattern="HH:mm"
 								timeOnly="true" />
 
+							<p:outputLabel value="Precio: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputNumber id="txtCreateProductPrice" style="font-size:14px;"
+								value="#{manageProduct.productoPersiste.price}" />
+
+
 						</p:panelGrid>
 					</div>
 				</p:panel>
@@ -285,6 +289,11 @@
 								value="#{manageProduct.productoClon.closed}" pattern="HH:mm"
 								timeOnly="true" />
 
+							<p:outputLabel value="Precio: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputNumber id="txtEditProductPrice" style="font-size:14px;"
+								value="#{manageProduct.productoClon.price}" />
+
 						</p:panelGrid>
 					</div>
 				</p:panel>
@@ -306,7 +315,7 @@
 				rendered="#{manageProduct.showProductStep}">
 				<h:panelGrid columns="2" styleClass="ui-panelgrid-blank">
 					<p:commandButton value="Crear #{mensaje.eleccion}"
-						id="btnIdCreateStep" styleClass="btn btn-success" update=":form"
+						id="btnIdCreateStep" styleClass="btn btn-success" update=":formCreateStep"
 						action="#{manageProduct.nuevaEleccion()}"
 						style="font-size:14px; font-weight: normal !important;" />
 
@@ -327,9 +336,7 @@
 					</div>
 
 					<div align="center">
-						<p:panel header="Elecciones"
-							rendered="#{manageProduct.listProductStep!=null and manageProduct.listProductStep.size()>0}">
-
+						<p:panel header="Tipos de elecciones">
 							<p:dataTable var="loc" id="dtlListProductStep"
 								widgetVar="dtlListProductStep"
 								value="#{manageProduct.listProductStep}" reflow="true"
@@ -420,9 +427,8 @@
 					</div>
 
 					<div align="center">
-						<p:panel header="Productos asociados a #{mensaje.eleccion}" id="pnlListStepDetail"
-							rendered="#{manageProduct.listStepDetail!=null and manageProduct.listStepDetail.size()>0}">
-
+						<p:panel header="Productos asociados a #{mensaje.eleccion}"
+							id="pnlListStepDetail">
 							<p:dataTable var="loc" id="dtlListStepDetail"
 								widgetVar="dtlListStepDetail"
 								value="#{manageProduct.listStepDetail}" reflow="true"
