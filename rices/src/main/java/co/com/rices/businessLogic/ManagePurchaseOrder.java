@@ -42,8 +42,10 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 				for(Product p: this.listadoProducto){
 					p.setListProductStep(IQueryRices.getProductStepsByProductId(p.getId(), true));
 					for(ProductStep s: p.getListProductStep()){
+						s.setTransientMainPoduct(p);
 						s.setListStepDetail(IQueryRices.getDetailsByProductStepId(s.getId(), true));
 						for(StepDetail d: s.getListStepDetail()){
+							d.setTransientProducStep(s);
 							d.setTransientProduct(new Product());
 							d.getTransientProduct().setId(d.getSelectedProductId());
 							d.getTransientProduct().setName(IQueryRices.getProductNameById(d.getSelectedProductId()));
@@ -61,7 +63,22 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 
 	public void seleccionarComplemento(Product pProducto){
 		this.mainProductSelected = pProducto;
+		for(ProductStep s: this.mainProductSelected.getListProductStep()){
+			for(StepDetail d: s.getListStepDetail()){
+				d.setChecked(false);
+			}
+		}
 		this.abrirModal("mdlSelectComplement");
+	}
+	
+	public void seleccionUnicaListener(StepDetail pDetail){
+		if(pDetail.getTransientProducStep().getSelectType().equals("U") && pDetail.isChecked()){
+			for(StepDetail s: pDetail.getTransientProducStep().getListStepDetail()){
+				if(s.getId().intValue()!=pDetail.getId().intValue()){
+					s.setChecked(false);
+				}
+			}
+		}
 	}
 
 	public boolean isShowSeleccionarProducto() {

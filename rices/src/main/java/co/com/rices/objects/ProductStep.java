@@ -15,6 +15,8 @@ public class ProductStep implements Serializable{
 	private Integer stepOrder;
 
 	private List<StepDetail> listStepDetail;
+	
+	private Product transientMainPoduct;
 
 	public Integer getId() {
 		return id;
@@ -58,6 +60,12 @@ public class ProductStep implements Serializable{
 	}
 	public void setListStepDetail(List<StepDetail> listStepDetail) {
 		this.listStepDetail = listStepDetail;
+	}
+	public Product getTransientMainPoduct() {
+		return transientMainPoduct;
+	}
+	public void setTransientMainPoduct(Product transientMainPoduct) {
+		this.transientMainPoduct = transientMainPoduct;
 	}
 	public ProductStep clone(){
 		ProductStep productStep = new ProductStep();

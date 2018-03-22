@@ -16,6 +16,8 @@ public class StepDetail implements Serializable{
 	private boolean    checked;
 
 	private Product    transientProduct;
+	
+	private ProductStep transientProducStep;
 
 	public Integer getId() {
 		return id;
@@ -71,6 +73,14 @@ public class StepDetail implements Serializable{
 
 	public void setChecked(boolean checked) {
 		this.checked = checked;
+	}
+
+	public ProductStep getTransientProducStep() {
+		return transientProducStep;
+	}
+
+	public void setTransientProducStep(ProductStep transientProducStep) {
+		this.transientProducStep = transientProducStep;
 	}
 
 	public StepDetail clone(){

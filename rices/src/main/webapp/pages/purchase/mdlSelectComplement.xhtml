@@ -7,23 +7,61 @@
 
 	<h:form id="formSelectComplement">
 
-		<p:dialog header="Crear #{mensaje.eleccion}"
-			widgetVar="mdlSelectComplement"
+		<style type="text/css">
+.ui-widget-content {
+	border: 0px solid #ffffff;
+	background: #ffffff
+		url("/rices/javax.faces.resource/images/ui-bg_flat_75_ffffff_40x100.png.jsf?ln=primefaces-blitzer")
+		50% 50% repeat-x;
+	color: #333333;
+}
+</style>
+
+		<p:dialog header="Elige tu #{mensaje.menu}"
+			widgetVar="mdlSelectComplement" width="33%"
 			position="center center center center" modal="true" resizable="true"
 			closable="true" responsive="true">
 			<p:outputPanel id="productDetail" style="text-align:center;">
 				<p:messages id="messages2" showDetail="true" closable="true" />
-				<div align="center">
+				<div align="left">
 					<p:repeat
 						value="#{managePurchaseOrder.mainProductSelected.listProductStep}"
 						var="step">
-						<p:panelGrid columns="2" style="width:80%"
-							columnClasses="logo,detail" styleClass="ui-panelgrid-blank">
-							<p:outputPanel>
-								<h:outputText value="#{step.description}"
-									style="font-weight: bold; color:#c7578f;" />
-							</p:outputPanel>
-						</p:panelGrid>
+						<p:outputPanel>
+							<h:outputText value="#{step.description}"
+								style="font-weight: bold; color:#c7578f;" />
+							<p:spacer width="10" />
+							<h:outputText rendered="#{step.selectType.equals('U')}"
+								value="Elige una #{mensaje.opcion}"
+								style="font-size:11px; font-weight: bold; color:#bdbdbd;" />
+							<h:outputText rendered="#{step.selectType.equals('M')}"
+								value="Puedes elegir #{mensaje.mas} de una #{mensaje.opcion}"
+								style="font-size:11px; font-weight: bold; color:#bdbdbd;" />
+							<p:dataTable id="idSelectMultiple" var="det"
+								value="#{step.listStepDetail}" styleClass="ui-datatable-blank">
+								<p:column width="33%"
+									style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
+									<div align="right">
+										<p:selectBooleanCheckbox value="#{det.checked}">
+											<p:ajax update="idSelectMultiple"
+												listener="#{managePurchaseOrder.seleccionUnicaListener(det)}" />
+										</p:selectBooleanCheckbox>
+									</div>
+								</p:column>
+								<p:column width="33%"
+									style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
+									<div align="left">
+										<h:outputText value="#{det.transientProduct.name}" />
+									</div>
+								</p:column>
+								<p:column width="33%"
+									style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
+									<div align="right">
+										<h:outputText value="$ #{det.price}" />
+									</div>
+								</p:column>
+							</p:dataTable>
+						</p:outputPanel>
 						<hr />
 					</p:repeat>
 					<div align="center" style="height: 10px;"></div>
