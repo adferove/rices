@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/principal.xhtml">
+
+	<ui:define name="body">
+		<h:form id="form">
+			<p:messages id="messages" showDetail="true" closable="true" />
+			<p:outputPanel id="pnl1"
+				rendered="#{managePurchaseOrder.showSeleccionarProducto}">
+				<div class="container">
+					<div class="row">
+						<div class="product-item col-md-12">
+							<div class="row">
+								<div class="col-md-6">
+									<p:panel header="Elige tu box">
+										<div align="center">
+											<p:repeat value="#{managePurchaseOrder.listadoProducto}"
+												var="producto">
+												<p:panelGrid columns="2" style="width:80%"
+													columnClasses="logo,detail" styleClass="ui-panelgrid-blank">
+													<p:commandLink update=":formSelectComplement"
+														actionListener="#{managePurchaseOrder.seleccionarComplemento(producto)}">
+														<p:graphicImage
+															name="demo/images/#{producto.imageName}.gif" />
+													</p:commandLink>
+													<p:outputPanel>
+														<p:panelGrid columns="2" cellpadding="5">
+															<h:outputText value="#{producto.name}"
+																style="font-weight: bold; color:#c7578f;" />
+															<h:outputText value="#{producto.description}"
+																style="font-weight: bold" />
+															<h:outputText value="Precio:" />
+															<h:outputText value="$#{producto.price}"
+																style="font-weight: bold" />
+															<h:outputText value="Ranking:" />
+															<p:rating value="#{producto.ranking}" readonly="true" />
+														</p:panelGrid>
+													</p:outputPanel>
+												</p:panelGrid>
+												<hr />
+											</p:repeat>
+										</div>
+									</p:panel>
+								</div>
+								<div class="col-md-6"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:outputPanel>
+		</h:form>
+		<ui:include src="/pages/purchase/mdlSelectComplement.xhtml" />
+	</ui:define>
+</ui:composition>
+
+

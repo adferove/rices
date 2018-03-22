@@ -3,6 +3,7 @@ package co.com.rices.objects;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class Product implements Serializable{
 
@@ -21,6 +22,7 @@ public class Product implements Serializable{
 	private Date    closed;
 	private BigDecimal price;
 
+	private List<ProductStep> listProductStep;
 
 	public Integer getId() {
 		return id;
@@ -94,6 +96,12 @@ public class Product implements Serializable{
 	}
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+	public List<ProductStep> getListProductStep() {
+		return listProductStep;
+	}
+	public void setListProductStep(List<ProductStep> listProductStep) {
+		this.listProductStep = listProductStep;
 	}
 	public Product clone(){
 		Product product = new Product();

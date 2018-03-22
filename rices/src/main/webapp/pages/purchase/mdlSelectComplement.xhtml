@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formSelectComplement">
+
+		<p:dialog header="Crear #{mensaje.eleccion}"
+			widgetVar="mdlSelectComplement"
+			position="center center center center" modal="true" resizable="true"
+			closable="true" responsive="true">
+			<p:outputPanel id="productDetail" style="text-align:center;">
+				<p:messages id="messages2" showDetail="true" closable="true" />
+				<div align="center">
+					<p:repeat
+						value="#{managePurchaseOrder.mainProductSelected.listProductStep}"
+						var="step">
+						<p:panelGrid columns="2" style="width:80%"
+							columnClasses="logo,detail" styleClass="ui-panelgrid-blank">
+							<p:outputPanel>
+								<h:outputText value="#{step.description}"
+									style="font-weight: bold; color:#c7578f;" />
+							</p:outputPanel>
+						</p:panelGrid>
+						<hr />
+					</p:repeat>
+					<div align="center" style="height: 10px;"></div>
+					<div align="center"></div>
+				</div>
+
+			</p:outputPanel>
+		</p:dialog>
+	</h:form>
+</ui:composition>

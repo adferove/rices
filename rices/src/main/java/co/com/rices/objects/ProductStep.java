@@ -1,6 +1,7 @@
 package co.com.rices.objects;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ProductStep implements Serializable{
 
@@ -13,6 +14,7 @@ public class ProductStep implements Serializable{
 	private String  description;
 	private Integer stepOrder;
 
+	private List<StepDetail> listStepDetail;
 
 	public Integer getId() {
 		return id;
@@ -51,6 +53,12 @@ public class ProductStep implements Serializable{
 		this.stepOrder = stepOrder;
 	}
 
+	public List<StepDetail> getListStepDetail() {
+		return listStepDetail;
+	}
+	public void setListStepDetail(List<StepDetail> listStepDetail) {
+		this.listStepDetail = listStepDetail;
+	}
 	public ProductStep clone(){
 		ProductStep productStep = new ProductStep();
 		productStep.setDescription(new String(this.description));

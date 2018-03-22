@@ -175,7 +175,7 @@ public interface IQueryRices {
 		return results;
 	}
 	
-	public static List<Product> getProductsToSell(Product pParam)  throws Exception{
+	public static List<Product> getProductsToSell()  throws Exception{
 		List<Product> results=new ArrayList<Product>();
 		try{
 			StringBuilder builder=new StringBuilder();
@@ -220,6 +220,38 @@ public interface IQueryRices {
 			throw new Exception(e);
 		}
 		return results;
+	}
+	
+	public static String getProductNameById(Integer pId)  throws Exception{
+		String result = "";
+		try{
+			StringBuilder builder=new StringBuilder();
+			builder.append(" SELECT product_name   "); 
+			builder.append(" FROM   rices.products ");
+			builder.append(" WHERE  id  = ?        ");
+
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setInt(1, pId);
+				rs = cs.executeQuery();
+				if(rs.next()){
+					result = rs.getString("product_name");
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return result;
 	}
 
 }

@@ -12,6 +12,8 @@ public class StepDetail implements Serializable{
 	private Integer    selectedProductId;
 	private String     state;
 	private BigDecimal price;
+	
+	private boolean    checked;
 
 	private Product    transientProduct;
 
@@ -61,6 +63,14 @@ public class StepDetail implements Serializable{
 
 	public void setTransientProduct(Product transientProduct) {
 		this.transientProduct = transientProduct;
+	}
+
+	public boolean isChecked() {
+		return checked;
+	}
+
+	public void setChecked(boolean checked) {
+		this.checked = checked;
 	}
 
 	public StepDetail clone(){
