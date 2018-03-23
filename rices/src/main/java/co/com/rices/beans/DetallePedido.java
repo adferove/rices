@@ -3,6 +3,8 @@ package co.com.rices.beans;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import co.com.rices.objects.Product;
+
 public class DetallePedido implements Serializable{
 
 	private static final long serialVersionUID = -5393826053155618664L;
@@ -15,6 +17,8 @@ public class DetallePedido implements Serializable{
 	private BigDecimal precio;
 	
 	private Producto   producto;
+	
+	private Product    mainProduct;
 	
 	public Integer getId() {
 		return id;
@@ -57,5 +61,11 @@ public class DetallePedido implements Serializable{
 	}
 	public void setProducto(Producto producto) {
 		this.producto = producto;
+	}
+	public Product getMainProduct() {
+		return mainProduct;
+	}
+	public void setMainProduct(Product mainProduct) {
+		this.mainProduct = mainProduct;
 	}
 }

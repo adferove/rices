@@ -23,6 +23,32 @@
 			closable="true" responsive="true">
 			<p:outputPanel id="productDetail" style="text-align:center;">
 				<p:messages id="messages2" showDetail="true" closable="true" />
+
+				<div align="center">
+					<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+						<p:graphicImage
+							name="demo/images/#{managePurchaseOrder.mainProductSelected.imageName}.gif" />
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+							<h:outputText value="" />
+							<h:outputText
+								value="#{managePurchaseOrder.mainProductSelected.name}"
+								style="font-weight: bold; color:#c7578f;" />
+							<h:outputText value="" />
+							<h:outputText
+								value="#{managePurchaseOrder.mainProductSelected.description}"
+								style="font-weight: bold" />
+							<h:outputText value="Precio:" />
+							<h:outputText
+								value="$#{managePurchaseOrder.mainProductSelected.price}"
+								style="font-weight: bold" />
+							<h:outputText value="" />
+							<p:rating
+								value="#{managePurchaseOrder.mainProductSelected.ranking}"
+								readonly="true" />
+						</p:panelGrid>
+					</p:panelGrid>
+				</div>
+				<div style="height: 10px"></div>
 				<div align="left">
 					<p:repeat
 						value="#{managePurchaseOrder.mainProductSelected.listProductStep}"
@@ -43,7 +69,8 @@
 									style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
 									<div align="right">
 										<p:selectBooleanCheckbox value="#{det.checked}">
-											<p:ajax update="idSelectMultiple"
+											<p:ajax
+												update="idSelectMultiple,formSelectComplement:idAddSubtotal"
 												listener="#{managePurchaseOrder.seleccionUnicaListener(det)}" />
 										</p:selectBooleanCheckbox>
 									</div>
@@ -64,8 +91,36 @@
 						</p:outputPanel>
 						<hr />
 					</p:repeat>
-					<div align="center" style="height: 10px;"></div>
-					<div align="center"></div>
+				</div>
+				<div style="height: 10px"></div>
+				<div align="center">
+					<p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
+						<p:commandButton icon="fa fa-minus-circle"
+							style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
+							action="#{managePurchaseOrder.restarSumarCantidad(0)}"
+							update="productDetail" />
+						<p:outputLabel
+							value="#{managePurchaseOrder.detallePedido.cantidad}" />
+						<p:commandButton icon="fa fa-plus-circle"
+							style="background-image: none; color: #fff; background-color: #5cb85c; border-color: #4cae4c; font-weight: normal;"
+							action="#{managePurchaseOrder.restarSumarCantidad(1)}"
+							update="productDetail" />
+					</p:panelGrid>
+				</div>
+				<div style="height: 10px"></div>
+				<div align="center">
+					<p:panelGrid id="idAddSubtotal" columns="2"
+						styleClass="ui-panelgrid-blank">
+						<p:outputLabel value="Subtotal:" />
+						<h:outputText value="$#{managePurchaseOrder.detallePedido.precio}"
+							style="font-weight: bold" />
+					</p:panelGrid>
+				</div>
+				<div style="height: 10px"></div>
+				<div align="center">
+					<p:commandButton value="Agregar a la orden"
+						style="background-image: none; color: #fff; background-color: #5cb85c; border-color: #4cae4c; font-weight: normal;"
+						action="#{managePurchaseOrder.addProductToOrder()}" />
 				</div>
 
 			</p:outputPanel>

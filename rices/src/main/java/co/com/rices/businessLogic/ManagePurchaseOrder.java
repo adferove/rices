@@ -1,5 +1,7 @@
 package co.com.rices.businessLogic;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -11,6 +13,9 @@ import javax.servlet.http.HttpSession;
 import co.com.rices.ConsultarFuncionesAPI;
 import co.com.rices.IConstants;
 import co.com.rices.DAO.IQueryRices;
+import co.com.rices.beans.Cliente;
+import co.com.rices.beans.DetallePedido;
+import co.com.rices.beans.Pedido;
 import co.com.rices.objects.Product;
 import co.com.rices.objects.ProductStep;
 import co.com.rices.objects.StepDetail;
@@ -24,18 +29,23 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 	private boolean        showSeleccionarProducto;
 	
 	private Product        mainProductSelected;
+	
+	private Pedido         pedidoPersiste;
+	private DetallePedido  detallePedido;
 
 	private List<Product>  listadoProducto;
+	
+	private List<DetallePedido> listadoDetallePedido;
 	
 	@SuppressWarnings("unchecked")
 	@PostConstruct
 	public void init(){
 		try{
 			this.showSeleccionarProducto = true;
-			
+
 			FacesContext context = FacesContext.getCurrentInstance();
 			HttpSession sesion = (HttpSession) context.getExternalContext().getSession(true);
-			
+
 			//PRODUCTOS OFRECIDOS POR RICES
 			if(sesion.getAttribute("RicesListProducts")==null){
 				this.listadoProducto = IQueryRices.getProductsToSell();
@@ -56,6 +66,27 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 			}else{
 				this.listadoProducto = (List<Product>) sesion.getAttribute("RicesListProducts");
 			}
+			this.pedidoPersiste          = new Pedido();
+			this.pedidoPersiste.setCliente(new Cliente());
+			this.pedidoPersiste.setCargoDomicilio(new BigDecimal(0));
+			this.pedidoPersiste.setSubtotal(new BigDecimal(0));
+			this.pedidoPersiste.setIva(new BigDecimal(0));
+			this.pedidoPersiste.setTotal(new BigDecimal(0));
+			this.pedidoPersiste.setEstado("R");
+			this.detallePedido = new DetallePedido();
+
+
+			//PRODUCTOS EN EL CARRITO
+			if(sesion.getAttribute("RiceProductInCart")==null){
+				this.listadoDetallePedido = new ArrayList<DetallePedido>();
+				sesion.setAttribute("RiceProductInCart", this.listadoDetallePedido);
+			}else{
+				this.listadoDetallePedido = (List<DetallePedido>) sesion.getAttribute("RiceProductInCart");
+				for(DetallePedido dp: this.listadoDetallePedido){
+					this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().add(dp.getPrecio()));
+					this.pedidoPersiste.setSubtotal(this.pedidoPersiste.getSubtotal().add(dp.getPrecio()));
+				}
+			}
 		}catch(Exception e){
 			IConstants.log.error(e.toString(),e);
 		}
@@ -68,6 +99,10 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 				d.setChecked(false);
 			}
 		}
+		this.detallePedido = new DetallePedido();
+		this.detallePedido.setMainProduct(this.mainProductSelected);
+		this.detallePedido.setCantidad(1);
+		this.detallePedido.setPrecio(this.mainProductSelected.getPrice());
 		this.abrirModal("mdlSelectComplement");
 	}
 	
@@ -77,6 +112,39 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 				if(s.getId().intValue()!=pDetail.getId().intValue()){
 					s.setChecked(false);
 				}
+			}
+		}
+		this.calculateSubtotalDetail();
+	}
+	
+	private void calculateSubtotalDetail(){
+		BigDecimal singlePrice = new BigDecimal(0);
+		for(ProductStep s: this.mainProductSelected.getListProductStep()){
+			for(StepDetail d: s.getListStepDetail()){
+				if(d.isChecked()){
+					singlePrice = singlePrice.add(d.getPrice());
+				}
+			}
+		}
+		BigDecimal subtotal    = this.mainProductSelected.getPrice().add(singlePrice);
+		BigDecimal quantity    = new BigDecimal(this.detallePedido.getCantidad());
+		this.detallePedido.setPrecio(subtotal.multiply(quantity));
+	}
+	
+	public void addProductToOrder(){
+		
+	}
+	
+	public void restarSumarCantidad(int pValor){
+		if(pValor==0){
+			if(this.detallePedido.getCantidad() > 1){
+				this.detallePedido.setCantidad(this.detallePedido.getCantidad()-1);
+				this.calculateSubtotalDetail();
+			}
+		}else{
+			if(this.detallePedido.getCantidad() < 99){
+				this.detallePedido.setCantidad(this.detallePedido.getCantidad()+1);
+				this.calculateSubtotalDetail();
 			}
 		}
 	}
@@ -91,6 +159,26 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 
 	public Product getMainProductSelected() {
 		return mainProductSelected;
+	}
+
+	public Pedido getPedidoPersiste() {
+		return pedidoPersiste;
+	}
+
+	public void setPedidoPersiste(Pedido pedidoPersiste) {
+		this.pedidoPersiste = pedidoPersiste;
+	}
+
+	public DetallePedido getDetallePedido() {
+		return detallePedido;
+	}
+
+	public void setDetallePedido(DetallePedido detallePedido) {
+		this.detallePedido = detallePedido;
+	}
+
+	public List<DetallePedido> getListadoDetallePedido() {
+		return listadoDetallePedido;
 	}
 
 }
