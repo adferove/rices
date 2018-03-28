@@ -1,6 +1,7 @@
 package co.com.rices.businessLogic;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,7 +133,31 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 	}
 	
 	public void addProductToOrder(){
-		
+		DetallePedido detalleAgrega = new DetallePedido();
+		detalleAgrega.setMainProduct(this.mainProductSelected.clone());
+		detalleAgrega.setCantidad(new Integer(this.detallePedido.getCantidad()));
+		detalleAgrega.setPrecio(this.detallePedido.getPrecio());
+		detalleAgrega.getMainProduct().setListProductStep(new ArrayList<ProductStep>());
+		for(ProductStep ps: this.mainProductSelected.getListProductStep()){
+			ProductStep clone = ps.clone();
+			clone.setListStepDetail(new ArrayList<StepDetail>());
+			for(StepDetail sd: ps.getListStepDetail()){
+				if(sd.isChecked()){
+					clone.getListStepDetail().add(sd.clone());
+				}
+			}
+			if(!clone.getListStepDetail().isEmpty()){
+				detalleAgrega.getMainProduct().getListProductStep().add(clone);
+			}
+		}
+		this.listadoDetallePedido.add(detalleAgrega);
+		this.pedidoPersiste.setSubtotal(new BigDecimal(0));
+		this.pedidoPersiste.setTotal(new BigDecimal(0));
+		for(DetallePedido dp: this.listadoDetallePedido){
+			this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().add(dp.getPrecio()));
+			this.pedidoPersiste.setSubtotal(this.pedidoPersiste.getSubtotal().add(dp.getPrecio()));
+		}
+		this.cerrarModal("mdlSelectComplement");
 	}
 	
 	public void restarSumarCantidad(int pValor){
@@ -146,6 +171,56 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 				this.detallePedido.setCantidad(this.detallePedido.getCantidad()+1);
 				this.calculateSubtotalDetail();
 			}
+		}
+	}
+	
+	public void restarCantidad(DetallePedido pDetalle){
+		if(pDetalle.getCantidad() > 1){
+			BigDecimal valorUnidad = pDetalle.getPrecio().divide(new BigDecimal(pDetalle.getCantidad()));
+			pDetalle.setCantidad(pDetalle.getCantidad()-1);
+			pDetalle.setPrecio(pDetalle.getPrecio().subtract(valorUnidad));
+			this.pedidoPersiste.setSubtotal(this.pedidoPersiste.getSubtotal().subtract(valorUnidad));
+			if(this.pedidoPersiste.getMultiplicador()!=null){
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal().multiply(this.pedidoPersiste.getMultiplicador()));
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().setScale(2, RoundingMode.HALF_DOWN));
+			}else{
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal());
+			}
+		}
+	}
+
+	public void sumarCantidad(DetallePedido pDetalle){
+		if(pDetalle.getCantidad() < 99){
+			BigDecimal valorUnidad = pDetalle.getPrecio().divide(new BigDecimal(pDetalle.getCantidad()));
+			pDetalle.setCantidad(pDetalle.getCantidad()+1);
+			pDetalle.setPrecio(pDetalle.getPrecio().add(valorUnidad));
+			this.pedidoPersiste.setSubtotal(this.pedidoPersiste.getSubtotal().add(valorUnidad));
+			if(this.pedidoPersiste.getMultiplicador()!=null){
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal().multiply(this.pedidoPersiste.getMultiplicador()));
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().setScale(2, RoundingMode.HALF_DOWN));
+			}else{
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal());
+			}
+		}
+	}
+	
+	public void quitarDetalle(DetallePedido pDetalle){
+		this.pedidoPersiste.setSubtotal(this.pedidoPersiste.getSubtotal().subtract(pDetalle.getPrecio()));
+		if(this.pedidoPersiste.getMultiplicador()!=null){
+			this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal().multiply(this.pedidoPersiste.getMultiplicador()));
+			this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().setScale(2, RoundingMode.HALF_DOWN));
+		}else{
+			this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal());
+		}
+		this.listadoDetallePedido.remove(pDetalle);
+	}
+	
+	public void validarProductoSeleccionado(){
+		if(this.listadoDetallePedido.size()>0){
+			this.showSeleccionarProducto = false;
+			//this.showCheckout            = true;
+		}else{
+			this.mostrarMensajeGlobal("seleccioneUnProducto", "advertencia");
 		}
 	}
 

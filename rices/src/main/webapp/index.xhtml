@@ -44,7 +44,7 @@
 			<!-- End Map section -->
 
 			<p:dialog id="mdlDescuento" widgetVar="mdlDescuento" modal="true"
-				showHeader="false" resizable="false" draggable="true" visible="true">
+				showHeader="false" resizable="false" visible="true">
 				<p:panel id="panelRegistraCliente">
 					<p:messages id="messages2" showDetail="true" closable="true" />
 					<div style="height: 10px;"></div>
@@ -64,30 +64,25 @@
 							<p:inputText id="idEmail" style="font-size:11px; " size="50"
 								maxlength="50"
 								value="#{administrarInicio.clientePersiste.email}" />
-							<p:watermark for="idEmail" value="CORREO #{mensaje.ELECTRONICO}"
-								id="watermarkEmail" />
+							<p:watermark for="idEmail" value="e-mail" id="watermarkEmail" />
 
-							<p:inputText id="idNombre"
-								style="font-size:11px; text-transform:uppercase;" size="50"
+							<p:inputText id="idNombre" style="font-size:11px; " size="50"
 								maxlength="50"
 								value="#{administrarInicio.clientePersiste.nombre}" />
 							<p:watermark for="idNombre" value="Nombre" id="watermarkNombre" />
 
-							<p:inputText id="idDireccion"
-								style="font-size:11px; text-transform:uppercase;" size="50"
+							<p:inputText id="idDireccion" style="font-size:11px; " size="50"
 								maxlength="50"
 								value="#{administrarInicio.clientePersiste.direccion}" />
 							<p:watermark for="idDireccion" value="#{mensaje.Direccion}"
 								id="watermarkDireccion" />
 
-							<p:inputText id="idBarrio"
-								style="font-size:11px; text-transform:uppercase;" size="50"
+							<p:inputText id="idBarrio" style="font-size:11px; " size="50"
 								maxlength="50"
 								value="#{administrarInicio.clientePersiste.barrio}" />
 							<p:watermark for="idBarrio" value="Barrio" id="watermarkBarrio" />
 
-							<p:inputText id="idCelular"
-								style="font-size:11px; text-transform:uppercase;" size="50"
+							<p:inputText id="idCelular" style="font-size:11px; " size="50"
 								maxlength="50"
 								value="#{administrarInicio.clientePersiste.celular}" />
 							<p:watermark for="idCelular" value="#{mensaje.Telefono}/Celular"
@@ -97,15 +92,16 @@
 
 						<div align="center">
 							<p:commandButton id="btnConfimar"
-								style="font-size:14px; font-weight: normal !important;"
+								style="background-image: none; color: #fff; background-color: #5cb85c; border-color: #4cae4c; font-weight: normal;"
 								action="#{administrarInicio.registrarCliente()}" value="Aceptar"
 								update=":form:panelRegistraCliente,:form:messages"
 								icon="fa fa-sign-in">
 							</p:commandButton>
 							<p:spacer width="10" />
 							<p:commandButton id="btnSalir"
-								style="font-size:14px; font-weight: normal !important;"
-								action="#{administrarInicio.cerrarPedido()}" value="No, Salir"
+								style="background-image: none; color: #fff; background-color: #d9534f; border-color: #d43f3a; font-weight: normal;"
+								action="#{administrarInicio.cerrarPedido()}"
+								value="No deseo el descuento"
 								update=":form:mdlDescuento,:form:messages" icon="fa fa-sign-out">
 							</p:commandButton>
 							<p:blockUI block=":form" trigger="btnConfimar,btnSalir" />

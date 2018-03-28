@@ -267,7 +267,7 @@ public interface IActualizaRices {
 			try{
 				conexion = new Conexion();
 				cs = conexion.getConnection().prepareCall(builder.toString());
-				cs.setString(1, pProductoPrecio.getEstado().toUpperCase());
+				cs.setString(1, pProductoPrecio.getEstado());
 				cs.setObject(2, new java.sql.Date(pProductoPrecio.getFechaActualiza().getTime()));
 				cs.setObject(3, pProductoPrecio.getUsuarioActualiza().toLowerCase());
 				cs.setInt(4, pProductoPrecio.getId());

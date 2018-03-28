@@ -704,7 +704,7 @@ public interface IConsultaRices {
 			int i = 1;
 			if(pNombre!=null && !pNombre.trim().equals("")){
 				builder.append(" AND nombres_cliente LIKE  ? ");
-				parametros.put(i++, "%" +pNombre.trim().toUpperCase()+ "%");
+				parametros.put(i++, "%" +pNombre.trim()+ "%");
 			}
 			if(pEmail!=null && !pEmail.trim().equals("")){
 				builder.append(" AND correo_cliente LIKE ? ");

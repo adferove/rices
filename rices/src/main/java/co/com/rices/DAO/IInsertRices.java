@@ -29,7 +29,7 @@ public interface IInsertRices {
 			try{
 				conexion = new Conexion();
 				cs = conexion.getConnection().prepareCall(builder.toString());
-				cs.setObject(1, pProduct.getName().trim().toUpperCase());
+				cs.setObject(1, pProduct.getName().trim());
 				cs.setObject(2, pProduct.getDescription().trim());
 				cs.setObject(3, new java.sql.Date(pProduct.getCreationDate().getTime()));
 				cs.setObject(4, pProduct.getState());

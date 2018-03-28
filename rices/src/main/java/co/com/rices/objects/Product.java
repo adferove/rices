@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class Product implements Serializable{
 
 	private static final long serialVersionUID = -3215594742117719705L;
@@ -109,17 +111,33 @@ public class Product implements Serializable{
 		if(this.closed!=null){
 			product.setClosed((Date) this.closed.clone());
 		}
-		product.setCreationDate((Date) this.creationDate.clone());
-		product.setDescription(new String(this.description));
-		product.setImageName(new String(this.imageName));
-		product.setLoginUsuario(new String(this.loginUsuario));
-		product.setName(new String(this.name));
+		if(this.creationDate!=null){
+			product.setCreationDate((Date) this.creationDate.clone());
+		}
+		if(StringUtils.trimToNull(this.description)!=null){
+			product.setDescription(new String(this.description));
+		}
+		if(StringUtils.trimToNull(this.imageName)!=null){
+			product.setImageName(new String(this.imageName));
+		}
+		if(StringUtils.trimToNull(this.loginUsuario)!=null){
+			product.setLoginUsuario(new String(this.loginUsuario));
+		}
+		if(StringUtils.trimToNull(this.name)!=null){
+			product.setName(new String(this.name));
+		}
 		if(this.open!=null){
 			product.setOpen((Date) this.open.clone());
 		}
-		product.setProductType(new String(this.productType));
-		product.setRanking(new Integer(this.ranking));
-		product.setState(new String(this.state));
+		if(StringUtils.trimToNull(this.productType)!=null){
+			product.setProductType(new String(this.productType));
+		}
+		if(this.ranking!=null){
+			product.setRanking(new Integer(this.ranking));
+		}
+		if(StringUtils.trimToNull(this.state)!=null){
+			product.setState(new String(this.state));
+		}
 		product.setPrice(new BigDecimal(0));
 		if(this.price!=null){
 			product.setPrice(product.getPrice().add(this.price));

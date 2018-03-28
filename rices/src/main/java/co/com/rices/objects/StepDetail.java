@@ -3,6 +3,8 @@ package co.com.rices.objects;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class StepDetail implements Serializable{
 
 	private static final long serialVersionUID = 4456437400187192607L;
@@ -86,12 +88,22 @@ public class StepDetail implements Serializable{
 	public StepDetail clone(){
 		StepDetail stepDetail = new StepDetail();
 		stepDetail.setId(new Integer(this.id));
-		stepDetail.setProductStepId(new Integer(this.productStepId));
-		stepDetail.setSelectedProductId(new Integer(this.selectedProductId));
-		stepDetail.setState(new String(this.state));
+		if(this.productStepId!=null){
+			stepDetail.setProductStepId(new Integer(this.productStepId));
+		}
+		if(this.selectedProductId!=null){
+			stepDetail.setSelectedProductId(new Integer(this.selectedProductId));
+		}
+		if(StringUtils.trimToNull(this.state)!=null){
+			stepDetail.setState(new String(this.state));
+		}
 		stepDetail.setPrice(new BigDecimal(0));
-		stepDetail.setPrice(stepDetail.getPrice().add(this.price));
-		stepDetail.setTransientProduct(this.transientProduct.clone());
+		if(this.price!=null){
+			stepDetail.setPrice(stepDetail.getPrice().add(this.price));
+		}
+		if(this.transientProduct!=null){
+			stepDetail.setTransientProduct(this.transientProduct.clone());
+		}
 		return stepDetail;
 	}
 }

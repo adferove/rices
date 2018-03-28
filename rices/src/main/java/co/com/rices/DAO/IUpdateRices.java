@@ -25,7 +25,7 @@ public interface IUpdateRices {
 			try{
 				conexion = new Conexion();
 				cs = conexion.getConnection().prepareCall(builder.toString());
-				cs.setObject(1, pProduct.getName().trim().toUpperCase());
+				cs.setObject(1, pProduct.getName().trim());
 				cs.setObject(2, pProduct.getDescription().trim());
 				cs.setObject(3, pProduct.getState());
 				cs.setObject(4, pProduct.getRanking());

@@ -89,10 +89,10 @@ public class AdministrarCliente extends ConsultarFuncionesAPI  {
 
 
 				this.clientePersiste.setEmail(this.clientePersiste.getEmail().trim().toLowerCase());
-				this.clientePersiste.setNombre(this.clientePersiste.getNombre().trim().toUpperCase());
+				this.clientePersiste.setNombre(this.clientePersiste.getNombre().trim());
 				this.clientePersiste.setCelular(this.clientePersiste.getCelular().trim());
-				this.clientePersiste.setDireccion(this.clientePersiste.getDireccion().trim().toUpperCase());
-				this.clientePersiste.setBarrio(this.clientePersiste.getBarrio().trim().toUpperCase());
+				this.clientePersiste.setDireccion(this.clientePersiste.getDireccion().trim());
+				this.clientePersiste.setBarrio(this.clientePersiste.getBarrio().trim());
 				this.clientePersiste.setGuardaDatos(true);
 				int idCliente=IActualizaRices.registrarCliente(this.clientePersiste);
 				this.showCrear=false;
@@ -114,10 +114,10 @@ public class AdministrarCliente extends ConsultarFuncionesAPI  {
 	public void editarCliente(){
 		try{	
 			this.clienteClon.setEmail(this.clienteClon.getEmail().trim().toLowerCase());
-			this.clienteClon.setNombre(this.clienteClon.getNombre().trim().toUpperCase());
+			this.clienteClon.setNombre(this.clienteClon.getNombre().trim());
 			this.clienteClon.setCelular(this.clienteClon.getCelular().trim());
-			this.clienteClon.setDireccion(this.clienteClon.getDireccion().trim().toUpperCase());
-			this.clienteClon.setBarrio(this.clienteClon.getBarrio().trim().toUpperCase());
+			this.clienteClon.setDireccion(this.clienteClon.getDireccion().trim());
+			this.clienteClon.setBarrio(this.clienteClon.getBarrio().trim());
 			if(IActualizaRices.actualizarCliente(this.clienteClon)){
 				this.clientePersiste.setNombre(this.clienteClon.getNombre());
 				this.clientePersiste.setEmail(this.clienteClon.getEmail());

@@ -72,10 +72,10 @@ public class AdministrarInicio extends ConsultarFuncionesAPI{
 					this.mostrarMensajeGlobal("clienteEncuentraRegistrado", "error");
 				}else{
 					this.clientePersiste.setEmail(this.clientePersiste.getEmail().trim().toLowerCase());
-					this.clientePersiste.setNombre(this.clientePersiste.getNombre().trim().toUpperCase());
+					this.clientePersiste.setNombre(this.clientePersiste.getNombre().trim());
 					this.clientePersiste.setCelular(this.clientePersiste.getCelular().trim());
-					this.clientePersiste.setDireccion(this.clientePersiste.getDireccion().trim().toUpperCase());
-					this.clientePersiste.setBarrio(this.clientePersiste.getBarrio().trim().toUpperCase());
+					this.clientePersiste.setDireccion(this.clientePersiste.getDireccion().trim());
+					this.clientePersiste.setBarrio(this.clientePersiste.getBarrio().trim());
 					this.clientePersiste.setGuardaDatos(true);
 					
 					Integer idCliente = IActualizaRices.registrarCliente(this.clientePersiste);
@@ -121,6 +121,7 @@ public class AdministrarInicio extends ConsultarFuncionesAPI{
 		}
 	}
 	
+
 	public Cliente getClientePersiste() {
 		if(this.clientePersiste==null){
 			this.clientePersiste = new Cliente();

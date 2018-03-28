@@ -233,10 +233,10 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 
 			if(!error){
 				this.pedidoPersiste.getCliente().setEmail(this.pedidoPersiste.getCliente().getEmail().trim().toLowerCase());
-				this.pedidoPersiste.getCliente().setNombre(this.pedidoPersiste.getCliente().getNombre().trim().toUpperCase());
+				this.pedidoPersiste.getCliente().setNombre(this.pedidoPersiste.getCliente().getNombre().trim());
 				this.pedidoPersiste.getCliente().setCelular(this.pedidoPersiste.getCliente().getCelular().trim());
-				this.pedidoPersiste.getCliente().setDireccion(this.pedidoPersiste.getCliente().getDireccion().trim().toUpperCase());
-				this.pedidoPersiste.getCliente().setBarrio(this.pedidoPersiste.getCliente().getBarrio().trim().toUpperCase());
+				this.pedidoPersiste.getCliente().setDireccion(this.pedidoPersiste.getCliente().getDireccion().trim());
+				this.pedidoPersiste.getCliente().setBarrio(this.pedidoPersiste.getCliente().getBarrio().trim());
 
 
 				boolean exito = false;
@@ -371,9 +371,9 @@ public class AdministrarOrdenCompra extends ConsultarFuncionesAPI{
 				this.mostraMensajeError="display:;";
 			}
 			if(!error){
-				String clave = this.pedidoPersiste.getCliente().getId().toString()+this.codigoCupon.trim().toUpperCase();
+				String clave = this.pedidoPersiste.getCliente().getId().toString()+this.codigoCupon.trim();
 				if(this.mapCuponByIdCliente.get(clave)==null){
-					this.mapCuponByIdCliente.put(clave, IConsultaRices.getCuponCliente(this.pedidoPersiste.getCliente().getId(), this.codigoCupon.trim().toUpperCase()));
+					this.mapCuponByIdCliente.put(clave, IConsultaRices.getCuponCliente(this.pedidoPersiste.getCliente().getId(), this.codigoCupon.trim()));
 				}
 				CuponCliente cuponCliente = this.mapCuponByIdCliente.get(clave);
 				if(cuponCliente==null){

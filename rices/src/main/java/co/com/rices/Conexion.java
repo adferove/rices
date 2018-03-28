@@ -36,9 +36,12 @@ public class Conexion implements Serializable{
 //			String url = "jdbc:postgresql://postgresql:5432/rices";
 //			String username = "admin";
 //			String password = "admin";
-			String url = "jdbc:postgresql://localhost:5432/rices";
+//			String url = "jdbc:postgresql://localhost:5432/rices";
+//			String username = "postgres";
+//			String password = "afrv1983";
+			String url = "jdbc:postgresql://localhost:5433/rices";
 			String username = "postgres";
-			String password = "afrv1983";
+			String password = "admin";
 			Class.forName(DB_driver);
 			con = DriverManager.getConnection(url, username, password);
 			con.setAutoCommit(true);

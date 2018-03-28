@@ -17,8 +17,8 @@
 }
 </style>
 
-		<p:dialog header="Elige tu #{mensaje.menu}"
-			widgetVar="mdlSelectComplement" width="33%"
+		<p:dialog header="Elige tu #{mensaje.menu}" height="650"
+			widgetVar="mdlSelectComplement" width="50%"
 			position="center center center center" modal="true" resizable="true"
 			closable="true" responsive="true">
 			<p:outputPanel id="productDetail" style="text-align:center;">
@@ -28,20 +28,20 @@
 					<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
 						<p:graphicImage
 							name="demo/images/#{managePurchaseOrder.mainProductSelected.imageName}.gif" />
-						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
-							<h:outputText value="" />
+						<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+
 							<h:outputText
 								value="#{managePurchaseOrder.mainProductSelected.name}"
 								style="font-weight: bold; color:#c7578f;" />
-							<h:outputText value="" />
+
 							<h:outputText
 								value="#{managePurchaseOrder.mainProductSelected.description}"
-								style="font-weight: bold" />
-							<h:outputText value="Precio:" />
+								style="font-weight: normal; font-size:12px;" />
+
 							<h:outputText
 								value="$#{managePurchaseOrder.mainProductSelected.price}"
 								style="font-weight: bold" />
-							<h:outputText value="" />
+
 							<p:rating
 								value="#{managePurchaseOrder.mainProductSelected.ranking}"
 								readonly="true" />
@@ -65,7 +65,7 @@
 								style="font-size:11px; font-weight: bold; color:#bdbdbd;" />
 							<p:dataTable id="idSelectMultiple" var="det"
 								value="#{step.listStepDetail}" styleClass="ui-datatable-blank">
-								<p:column width="33%"
+								<p:column width="10%"
 									style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
 									<div align="right">
 										<p:selectBooleanCheckbox value="#{det.checked}">
@@ -75,13 +75,13 @@
 										</p:selectBooleanCheckbox>
 									</div>
 								</p:column>
-								<p:column width="33%"
+								<p:column width="62%"
 									style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
 									<div align="left">
 										<h:outputText value="#{det.transientProduct.name}" />
 									</div>
 								</p:column>
-								<p:column width="33%"
+								<p:column width="28%"
 									style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
 									<div align="right">
 										<h:outputText value="$ #{det.price}" />
@@ -111,7 +111,7 @@
 				<div align="center">
 					<p:panelGrid id="idAddSubtotal" columns="2"
 						styleClass="ui-panelgrid-blank">
-						<p:outputLabel value="Subtotal:" />
+						<h:outputText value="Subtotal:" />
 						<h:outputText value="$#{managePurchaseOrder.detallePedido.precio}"
 							style="font-weight: bold" />
 					</p:panelGrid>
@@ -120,7 +120,8 @@
 				<div align="center">
 					<p:commandButton value="Agregar a la orden"
 						style="background-image: none; color: #fff; background-color: #5cb85c; border-color: #4cae4c; font-weight: normal;"
-						action="#{managePurchaseOrder.addProductToOrder()}" />
+						action="#{managePurchaseOrder.addProductToOrder()}"
+						update=":formSelectComplement:productDetail, form:tb, form:tbDetail, :form:idStcky,:form:messages" />
 				</div>
 
 			</p:outputPanel>

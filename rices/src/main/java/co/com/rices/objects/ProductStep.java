@@ -3,6 +3,8 @@ package co.com.rices.objects;
 import java.io.Serializable;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class ProductStep implements Serializable{
 
 	private static final long serialVersionUID = -6796250662297410741L;
@@ -69,11 +71,21 @@ public class ProductStep implements Serializable{
 	}
 	public ProductStep clone(){
 		ProductStep productStep = new ProductStep();
-		productStep.setDescription(new String(this.description));
+		
 		productStep.setId(new Integer(this.id));
-		productStep.setProductId(new Integer(this.productId));
-		productStep.setSelectType(new String(this.selectType));
-		productStep.setState(new String(this.state));
+		
+		if(StringUtils.trimToNull(this.description)!=null){
+			productStep.setDescription(new String(this.description));
+		}
+		if(this.getProductId()!=null){
+			productStep.setProductId(new Integer(this.productId));
+		}
+		if(StringUtils.trimToNull(this.selectType)!=null){
+			productStep.setSelectType(new String(this.selectType));
+		}
+		if(StringUtils.trimToNull(this.state)!=null){
+			productStep.setState(new String(this.state));
+		}
 		if(this.stepOrder!=null){
 			productStep.setStepOrder(new Integer(this.stepOrder));
 		}

@@ -104,7 +104,7 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 					error = true;
 					this.mostrarMensajeGlobal("ingreseNombreSinGuion", "error");
 				}else{
-					this.productoPersiste.setName(this.productoPersiste.getName().trim().toUpperCase());
+					this.productoPersiste.setName(this.productoPersiste.getName().trim());
 				}
 			}
 			if(this.productoPersiste.getDescription()==null || this.productoPersiste.getDescription().trim().equals("")){
@@ -151,7 +151,7 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 					error = true;
 					this.mostrarMensajeGlobal("ingreseNombreSinGuion", "error");
 				}else{
-					this.productoClon.setName(this.productoClon.getName().trim().toUpperCase());
+					this.productoClon.setName(this.productoClon.getName().trim());
 				}
 			}
 			if(this.productoClon.getDescription()==null || this.productoClon.getDescription().trim().equals("")){
@@ -364,7 +364,7 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 		try{
 			if(StringUtils.trimToNull(pTexto)!=null){
 				Product p = new Product();
-				p.setName(pTexto.trim().toUpperCase());
+				p.setName(pTexto.trim());
 				List<Product> products = IQueryRices.getProductsByParams(p);
 				if(products.size()>0){
 					resultados = new ArrayList<String>();

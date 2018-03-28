@@ -44,7 +44,7 @@ public interface IQueryRices {
 				}
 				if(StringUtils.trimToNull(pParam.getName())!=null){
 					builder.append(" AND product_name LIKE ? ");
-					params.put(i++, "%"+pParam.getName().trim().toUpperCase()+"%");
+					params.put(i++, "%"+pParam.getName().trim()+"%");
 				}
 			}
 			Conexion conexion    = null;
