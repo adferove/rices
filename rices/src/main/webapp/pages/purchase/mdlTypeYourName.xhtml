@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formTypeYourName">
+
+		<style type="text/css">
+.ui-widget-content {
+	border: 0px solid #ffffff;
+	background: #ffffff
+		url("/rices/javax.faces.resource/images/ui-bg_flat_75_ffffff_40x100.png.jsf?ln=primefaces-blitzer")
+		50% 50% repeat-x;
+	color: #333333;
+}
+</style>
+
+		<p:dialog id="mdlTypeYourName" widgetVar="mdlTypeYourName"
+			modal="true" showHeader="false" resizable="false"
+			visible="#{managePurchaseOrder.showCustomerName}">
+			<p:outputPanel id="oPanelTypeYourName" style="text-align:center;">
+				<p:panelGrid styleClass="ui-panelgrid-blank" columns="2">
+					<div align="center" class="logo">
+						<img src="/rices/images/logo.png" title="Rices fusion y mas"
+							alt="Rices to go" />
+					</div>
+					<p:panelGrid styleClass="ui-panelgrid-blank" columns="1">
+						<p:outputLabel style="font-size:20px;"
+							value="#{mensaje.cuentaComoTeLlamas}" />
+						<p:inputText maxlength="50"
+							value="#{managePurchaseOrder.customerName}" />
+						<div style="height: 10px;"></div>
+						<div align="center">
+							<p:commandButton value="Continuar"
+								style="background-image: none; color: #fff; background-color: #5cb85c; border-color: #4cae4c; font-weight: normal;"
+								action="#{managePurchaseOrder.typeYourName()}"
+								update=":formTypeYourName:oPanelTypeYourName, form:tb, :form:idStcky,:form:messages" />
+						</div>
+					</p:panelGrid>
+				</p:panelGrid>
+			</p:outputPanel>
+		</p:dialog>
+
+	</h:form>
+</ui:composition>

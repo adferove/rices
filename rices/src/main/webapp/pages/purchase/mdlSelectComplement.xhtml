@@ -94,13 +94,15 @@
 				</div>
 				<div style="height: 10px"></div>
 				<div align="center">
-					<p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
+					<p:panelGrid columns="5" styleClass="ui-panelgrid-blank">
 						<p:commandButton icon="fa fa-minus-circle"
 							style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
 							action="#{managePurchaseOrder.restarSumarCantidad(0)}"
 							update="productDetail" />
+						<p:spacer width="10" />
 						<p:outputLabel
 							value="#{managePurchaseOrder.detallePedido.cantidad}" />
+						<p:spacer width="10" />
 						<p:commandButton icon="fa fa-plus-circle"
 							style="background-image: none; color: #fff; background-color: #5cb85c; border-color: #4cae4c; font-weight: normal;"
 							action="#{managePurchaseOrder.restarSumarCantidad(1)}"

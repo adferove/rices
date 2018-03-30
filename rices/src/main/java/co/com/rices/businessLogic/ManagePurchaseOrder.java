@@ -11,12 +11,14 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
+
 import co.com.rices.ConsultarFuncionesAPI;
 import co.com.rices.IConstants;
 import co.com.rices.DAO.IQueryRices;
-import co.com.rices.beans.Cliente;
 import co.com.rices.beans.DetallePedido;
 import co.com.rices.beans.Pedido;
+import co.com.rices.objects.City;
 import co.com.rices.objects.Product;
 import co.com.rices.objects.ProductStep;
 import co.com.rices.objects.StepDetail;
@@ -28,6 +30,13 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 	private static final long serialVersionUID = 911365794720003052L;
 
 	private boolean        showSeleccionarProducto;
+	private boolean        showCheckout;
+	private boolean        showCustomerName;
+	
+	private String         customerName;
+	private String         codigoCupon;
+	private String         mostraMensajeError;
+	private String         mensajeError;
 	
 	private Product        mainProductSelected;
 	
@@ -38,12 +47,14 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 	
 	private List<DetallePedido> listadoDetallePedido;
 	
+	private List<City> listCities;
+	
 	@SuppressWarnings("unchecked")
 	@PostConstruct
 	public void init(){
 		try{
 			this.showSeleccionarProducto = true;
-
+			this.mostraMensajeError      = "display:none;";
 			FacesContext context = FacesContext.getCurrentInstance();
 			HttpSession sesion = (HttpSession) context.getExternalContext().getSession(true);
 
@@ -68,7 +79,6 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 				this.listadoProducto = (List<Product>) sesion.getAttribute("RicesListProducts");
 			}
 			this.pedidoPersiste          = new Pedido();
-			this.pedidoPersiste.setCliente(new Cliente());
 			this.pedidoPersiste.setCargoDomicilio(new BigDecimal(0));
 			this.pedidoPersiste.setSubtotal(new BigDecimal(0));
 			this.pedidoPersiste.setIva(new BigDecimal(0));
@@ -88,6 +98,17 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 					this.pedidoPersiste.setSubtotal(this.pedidoPersiste.getSubtotal().add(dp.getPrecio()));
 				}
 			}
+			
+			if(sesion.getAttribute("customerClient")!=null){
+				this.customerName = (String) sesion.getAttribute("customerClient");
+			}
+			
+			if(StringUtils.trimToNull(this.customerName)==null){
+				this.showCustomerName = true;
+			}
+			
+			this.listCities = IQueryRices.getCities();
+			
 		}catch(Exception e){
 			IConstants.log.error(e.toString(),e);
 		}
@@ -217,11 +238,38 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 	
 	public void validarProductoSeleccionado(){
 		if(this.listadoDetallePedido.size()>0){
+			if(StringUtils.trimToNull(this.pedidoPersiste.getNombreCliente())==null){
+				this.pedidoPersiste.setNombreCliente(this.customerName.trim());
+			}
 			this.showSeleccionarProducto = false;
-			//this.showCheckout            = true;
+			this.showCheckout            = true;
 		}else{
 			this.mostrarMensajeGlobal("seleccioneUnProducto", "advertencia");
 		}
+	}
+	
+	public void typeYourName(){
+		if(StringUtils.trimToNull(this.customerName)!=null){
+			FacesContext context = FacesContext.getCurrentInstance();
+			HttpSession sesion = (HttpSession) context.getExternalContext().getSession(true);
+			sesion.setAttribute("customerClient", this.customerName.trim());
+			this.cerrarModal("mdlTypeYourName");
+		}else{
+			this.mostrarMensajeGlobal("paraContinuarNombre", "advertencia");
+		}
+	}
+	
+	public void regresarSeleccionProducto(){
+		this.showSeleccionarProducto = true;
+		this.showCheckout            = false;
+	}
+	
+	public void aplicarCupon(){
+		
+	}
+	
+	public void confirmarPedido(){
+		
 	}
 
 	public boolean isShowSeleccionarProducto() {
@@ -254,6 +302,42 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 
 	public List<DetallePedido> getListadoDetallePedido() {
 		return listadoDetallePedido;
+	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	public boolean isShowCustomerName() {
+		return showCustomerName;
+	}
+
+	public boolean isShowCheckout() {
+		return showCheckout;
+	}
+
+	public List<City> getListCities() {
+		return listCities;
+	}
+
+	public String getCodigoCupon() {
+		return codigoCupon;
+	}
+
+	public void setCodigoCupon(String codigoCupon) {
+		this.codigoCupon = codigoCupon;
+	}
+
+	public String getMostraMensajeError() {
+		return mostraMensajeError;
+	}
+
+	public String getMensajeError() {
+		return mensajeError;
 	}
 
 }

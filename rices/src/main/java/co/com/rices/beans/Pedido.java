@@ -24,6 +24,11 @@ public class Pedido implements Serializable{
 	private CuponCliente        transientCuponCliente;
 	private List<DetallePedido> listadoDetalle;
 	
+	private String              nombreCliente;
+	private String              direccionCliente;
+	private String              celularCliente;
+	private Integer             codigoCiudad;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -107,6 +112,30 @@ public class Pedido implements Serializable{
 	}
 	public void setListadoDetalle(List<DetallePedido> listadoDetalle) {
 		this.listadoDetalle = listadoDetalle;
+	}
+	public String getNombreCliente() {
+		return nombreCliente;
+	}
+	public void setNombreCliente(String nombreCliente) {
+		this.nombreCliente = nombreCliente;
+	}
+	public String getDireccionCliente() {
+		return direccionCliente;
+	}
+	public void setDireccionCliente(String direccionCliente) {
+		this.direccionCliente = direccionCliente;
+	}
+	public String getCelularCliente() {
+		return celularCliente;
+	}
+	public void setCelularCliente(String celularCliente) {
+		this.celularCliente = celularCliente;
+	}
+	public Integer getCodigoCiudad() {
+		return codigoCiudad;
+	}
+	public void setCodigoCiudad(Integer codigoCiudad) {
+		this.codigoCiudad = codigoCiudad;
 	}
 
 }

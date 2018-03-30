@@ -15,6 +15,7 @@ import co.com.rices.Conexion;
 import co.com.rices.IConstants;
 import co.com.rices.objects.ProductStep;
 import co.com.rices.objects.StepDetail;
+import co.com.rices.objects.City;
 import co.com.rices.objects.Product;
 
 public interface IQueryRices {
@@ -252,6 +253,39 @@ public interface IQueryRices {
 			throw new Exception(e);
 		}
 		return result;
+	}
+	
+	public static List<City> getCities()throws Exception{
+		List<City> results = new ArrayList<City>();
+		try{
+			StringBuilder builder=new StringBuilder();
+			builder.append(" SELECT codigo, nombre, codigo_superior ");
+			builder.append(" FROM rices.cities                      ");
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				rs = cs.executeQuery();
+				while(rs.next()){
+					City city = new City();
+					city.setId(rs.getInt("codigo"));
+					city.setName(rs.getString("nombre"));
+					city.setIdSuperior(rs.getInt("codigo_superior"));
+					results.add(city);
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return results;
 	}
 
 }
