@@ -10,10 +10,12 @@ import co.com.rices.ConsultarFuncionesAPI;
 import co.com.rices.IConstants;
 import co.com.rices.DAO.IActualizaRices;
 import co.com.rices.DAO.IConsultaRices;
+import co.com.rices.DAO.IInsertRices;
+import co.com.rices.DAO.IQueryRices;
 import co.com.rices.beans.Cliente;
 import co.com.rices.beans.Cupon;
-import co.com.rices.beans.CuponCliente;
 import co.com.rices.general.RicesTools;
+import co.com.rices.objects.CouponCode;
 
 @ManagedBean
 @ViewScoped
@@ -59,10 +61,10 @@ public class AdministrarInicio extends ConsultarFuncionesAPI{
 				error = true;
 				this.mostrarMensajeGlobal("ingresaDireccion", "error");
 			}
-			if(this.clientePersiste.getBarrio()==null    || this.clientePersiste.getBarrio().trim().equals("")){
-				error = true;
-				this.mostrarMensajeGlobal("ingresaBarrio", "error");
-			}
+//			if(this.clientePersiste.getBarrio()==null    || this.clientePersiste.getBarrio().trim().equals("")){
+//				error = true;
+//				this.mostrarMensajeGlobal("ingresaBarrio", "error");
+//			}
 
 			if(!error){
 
@@ -75,20 +77,38 @@ public class AdministrarInicio extends ConsultarFuncionesAPI{
 					this.clientePersiste.setNombre(this.clientePersiste.getNombre().trim());
 					this.clientePersiste.setCelular(this.clientePersiste.getCelular().trim());
 					this.clientePersiste.setDireccion(this.clientePersiste.getDireccion().trim());
-					this.clientePersiste.setBarrio(this.clientePersiste.getBarrio().trim());
+					//this.clientePersiste.setBarrio(this.clientePersiste.getBarrio().trim());
 					this.clientePersiste.setGuardaDatos(true);
 					
 					Integer idCliente = IActualizaRices.registrarCliente(this.clientePersiste);
 					if(idCliente>0){
 						//Consulta el cupón y registra el cuponcliente
 						Cupon cupon = IConsultaRices.getCuponActivoByCupon(IConstants.CUPON_REGISTRO);
+//						if(cupon!=null){
+//							CuponCliente cuponCliente = new CuponCliente();
+//							cuponCliente.setCupon(IConstants.CUPON_REGISTRO);
+//							cuponCliente.setIdCliente(idCliente);
+//							cuponCliente.setUsado("N");
+//							IActualizaRices.registrarCuponCliente(cuponCliente);
+//						}
+						
+						//GENERA EL CUPON
 						if(cupon!=null){
-							CuponCliente cuponCliente = new CuponCliente();
-							cuponCliente.setCupon(IConstants.CUPON_REGISTRO);
-							cuponCliente.setIdCliente(idCliente);
-							cuponCliente.setUsado("N");
-							IActualizaRices.registrarCuponCliente(cuponCliente);
+							String code            = null;
+							CouponCode couponQuery = new CouponCode();
+							do{
+								code ="RICES"+RicesTools.randomString(7);
+								couponQuery.setCoupon(code);
+							}while(IQueryRices.getCouponCode(couponQuery)!=null);
+							
+							CouponCode couponCode = new CouponCode();
+							couponCode.setClientId(idCliente);
+							couponCode.setCoupon(code);
+							couponCode.setPercentage(cupon.getPorcentaje());
+							couponCode.setUsed("N");
+							IInsertRices.saveCouponCode(couponCode);
 						}
+						
 						this.cerrarModal("mdlDescuento");
 						this.mostrarMensajeGlobal("clienteRegistradoDescuento", "exito");
 						String args[] = new String[1];

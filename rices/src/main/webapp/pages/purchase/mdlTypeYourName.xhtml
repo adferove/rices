@@ -20,7 +20,10 @@
 		<p:dialog id="mdlTypeYourName" widgetVar="mdlTypeYourName"
 			modal="true" showHeader="false" resizable="false"
 			visible="#{managePurchaseOrder.showCustomerName}">
+
 			<p:outputPanel id="oPanelTypeYourName" style="text-align:center;">
+
+				<p:messages id="messages2" showDetail="true" closable="true" />
 				<p:panelGrid styleClass="ui-panelgrid-blank" columns="2">
 					<div align="center" class="logo">
 						<img src="/rices/images/logo.png" title="Rices fusion y mas"

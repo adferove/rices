@@ -13,13 +13,14 @@ import org.apache.commons.lang3.StringUtils;
 
 import co.com.rices.Conexion;
 import co.com.rices.IConstants;
+import co.com.rices.objects.City;
+import co.com.rices.objects.CouponCode;
+import co.com.rices.objects.Product;
 import co.com.rices.objects.ProductStep;
 import co.com.rices.objects.StepDetail;
-import co.com.rices.objects.City;
-import co.com.rices.objects.Product;
 
 public interface IQueryRices {
-	
+
 	public static List<Product> getProductsByParams(Product pParam)  throws Exception{
 		List<Product> results=new ArrayList<Product>();
 		try{
@@ -86,7 +87,7 @@ public interface IQueryRices {
 		}
 		return results;
 	}
-	
+
 	public static List<ProductStep> getProductStepsByProductId(Integer pProductId, boolean pActivos) throws Exception{
 		List<ProductStep> results=new ArrayList<ProductStep>();
 		try{
@@ -131,8 +132,8 @@ public interface IQueryRices {
 		}
 		return results;
 	}
-	
-	
+
+
 	public static List<StepDetail> getDetailsByProductStepId(Integer pProductStepId, boolean pActivos) throws Exception{
 		List<StepDetail> results=new ArrayList<StepDetail>();
 		try{
@@ -175,7 +176,7 @@ public interface IQueryRices {
 		}
 		return results;
 	}
-	
+
 	public static List<Product> getProductsToSell()  throws Exception{
 		List<Product> results=new ArrayList<Product>();
 		try{
@@ -222,7 +223,7 @@ public interface IQueryRices {
 		}
 		return results;
 	}
-	
+
 	public static String getProductNameById(Integer pId)  throws Exception{
 		String result = "";
 		try{
@@ -254,7 +255,7 @@ public interface IQueryRices {
 		}
 		return result;
 	}
-	
+
 	public static List<City> getCities()throws Exception{
 		List<City> results = new ArrayList<City>();
 		try{
@@ -287,5 +288,58 @@ public interface IQueryRices {
 		}
 		return results;
 	}
+
+	public static CouponCode getCouponCode(CouponCode pCouponCode)throws Exception{
+		CouponCode resultado = null;
+		Map<Integer, Object> params = new HashMap<Integer, Object>();
+		try{
+			StringBuilder builder = new StringBuilder();
+			builder.append(" SELECT client_id, coupon, used, percentage  ");
+			builder.append(" FROM   rices.coupon_codes                    ");
+			builder.append(" WHERE  345 = 345                             ");
+			if(pCouponCode!=null){
+				int i = 1;
+				if(pCouponCode.getClientId()!=null){
+					builder.append(" AND client_id = ? ");
+					params.put(i++, pCouponCode.getClientId());
+				}
+				if(StringUtils.trimToNull(pCouponCode.getCoupon())!=null){
+					builder.append(" AND coupon =  ? ");
+					params.put(i++, pCouponCode.getCoupon());
+				}
+				if(StringUtils.trimToNull(pCouponCode.getUsed())!=null){
+					builder.append(" AND  used = ? ");
+					params.put(i++, pCouponCode.getUsed());
+				}
+			}
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				for(int i: params.keySet()){
+					cs.setObject(i, params.get(i));
+				}
+				rs = cs.executeQuery();
+				if(rs.next()){
+					resultado = new CouponCode();
+					resultado.setClientId(rs.getInt("client_id"));
+					resultado.setCoupon(rs.getString("coupon"));
+					resultado.setPercentage(rs.getBigDecimal("percentage"));
+					resultado.setUsed(rs.getString("used"));
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}	
 
 }

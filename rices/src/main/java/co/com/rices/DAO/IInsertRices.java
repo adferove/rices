@@ -6,9 +6,10 @@ import java.sql.SQLException;
 
 import co.com.rices.Conexion;
 import co.com.rices.IConstants;
+import co.com.rices.objects.CouponCode;
+import co.com.rices.objects.Product;
 import co.com.rices.objects.ProductStep;
 import co.com.rices.objects.StepDetail;
-import co.com.rices.objects.Product;
 
 public interface IInsertRices {
 
@@ -121,6 +122,38 @@ public interface IInsertRices {
 				rs = cs.getResultSet();
 				if(rs.next()){
 					resultado = rs.getInt(1);
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}
+	
+	public static boolean saveCouponCode(CouponCode pCouponCode)throws Exception{
+		boolean resultado = false;
+		try{
+			StringBuilder builder = new StringBuilder();
+			builder.append(" INSERT INTO rices.coupon_codes(                  ");
+			builder.append("             client_id, coupon, used, percentage) ");
+			builder.append(" VALUES      (?, ?, ?, ?);                        "); 
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setInt(1, pCouponCode.getClientId());
+				cs.setString(2, pCouponCode.getCoupon());
+				cs.setString(3, pCouponCode.getUsed());
+				cs.setBigDecimal(4, pCouponCode.getPercentage());
+				int value = cs.executeUpdate();
+				if(value==1){
+					resultado = true;
 				}
 			}catch(SQLException sq){
 				IConstants.log.error(sq.toString(),sq);

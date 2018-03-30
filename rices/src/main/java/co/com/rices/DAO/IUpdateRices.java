@@ -5,9 +5,10 @@ import java.sql.SQLException;
 
 import co.com.rices.Conexion;
 import co.com.rices.IConstants;
+import co.com.rices.objects.CouponCode;
+import co.com.rices.objects.Product;
 import co.com.rices.objects.ProductStep;
 import co.com.rices.objects.StepDetail;
-import co.com.rices.objects.Product;
 
 public interface IUpdateRices {
 	
@@ -100,6 +101,38 @@ public interface IUpdateRices {
 				cs.setObject(1, pStepDetail.getState());
 				cs.setObject(2, pStepDetail.getPrice());
 				cs.setObject(3, pStepDetail.getId());
+				int value = cs.executeUpdate();
+				if(value==1){
+					resultado = true;
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}
+	
+	public static boolean updateCouponState(CouponCode pCouponCode)throws Exception{
+		boolean resultado = false;
+		try{
+			StringBuilder builder = new StringBuilder();
+			builder.append(" UPDATE rices.coupon_codes ");
+			builder.append(" SET    used = ?           ");
+			builder.append(" WHERE  client_id = ?      ");
+			builder.append(" AND    coupon = ?         ");
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setString(1, pCouponCode.getUsed());
+				cs.setInt(2, pCouponCode.getClientId());
+				cs.setString(3, pCouponCode.getCoupon());
 				int value = cs.executeUpdate();
 				if(value==1){
 					resultado = true;

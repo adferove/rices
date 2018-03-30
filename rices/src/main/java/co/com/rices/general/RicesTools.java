@@ -1,5 +1,6 @@
 package co.com.rices.general;
 
+import java.security.SecureRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +23,9 @@ public class RicesTools {
 
 	private static byte[] salt = {(byte)0xc7, (byte)0x73, (byte)0x21, (byte)0x8c,(byte)0x7e, (byte)0xc8, (byte)0xee, (byte)0x99};
 	private static char[] llave = {'k','e','n'};
+
+	static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	static SecureRandom rnd = new SecureRandom();
 
 	/**
 	 * Función que elimina acentos y caracteres especiales de una cadena de texto.
@@ -108,6 +112,13 @@ public class RicesTools {
 		}
 		//Retornar el password encriptado
 		return cadena;
+	}
+
+	public static String randomString( int len ){
+		StringBuilder sb = new StringBuilder( len );
+		for( int i = 0; i < len; i++ ) 
+			sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
+		return sb.toString();
 	}
 
 }

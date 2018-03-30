@@ -15,10 +15,13 @@ import org.apache.commons.lang3.StringUtils;
 
 import co.com.rices.ConsultarFuncionesAPI;
 import co.com.rices.IConstants;
+import co.com.rices.DAO.IActualizaRices;
 import co.com.rices.DAO.IQueryRices;
+import co.com.rices.DAO.IUpdateRices;
 import co.com.rices.beans.DetallePedido;
 import co.com.rices.beans.Pedido;
 import co.com.rices.objects.City;
+import co.com.rices.objects.CouponCode;
 import co.com.rices.objects.Product;
 import co.com.rices.objects.ProductStep;
 import co.com.rices.objects.StepDetail;
@@ -31,6 +34,7 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 
 	private boolean        showSeleccionarProducto;
 	private boolean        showCheckout;
+	private boolean        showPedidoRegistrado;
 	private boolean        showCustomerName;
 	
 	private String         customerName;
@@ -265,11 +269,106 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 	}
 	
 	public void aplicarCupon(){
-		
+		try{
+			this.mensajeError = "";
+			boolean error = false;
+			if(this.codigoCupon==null || this.codigoCupon.trim().equals("")){
+				error = true;
+				this.mensajeError = this.getMensaje("ingresaCupon");
+				this.mostraMensajeError="display:;";
+			}
+			if(!error){
+				CouponCode pCouponCode = new CouponCode();
+				pCouponCode.setCoupon(this.codigoCupon);
+				CouponCode cuponCliente = IQueryRices.getCouponCode(pCouponCode);
+				if(cuponCliente==null){
+					this.mensajeError = this.getMensaje("cuponNoValido");
+					this.mostraMensajeError="display:;";
+					error = true;
+				}else if(cuponCliente.getUsed().equals("S")){
+					this.mensajeError = this.getMensaje("cuponUtilizado");
+					this.mostraMensajeError="display:;";
+					error = true;
+				}else{
+					this.mensajeError = "";
+					this.mostraMensajeError="display:none;";
+					this.pedidoPersiste.setDescuento(cuponCliente.getPercentage());
+					BigDecimal valorSobreCien = cuponCliente.getPercentage().divide(new BigDecimal(100));
+					BigDecimal valorMultiplica = (new BigDecimal(1)).subtract(valorSobreCien);
+					this.pedidoPersiste.setMultiplicador(valorMultiplica);
+					this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal().multiply(valorMultiplica));
+					this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().setScale(2, RoundingMode.HALF_DOWN));
+					this.pedidoPersiste.setTransientCouponCode(cuponCliente);
+				}
+			}
+			if(error){
+				this.pedidoPersiste.setDescuento(null);
+				this.pedidoPersiste.setMultiplicador(null);
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal());
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().setScale(2, RoundingMode.HALF_DOWN));
+				this.pedidoPersiste.setTransientCouponCode(null);
+			}
+		}catch(Exception e){
+			IConstants.log.error(e.toString(),e);
+		}
 	}
 	
 	public void confirmarPedido(){
-		
+		boolean error = false;
+		try{
+			if(StringUtils.trimToNull(this.pedidoPersiste.getNombreCliente())==null){
+				error = true;
+				this.mostrarMensajeGlobal("ingresaNombre", "error");
+			}
+			if(StringUtils.trimToNull(this.pedidoPersiste.getCelularCliente())==null){
+				error = true;
+				this.mostrarMensajeGlobal("ingresaTelefono", "error");
+			}
+			if(StringUtils.trimToNull(this.pedidoPersiste.getDireccionCliente())==null){
+				error = true;
+				this.mostrarMensajeGlobal("ingresaDireccion", "error");
+			}
+
+			if(!error){
+				boolean exito = true;
+				//REGISTRA EL PEDIDO
+				Integer idPedido = IActualizaRices.registrarPedido(this.pedidoPersiste);
+				if(idPedido!=null){
+					//REGISTRA DETALLE
+					for(DetallePedido dp: this.listadoDetallePedido){
+						dp.setIdpedido(idPedido);
+						if(!IActualizaRices.registrarDetallePedido(dp)){
+							exito = false;
+							break;
+						}
+					}
+					//SI UTILIZÓ CUPON LO INHABILITA
+					if(this.pedidoPersiste.getTransientCouponCode()!=null){
+						this.pedidoPersiste.getTransientCouponCode().setUsed("S");
+						IUpdateRices.updateCouponState(this.pedidoPersiste.getTransientCouponCode());
+					}
+				}else{
+					exito = false;
+					this.mostrarMensajeGlobal("noRegistraPedido", "error");
+				}
+
+				if(exito){
+					FacesContext context = FacesContext.getCurrentInstance();
+					HttpSession sesion = (HttpSession) context.getExternalContext().getSession(true);
+					if(sesion!=null){
+						sesion.invalidate();
+						sesion=null;
+					}
+					this.showCheckout         = false;
+					this.showPedidoRegistrado = true;
+				}else{
+					this.mostrarMensajeGlobal("noRegistraDetalle", "advertencia");
+				}
+			}
+		}catch(Exception e){
+			IConstants.log.error(e.toString(),e);
+		}
+
 	}
 
 	public boolean isShowSeleccionarProducto() {
@@ -338,6 +437,10 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 
 	public String getMensajeError() {
 		return mensajeError;
+	}
+
+	public boolean isShowPedidoRegistrado() {
+		return showPedidoRegistrado;
 	}
 
 }

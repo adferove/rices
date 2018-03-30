@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import co.com.rices.objects.CouponCode;
+
 public class Pedido implements Serializable{
 
 	private static final long serialVersionUID = -7004622626932386721L;
@@ -28,6 +30,8 @@ public class Pedido implements Serializable{
 	private String              direccionCliente;
 	private String              celularCliente;
 	private Integer             codigoCiudad;
+	
+	private CouponCode          transientCouponCode;
 	
 	public Integer getId() {
 		return id;
@@ -136,6 +140,12 @@ public class Pedido implements Serializable{
 	}
 	public void setCodigoCiudad(Integer codigoCiudad) {
 		this.codigoCiudad = codigoCiudad;
+	}
+	public CouponCode getTransientCouponCode() {
+		return transientCouponCode;
+	}
+	public void setTransientCouponCode(CouponCode transientCouponCode) {
+		this.transientCouponCode = transientCouponCode;
 	}
 
 }
