@@ -3,7 +3,9 @@ package co.com.rices.businessLogic;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -15,12 +17,13 @@ import org.apache.commons.lang3.StringUtils;
 
 import co.com.rices.ConsultarFuncionesAPI;
 import co.com.rices.IConstants;
-import co.com.rices.DAO.IActualizaRices;
+import co.com.rices.DAO.IInsertRices;
 import co.com.rices.DAO.IQueryRices;
 import co.com.rices.DAO.IUpdateRices;
 import co.com.rices.beans.DetallePedido;
 import co.com.rices.beans.Pedido;
 import co.com.rices.objects.City;
+import co.com.rices.objects.Complement;
 import co.com.rices.objects.CouponCode;
 import co.com.rices.objects.Product;
 import co.com.rices.objects.ProductStep;
@@ -46,6 +49,8 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 	
 	private Pedido         pedidoPersiste;
 	private DetallePedido  detallePedido;
+	
+	private Map<Integer, String> mapCity;
 
 	private List<Product>  listadoProducto;
 	
@@ -111,7 +116,15 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 				this.showCustomerName = true;
 			}
 			
-			this.listCities = IQueryRices.getCities();
+			if(sesion.getAttribute("RiceCities")==null){
+				sesion.setAttribute("RiceCities", IQueryRices.getCities());
+			}
+			
+			this.listCities = (List<City>) sesion.getAttribute("RiceCities");
+			this.mapCity = new HashMap<Integer,String>();
+			for(City c: this.listCities){
+				this.mapCity.put(c.getId(), c.getName());
+			}
 			
 		}catch(Exception e){
 			IConstants.log.error(e.toString(),e);
@@ -332,14 +345,23 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 			if(!error){
 				boolean exito = true;
 				//REGISTRA EL PEDIDO
-				Integer idPedido = IActualizaRices.registrarPedido(this.pedidoPersiste);
+				Integer idPedido =IInsertRices.savePurchaseOrder(this.pedidoPersiste);
 				if(idPedido!=null){
 					//REGISTRA DETALLE
 					for(DetallePedido dp: this.listadoDetallePedido){
 						dp.setIdpedido(idPedido);
-						if(!IActualizaRices.registrarDetallePedido(dp)){
-							exito = false;
-							break;
+						Integer idDetalle = IInsertRices.saveOrderDetail(dp); 
+						if(idDetalle!=null){
+							for(ProductStep ps: dp.getMainProduct().getListProductStep()){
+								for(StepDetail sd: ps.getListStepDetail()){
+									Complement pComplement = new Complement();
+									pComplement.setDetailId(idDetalle);
+									pComplement.setSelectedProductId(sd.getSelectedProductId());
+									pComplement.setProductStepId(ps.getId());
+									pComplement.setPrice(sd.getPrice());
+									IInsertRices.saveComplement(pComplement);
+								}
+							}
 						}
 					}
 					//SI UTILIZÓ CUPON LO INHABILITA
@@ -353,12 +375,10 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 				}
 
 				if(exito){
+					this.pedidoPersiste.setCityName(this.mapCity.get(this.pedidoPersiste.getCodigoCiudad()));
 					FacesContext context = FacesContext.getCurrentInstance();
 					HttpSession sesion = (HttpSession) context.getExternalContext().getSession(true);
-					if(sesion!=null){
-						sesion.invalidate();
-						sesion=null;
-					}
+					sesion.removeAttribute("RiceProductInCart");
 					this.showCheckout         = false;
 					this.showPedidoRegistrado = true;
 				}else{
@@ -368,9 +388,8 @@ public class ManagePurchaseOrder extends ConsultarFuncionesAPI{
 		}catch(Exception e){
 			IConstants.log.error(e.toString(),e);
 		}
-
 	}
-
+	
 	public boolean isShowSeleccionarProducto() {
 		return showSeleccionarProducto;
 	}

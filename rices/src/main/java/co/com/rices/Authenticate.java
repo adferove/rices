@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -31,7 +30,7 @@ public class Authenticate extends ConsultarFuncionesAPI{
 		this.mapUsuarioByLogin = new HashMap<String, Usuario>();
 	}
 	
-	public void authenticate(){
+	public String authenticate(){
 		try{
 			boolean error = false;
 			if(this.usuario==null || this.usuario.trim().equals("")){
@@ -66,8 +65,9 @@ public class Authenticate extends ConsultarFuncionesAPI{
 						sesion = (HttpSession) context.getExternalContext().getSession(true);
 						sesion.setAttribute("RicesUser", usuario);
 						sesion.setAttribute("RicesRoles", roles);
-						ExternalContext externalContext = context.getExternalContext();
-						externalContext.redirect("/rices/pages/pedidos/pedidoRegistrado.jsf");
+//						ExternalContext externalContext = context.getExternalContext();
+//						externalContext.redirect("/rices/pages/pedidos/pedidoRegistrado.jsf");
+						return "/pages/pedidos/pedidoRegistrado.xhtml?faces-redirect=true";
 					}else{
 						this.mostrarMensajeGlobal("passwordInconrrecto", "error");
 					}
@@ -78,6 +78,7 @@ public class Authenticate extends ConsultarFuncionesAPI{
 		}catch(Exception e){
 			IConstants.log.error(e.toString(),e);
 		}
+		return null;
 	}
 	
 	public String getUsuario() {

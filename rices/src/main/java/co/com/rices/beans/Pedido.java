@@ -32,6 +32,7 @@ public class Pedido implements Serializable{
 	private Integer             codigoCiudad;
 	
 	private CouponCode          transientCouponCode;
+	private String              cityName;
 	
 	public Integer getId() {
 		return id;
@@ -147,5 +148,11 @@ public class Pedido implements Serializable{
 	public void setTransientCouponCode(CouponCode transientCouponCode) {
 		this.transientCouponCode = transientCouponCode;
 	}
-
+	public String getCityName() {
+		return cityName;
+	}
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+	
 }

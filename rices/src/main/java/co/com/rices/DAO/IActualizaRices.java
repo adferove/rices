@@ -98,11 +98,12 @@ public interface IActualizaRices {
 		Integer resultado = null;
 		try{
 			StringBuilder builder = new StringBuilder();
-			builder.append(" INSERT INTO rices.pedidos(                                           ");
-			builder.append("         id_cliente, total_pedido, subtotal_pedido, cargo_domicilio,  ");
-			builder.append("         iva, fecha_pedido, hora_pedido, estado_pedido, descuento)    ");
-			builder.append(" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)                                   ");
-			builder.append(" RETURNING id_pedido;                                                 ");
+			builder.append(" INSERT INTO rices.pedidos(                                                ");
+			builder.append("         id_cliente, total_pedido, subtotal_pedido, cargo_domicilio,       ");
+			builder.append("         iva, fecha_pedido, hora_pedido, estado_pedido, descuento,         ");
+			builder.append("         nombre_cliente, direccion_cliente, celular_cliente, codigo_ciudad)");
+			builder.append(" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)                            ");
+			builder.append(" RETURNING id_pedido;                                                      ");
 			Conexion conexion    = null;
 			CallableStatement cs = null;
 			ResultSet         rs = null;
@@ -118,6 +119,10 @@ public interface IActualizaRices {
 				cs.setObject(7, new java.sql.Time(Calendar.getInstance().getTime().getTime()));
 				cs.setString(8, pPedido.getEstado());
 				cs.setObject(9, pPedido.getDescuento());
+				cs.setObject(10, pPedido.getNombreCliente().trim());
+				cs.setObject(11, pPedido.getDireccionCliente().trim());
+				cs.setObject(12, pPedido.getCelularCliente());
+				cs.setObject(13, pPedido.getCodigoCiudad());
 				cs.execute();
 				rs = cs.getResultSet();
 				if(rs.next()){

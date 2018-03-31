@@ -281,7 +281,7 @@
 															<p:column width="62%">
 																<div align="left">
 																	<h:outputText value="#{detalle.mainProduct.name}"
-																		style="font-weight: bold; color:blue; font-size:10px;" />
+																		style="font-weight: bold; color:#c7578f; font-size:10px;" />
 																</div>
 															</p:column>
 															<p:column width="28%">
@@ -435,6 +435,186 @@
 
 
 
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:outputPanel>
+
+			<p:outputPanel id="pnl3"
+				rendered="#{managePurchaseOrder.showPedidoRegistrado}">
+				<div class="container">
+					<div class="row">
+						<div class="product-item col-md-12">
+							<p:outputLabel value="#{mensaje.PedidoRegistrado}"
+								style="color:#c7578f;font-size:16px;" />
+							<div style="height: 10px;"></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="product-item col-md-12">
+							<div class="row">
+								<div class="col-md-5">
+
+									<p:accordionPanel id="tbTypeContactReg">
+										<p:tab title="#{mensaje.InformacionCliente}">
+											<div align="left">
+
+												<p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
+
+													<h:outputText value="Cliente" />
+													<div style="width: 10px;"></div>
+													<p:outputLabel style="font-size:11px;"
+														value="#{managePurchaseOrder.pedidoPersiste.nombreCliente}" />
+
+
+													<h:outputText value="#{mensaje.Direccion}" />
+													<div style="width: 10px;"></div>
+													<p:outputLabel style="font-size:11px;"
+														value="#{managePurchaseOrder.pedidoPersiste.direccionCliente}" />
+
+
+													<h:outputText value="Municipio" />
+													<div style="width: 10px;"></div>
+													<p:outputLabel style="font-size:11px;"
+														value="#{managePurchaseOrder.pedidoPersiste.cityName}" />
+
+
+													<h:outputText value="#{mensaje.Telefono}/Celular" />
+													<div style="width: 10px;"></div>
+													<p:outputLabel style="font-size:11px;"
+														value="#{managePurchaseOrder.pedidoPersiste.celularCliente}" />
+
+
+												</p:panelGrid>
+											</div>
+
+										</p:tab>
+									</p:accordionPanel>
+								</div>
+
+								<div class="col-md-4">
+									<p:accordionPanel id="tbDetailReg">
+										<p:tab title="Detalle de tu pedido">
+											<div align="left" style="padding: 0;">
+												<p:repeat
+													value="#{managePurchaseOrder.listadoDetallePedido}"
+													var="detalle">
+													<p:outputPanel>
+														<p:dataTable value="1" styleClass="ui-datatable-blank">
+															<p:column width="62%">
+																<div align="left">
+																	<h:outputText value="#{detalle.mainProduct.name}"
+																		style="font-weight: bold; color:#c7578f; font-size:10px;" />
+																</div>
+															</p:column>
+															<p:column width="28%">
+																<div align="right">
+																	<h:outputText value="$#{detalle.mainProduct.price}"
+																		style="font-weight: bold; font-size:10px;" />
+																</div>
+															</p:column>
+														</p:dataTable>
+													</p:outputPanel>
+
+
+													<p:repeat value="#{detalle.mainProduct.listProductStep}"
+														var="step">
+														<p:outputPanel>
+															<h:outputText value="#{step.description}"
+																style="font-weight: bold; color:grey; font-size:10px;" />
+															<p:spacer width="10" />
+															<p:dataTable id="idSelectMultipleCO" var="det"
+																value="#{step.listStepDetail}"
+																styleClass="ui-datatable-blank">
+																<p:column width="62%"
+																	style="background-color:#ffffff;border: 1px solid #ffffff; background:none; ">
+																	<div align="left">
+																		<h:outputText value="#{det.transientProduct.name}"
+																			style="font-size:10px; color:grey;" />
+																	</div>
+																</p:column>
+																<p:column width="28%"
+																	style="background-color:#ffffff;border: 1px solid #ffffff; background:none; ">
+																	<div align="right">
+																		<h:outputText value="$ #{det.price}"
+																			style="font-size:10px; color:grey;" />
+																	</div>
+																</p:column>
+															</p:dataTable>
+														</p:outputPanel>
+													</p:repeat>
+													<hr style="margin-top: 0px; margin-bottom: 0px;" />
+													<table class="table table-md">
+														<thead>
+															<tr>
+																<th scope="col"><div align="left"
+																		style="font-size: 12px; color: red;">Subtotal</div></th>
+
+																<th scope="col"><div align="center"
+																		style="font-size: 12px;">
+
+																		<h:outputText value="#{detalle.cantidad}"
+																			style="font-size:12px;" />
+																	</div></th>
+
+																<th scope="col"><div align="right"
+																		style="font-size: 12px;">$#{detalle.precio}</div></th>
+
+
+															</tr>
+														</thead>
+													</table>
+													<div style="height: 10px;"></div>
+												</p:repeat>
+											</div>
+										</p:tab>
+									</p:accordionPanel>
+								</div>
+
+								<div class="col-md-3">
+									<p:accordionPanel id="tb3">
+										<p:tab title="Valor del pedido">
+											<div align="center" style="padding: 0;">
+												<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+													<p:outputLabel value="Subtotal:"
+														style="font-size:10px; color:grey;" />
+													<h:outputText
+														value="$#{managePurchaseOrder.pedidoPersiste.subtotal}"
+														style="font-weight: bold; font-size:10px;" />
+													<p:outputLabel value="Iva:"
+														style="font-size:10px; color:grey;" />
+													<p:outputLabel
+														value="$#{managePurchaseOrder.pedidoPersiste.iva}"
+														style="font-size:10px;" />
+													<p:outputLabel value="Domicilio:"
+														style="font-size:10px; color:grey;" />
+													<p:outputLabel style="font-size:10px;"
+														value="$#{managePurchaseOrder.pedidoPersiste.cargoDomicilio}" />
+
+													<p:outputLabel value="Descuento:"
+														style="font-size:10px;  color:grey;" />
+													<p:outputLabel style="font-size:10px;"
+														value="#{managePurchaseOrder.pedidoPersiste.descuento}%" />
+
+													<p:outputLabel value="Total:"
+														style="font-size:10px;  color:grey;" />
+													<p:outputLabel style="font-size:10px;"
+														value="$#{managePurchaseOrder.pedidoPersiste.total}" />
+												</p:panelGrid>
+											</div>
+											<div style="height: 20px"></div>
+											<div align="center">
+												<p:commandButton id="btnSalir"
+													style="background-image: none; color: #fff; background-color: #d9534f; border-color: #d43f3a; font-weight: normal;"
+													action="/index.xhtml?faces-redirect=true" ajax="false"
+													value="Salir" icon="fa fa-sign-out">
+												</p:commandButton>
+												<p:blockUI block=":form" trigger="btnSalir" />
+											</div>
+										</p:tab>
+									</p:accordionPanel>
+								</div>
 							</div>
 						</div>
 					</div>

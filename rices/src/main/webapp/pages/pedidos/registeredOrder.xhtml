@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/principalAdmin.xhtml">
+
+	<ui:define name="body">
+
+
+		<h:form id="form">
+
+			<style type="text/css">
+.ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td,
+	.ui-datatable tfoot th {
+	padding: 0;
+}
+
+.table {
+	width: 100%;
+	margin-bottom: 0px;
+}
+
+.ui-panelgrid .ui-panelgrid-cell {
+	border-width: 1px;
+	border-style: solid;
+	border-color: inherit;
+	padding: 0;
+}
+</style>
+
+			<p:messages id="messages" showDetail="true" closable="true" />
+
+			<div align="center">
+				<p:outputLabel value="Pedidos registrados" style="font-size:20px;" />
+			</div>
+
+			<div style="height: 20px;"></div>
+
+			<p:outputPanel id="lstPedidos">
+
+				<div align="left">
+					<p:repeat value="#{manageRegisteredOrder.listadoPedido}" var="loc">
+
+						<div class="row">
+							<div class="col-md-5">
+								<p:outputPanel id="opPedido">
+									<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+										<h:outputText value="# pedido:" style="font-size:11px;" />
+										<h:outputText value="#{loc.id}"
+											style="font-weight: bold; font-size:11px;" />
+
+										<h:outputText value="Fecha:" style="font-size:11px;" />
+										<h:outputText
+											value="#{consultarFuncionesAPI.fechaCorta(loc.fecha)} #{consultarFuncionesAPI.horaCorta(loc.hora)}"
+											style="font-weight: bold; font-size:11px;" />
+
+										<h:outputText value="Cliente:" style="font-size:11px;" />
+										<h:outputText value="#{loc.nombreCliente}"
+											style="font-weight: bold; font-size:11px;" />
+
+										<h:outputText value="#{mensaje.Telefono}:"
+											style="font-size:11px;" />
+										<h:outputText value="#{loc.celularCliente}"
+											style="font-weight: bold; font-size:11px;" />
+
+										<h:outputText value="Municipio:" style="font-size:11px;" />
+										<h:outputText value="#{loc.cityName}"
+											style="font-weight: bold; font-size:11px;" />
+
+										<h:outputText value="#{mensaje.Direccion}:"
+											style="font-size:11px;" />
+										<h:outputText value="#{loc.direccionCliente}"
+											style="font-weight: bold; font-size:11px;" />
+
+										<h:outputText value="Subtotal:" style="font-size:11px;" />
+										<h:outputText value="$#{loc.subtotal}"
+											style="font-weight: bold; font-size:11px;" />
+
+										<h:outputText value="Descuento:" style="font-size:11px;" />
+										<h:outputText rendered="#{loc.descuento!=null}"
+											value="#{loc.descuento}%"
+											style="font-weight: bold; font-size:11px;" />
+										<h:outputText rendered="#{loc.descuento==null}" value="n/a"
+											style="font-weight: bold; font-size:11px;" />
+
+										<h:outputText value="Total:" style="font-size:11px;" />
+										<h:outputText value="$#{loc.total}"
+											style="font-weight: bold; font-size:11px;" />
+									</p:panelGrid>
+								</p:outputPanel>
+							</div>
+
+							<div class="col-md-4">
+
+								<p:accordionPanel id="tbDetailCO">
+									<p:tab title="Detalle del pedido" titleStyle="font-size:11px;">
+										<div align="left" style="padding: 0;">
+											<p:repeat value="#{loc.listadoDetalle}" var="detalle">
+
+												<p:outputPanel>
+													<p:dataTable value="1" styleClass="ui-datatable-blank">
+														<p:column width="62%">
+															<div align="left">
+																<h:outputText value="#{detalle.mainProduct.name}"
+																	style="font-weight: bold; color:#c7578f; font-size:10px;" />
+															</div>
+														</p:column>
+														<p:column width="28%">
+															<div align="right">
+																<h:outputText value="$#{detalle.mainProduct.price}"
+																	style="font-weight: bold; font-size:10px;" />
+															</div>
+														</p:column>
+													</p:dataTable>
+												</p:outputPanel>
+
+												<p:repeat value="#{detalle.mainProduct.listProductStep}"
+													var="step">
+													<p:outputPanel>
+														<h:outputText value="#{step.description}"
+															style="font-weight: bold; color:grey; font-size:10px;" />
+														<p:spacer width="10" />
+														<p:dataTable id="idSelectMultipleCO" var="det"
+															value="#{step.listStepDetail}"
+															styleClass="ui-datatable-blank">
+															<p:column width="62%"
+																style="background-color:#ffffff;border: 1px solid #ffffff; background:none; ">
+																<div align="left">
+																	<h:outputText value="#{det.transientProduct.name}"
+																		style="font-size:10px; color:grey;" />
+																</div>
+															</p:column>
+															<p:column width="28%"
+																style="background-color:#ffffff;border: 1px solid #ffffff; background:none; ">
+																<div align="right">
+																	<h:outputText value="$ #{det.price}"
+																		style="font-size:10px; color:grey;" />
+																</div>
+															</p:column>
+														</p:dataTable>
+													</p:outputPanel>
+												</p:repeat>
+												<hr style="margin-top: 0px; margin-bottom: 0px;" />
+												<table class="table table-md">
+													<thead>
+														<tr>
+															<th scope="col"><div align="left"
+																	style="font-size: 10px; color: red;">Subtotal</div></th>
+															<th scope="col"><div align="center"
+																	style="font-size: 10px;">
+																	<h:outputText value="#{detalle.cantidad}"
+																		style="font-size:10px;" />
+																</div></th>
+															<th scope="col"><div align="right"
+																	style="font-size: 10px;">$#{detalle.precio}</div></th>
+														</tr>
+													</thead>
+												</table>
+												<div style="height: 10px;"></div>
+											</p:repeat>
+										</div>
+									</p:tab>
+								</p:accordionPanel>
+
+							</div>
+
+							<div class="col-md-3">
+								<p:outputPanel id="opActualizarPedido">
+
+
+									<p:accordionPanel id="tbUpdOrder">
+										<p:tab title="Actualizar estado del pedido"
+											titleStyle="font-size:11px;">
+
+											<div align="center">
+												<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+													<p:outputLabel value="Estado: "
+														style="font-weight:bold; font-size:11px" />
+													<p:selectOneMenu id="slctEditProducto"
+														style="padding-right: 1em; font-size:11px;"
+														value="#{loc.estado}">
+														<f:selectItem itemLabel="Registrado" itemValue="R" />
+														<f:selectItem itemLabel="Cancelado" itemValue="C" />
+														<f:selectItem itemLabel="Confirmado" itemValue="A" />
+													</p:selectOneMenu>
+												</p:panelGrid>
+											</div>
+											<p:spacer height="10" />
+											<div align="center">
+												<p:commandButton id="btnEditarEstado"
+													style="font-size:14px; font-weight: normal !important;"
+													action="#{manageRegisteredOrder.actualizarEstado(loc)}"
+													value="Actualizar" update=":form">
+												</p:commandButton>
+												<p:blockUI block=":form" trigger="btnEditarEstado" />
+											</div>
+										</p:tab>
+									</p:accordionPanel>
+								</p:outputPanel>
+							</div>
+						</div>
+
+
+						<hr />
+					</p:repeat>
+				</div>
+			</p:outputPanel>
+
+
+		</h:form>
+	</ui:define>
+</ui:composition>
