@@ -1,0 +1,332 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/principalAdmin.xhtml">
+
+	<ui:define name="body">
+		<script>
+function printPage(id)
+{
+   var html="<html>";
+   html+= document.getElementById(id).innerHTML;
+
+   html+="</html>";
+
+   var printWin = window.open('','','left=0,top=0,width=650,height=800,toolbar=0,scrollbars=0,status  =0');
+   printWin.document.write(html);
+   printWin.document.close();
+   printWin.focus();
+   printWin.print();
+   printWin.close();
+}
+</script>
+		<style type="text/css">
+.ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td,
+	.ui-datatable tfoot th {
+	padding: 0;
+}
+
+.table {
+	width: 100%;
+	margin-bottom: 0px;
+}
+
+.ui-panelgrid .ui-panelgrid-cell {
+	border-width: 1px;
+	border-style: solid;
+	border-color: inherit;
+	padding: 0;
+}
+</style>
+		<h:form id="form">
+			<p:messages id="messages" showDetail="true" closable="true" />
+
+			<div align="center">
+				<p:outputLabel value="Consulta de pedidos" style="font-size:20px;" />
+			</div>
+
+			<div style="height: 20px;"></div>
+
+			<!-- INICIO INGRESO CRITERIOS CONSULTA -->
+			<p:outputPanel id="pnlIngresoDatos"
+				rendered="#{manageRegisteredOrder.showConsulta}">
+
+				<p:panel header="Criterios de consulta" style="text-align:center;">
+					<div align="center">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel value="Estado: "
+								style="font-weight:bold; font-size:14px" />
+							<p:selectOneMenu id="slctEditProducto"
+								style="padding-right: 1em; font-size:14px;"
+								value="#{manageRegisteredOrder.estado}">
+								<f:selectItem noSelectionOption="true" itemLabel="Seleccione..." />
+								<f:selectItem itemLabel="Registrado" itemValue="R" />
+								<f:selectItem itemLabel="Cancelado" itemValue="C" />
+								<f:selectItem itemLabel="Despachado" itemValue="D" />
+								<f:selectItem itemLabel="Confirmado" itemValue="A" />
+							</p:selectOneMenu>
+
+							<p:outputLabel for="desde" value="Fecha pedido desde:" />
+							<p:calendar id="desde"
+								value="#{manageRegisteredOrder.fechaDesde}" pattern="dd-MM-yyyy"
+								mask="true" />
+
+							<p:outputLabel for="hasta" value="Fecha pedido hasta:" />
+							<p:calendar id="hasta"
+								value="#{manageRegisteredOrder.fechaHasta}" pattern="dd-MM-yyyy"
+								mask="true" />
+						</p:panelGrid>
+					</div>
+				</p:panel>
+
+				<p:spacer height="10" />
+
+				<div align="center">
+					<p:commandButton id="btnConsultarPedido"
+						style="background-image: none; color: #fff; background-color: #5cb85c; border-color: #4cae4c; font-weight: normal;"
+						action="#{manageRegisteredOrder.consultarPedido()}"
+						value="Consultar" update=":form">
+					</p:commandButton>
+					<p:blockUI block=":form" trigger="btnConsultarPedido" />
+				</div>
+
+				<p:spacer height="10" />
+
+				<div align="center">
+					<p:panel header="Pedidos">
+
+						<p:dataTable var="loc" id="dtlListadoPedido"
+							widgetVar="dtlListadoPedido"
+							value="#{manageRegisteredOrder.listadoPedido}" reflow="true"
+							emptyMessage="#{mensaje.noExistenciaRegistro}">
+
+							<p:column headerText="# Pedido" width="20%">
+								<div align="right">
+									<h:outputText value="#{loc.id}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Fecha" width="30%">
+								<div align="center">
+									<h:outputText
+										value="#{consultarFuncionesAPI.fechaCorta(loc.fecha)} #{consultarFuncionesAPI.horaCorta(loc.hora)}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Estado" width="20%">
+								<div align="left">
+									<h:outputText value="Registrado"
+										rendered="#{loc.estado.equals('R')}" />
+									<h:outputText value="Cancelado"
+										rendered="#{loc.estado.equals('C')}" />
+									<h:outputText value="Despachado"
+										rendered="#{loc.estado.equals('D')}" />
+									<h:outputText value="Confirmado"
+										rendered="#{loc.estado.equals('A')}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Total" width="20%">
+								<div align="right">
+									<h:outputText value="$#{loc.total}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="" width="10%">
+								<div align="center">
+
+									<p:commandButton id="btnVerDetalle" icon="ui-icon-search"
+										action="#{manageRegisteredOrder.verDetallePedido(loc)}"
+										update="form" title="Ver detalle del pedido" />
+
+									<p:blockUI id="idBlockProducto" block=":form"
+										trigger="btnVerDetalle" />
+
+								</div>
+							</p:column>
+
+						</p:dataTable>
+					</p:panel>
+				</div>
+
+
+			</p:outputPanel>
+
+			<p:outputPanel id="pnlVerDetalle"
+				rendered="#{manageRegisteredOrder.showVerDetalle}">
+
+				<div class="row">
+					<div class="col-md-6">
+						<p:outputPanel id="opPedido">
+							<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+								<h:outputText value="# pedido:" style="font-size:11px;" />
+								<h:outputText
+									value="#{manageRegisteredOrder.pedidoSeleccionado.id}"
+									style="font-weight: bold; font-size:11px;" />
+
+								<h:outputText value="Fecha:" style="font-size:11px;" />
+								<h:outputText
+									value="#{consultarFuncionesAPI.fechaCorta(manageRegisteredOrder.pedidoSeleccionado.fecha)} #{consultarFuncionesAPI.horaCorta(manageRegisteredOrder.pedidoSeleccionado.hora)}"
+									style="font-weight: bold; font-size:11px;" />
+
+								<h:outputText value="Cliente:" style="font-size:11px;" />
+								<h:outputText
+									value="#{manageRegisteredOrder.pedidoSeleccionado.nombreCliente}"
+									style="font-weight: bold; font-size:11px;" />
+
+								<h:outputText value="#{mensaje.Telefono}:"
+									style="font-size:11px;" />
+								<h:outputText
+									value="#{manageRegisteredOrder.pedidoSeleccionado.celularCliente}"
+									style="font-weight: bold; font-size:11px;" />
+
+								<h:outputText value="#{mensaje.Direccion}:"
+									style="font-size:11px;" />
+								<h:outputText
+									value="#{manageRegisteredOrder.pedidoSeleccionado.direccionCliente}, #{manageRegisteredOrder.pedidoSeleccionado.cityName}"
+									style="font-weight: bold; font-size:11px;" />
+
+								<h:outputText value="Subtotal:" style="font-size:11px;" />
+								<h:outputText
+									value="$#{manageRegisteredOrder.pedidoSeleccionado.subtotal}"
+									style="font-weight: bold; font-size:11px;" />
+
+								<h:outputText value="Descuento:" style="font-size:11px;" />
+								<h:outputText
+									rendered="#{manageRegisteredOrder.pedidoSeleccionado.descuento!=null}"
+									value="#{manageRegisteredOrder.pedidoSeleccionado.descuento}%"
+									style="font-weight: bold; font-size:11px;" />
+								<h:outputText
+									rendered="#{manageRegisteredOrder.pedidoSeleccionado.descuento==null}"
+									value="n/a" style="font-weight: bold; font-size:11px;" />
+
+								<h:outputText value="Total:" style="font-size:11px;" />
+								<h:outputText
+									value="$#{manageRegisteredOrder.pedidoSeleccionado.total}"
+									style="font-weight: bold; font-size:11px;" />
+
+								<h:outputText value="Estado:" style="font-size:11px;" />
+								<h:outputText value="Registrado"
+									style="font-weight: bold; font-size:11px;"
+									rendered="#{manageRegisteredOrder.pedidoSeleccionado.estado.equals('R')}" />
+								<h:outputText value="Cancelado"
+									style="font-weight: bold; font-size:11px;"
+									rendered="#{manageRegisteredOrder.pedidoSeleccionado.estado.equals('C')}" />
+								<h:outputText value="Despachado"
+									style="font-weight: bold; font-size:11px;"
+									rendered="#{manageRegisteredOrder.pedidoSeleccionado.estado.equals('D')}" />
+								<h:outputText value="Confirmado"
+									style="font-weight: bold; font-size:11px;"
+									rendered="#{manageRegisteredOrder.pedidoSeleccionado.estado.equals('A')}" />
+							</p:panelGrid>
+						</p:outputPanel>
+					</div>
+
+					<div class="col-md-6">
+						<p:accordionPanel id="tbDetailCO">
+							<p:tab title="Detalle del pedido" titleStyle="font-size:11px;">
+								<div align="left" style="padding: 0;">
+									<p:repeat
+										value="#{manageRegisteredOrder.pedidoSeleccionado.listadoDetalle}"
+										var="detalle">
+
+										<p:outputPanel>
+											<p:dataTable value="1" styleClass="ui-datatable-blank">
+												<p:column width="62%">
+													<div align="left">
+														<h:outputText value="#{detalle.mainProduct.name}"
+															style="font-weight: bold; color:#c7578f; font-size:10px;" />
+													</div>
+												</p:column>
+												<p:column width="28%">
+													<div align="right">
+														<h:outputText value="$#{detalle.mainProduct.price}"
+															style="font-weight: bold; font-size:10px;" />
+													</div>
+												</p:column>
+											</p:dataTable>
+										</p:outputPanel>
+
+										<p:repeat value="#{detalle.mainProduct.listProductStep}"
+											var="step">
+											<p:outputPanel
+												rendered="#{step.listStepDetail !=null and step.listStepDetail.size()>0}">
+												<h:outputText value="#{step.description}"
+													style="font-weight: bold; color:grey; font-size:10px;" />
+												<p:spacer width="10" />
+												<p:dataTable id="idSelectMultipleCO" var="det"
+													value="#{step.listStepDetail}"
+													styleClass="ui-datatable-blank">
+													<p:column width="62%"
+														style="background-color:#ffffff;border: 1px solid #ffffff; background:none; ">
+														<div align="left">
+															<h:outputText value="#{det.transientProduct.name}"
+																style="font-size:10px; color:grey;" />
+														</div>
+													</p:column>
+													<p:column width="28%"
+														style="background-color:#ffffff;border: 1px solid #ffffff; background:none; ">
+														<div align="right">
+															<h:outputText value="$ #{det.price}"
+																style="font-size:10px; color:grey;" />
+														</div>
+													</p:column>
+												</p:dataTable>
+											</p:outputPanel>
+										</p:repeat>
+										<hr style="margin-top: 0px; margin-bottom: 0px;" />
+										<table class="table table-md">
+											<thead>
+												<tr>
+													<th scope="col"><div align="left"
+															style="font-size: 10px; color: red;">Subtotal</div></th>
+													<th scope="col"><div align="center"
+															style="font-size: 10px;">
+															<h:outputText value="#{detalle.cantidad}"
+																style="font-size:10px;" />
+														</div></th>
+													<th scope="col"><div align="right"
+															style="font-size: 10px;">$#{detalle.precio}</div></th>
+												</tr>
+											</thead>
+										</table>
+										<div style="height: 10px;"></div>
+									</p:repeat>
+								</div>
+							</p:tab>
+						</p:accordionPanel>
+					</div>
+				</div>
+
+
+				<p:spacer height="10" />
+				<div align="center">
+					<p:commandButton id="btnRegresar1"
+						style="background-image: none; color: #fff; background-color: #d9534f; border-color: #d43f3a; font-weight: normal;"
+						action="#{manageRegisteredOrder.regresar()}" value="Regresar"
+						update=":form">
+					</p:commandButton>
+					<p:spacer width="10" />
+					<p:commandButton id="btnFactura"
+						rendered="#{manageRegisteredOrder.pedidoSeleccionado.estado.equals('D')}"
+						style="background-image: none; color: #fff; background-color: blue; border-color: blue; font-weight: normal;"
+						action="#{manageRegisteredOrder.verFactura()}"
+						value="Imprimir factura" update=":form">
+					</p:commandButton>
+
+					<p:blockUI block=":form" trigger="btnRegresar1" />
+				</div>
+			</p:outputPanel>
+
+			<p:dialog header="Modal Dialog" widgetVar="dlg2" modal="true"
+				height="100">
+				<div id='block1'></div>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

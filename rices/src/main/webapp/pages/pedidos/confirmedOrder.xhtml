@@ -8,6 +8,22 @@
 
 	<ui:define name="body">
 
+		<script>
+function printPage(id)
+{
+   var html="<html>";
+   html+= document.getElementById(id).innerHTML;
+
+   html+="</html>";
+
+   var printWin = window.open('','','left=0,top=0,width=650,height=800,toolbar=0,scrollbars=0,status  =0');
+   printWin.document.write(html);
+   printWin.document.close();
+   printWin.focus();
+   printWin.print();
+   printWin.close();
+}
+</script>
 
 		<h:form id="form">
 
@@ -30,11 +46,10 @@
 }
 </style>
 
-
 			<p:messages id="messages" showDetail="true" closable="true" />
 
 			<div align="center">
-				<p:outputLabel value="Pedidos registrados" style="font-size:20px;" />
+				<p:outputLabel value="Pedidos confirmados" style="font-size:20px;" />
 			</div>
 
 			<div style="height: 20px;"></div>
@@ -126,8 +141,7 @@
 														<p:spacer width="10" />
 														<p:dataTable id="idSelectMultipleCO" var="det"
 															value="#{step.listStepDetail}"
-															styleClass="ui-datatable-blank"
-															rendered="#{step.listStepDetail !=null and step.listStepDetail.size()>0}">
+															styleClass="ui-datatable-blank">
 															<p:column width="62%"
 																style="background-color:#ffffff;border: 1px solid #ffffff; background:none; ">
 																<div align="left">
@@ -184,7 +198,7 @@
 													<p:selectOneMenu id="slctEditProducto"
 														style="padding-right: 1em; font-size:11px;"
 														value="#{loc.estado}">
-														<f:selectItem itemLabel="Registrado" itemValue="R" />
+														<f:selectItem itemLabel="Despachado" itemValue="D" />
 														<f:selectItem itemLabel="Cancelado" itemValue="C" />
 														<f:selectItem itemLabel="Confirmado" itemValue="A" />
 													</p:selectOneMenu>
@@ -210,7 +224,10 @@
 					</p:repeat>
 				</div>
 			</p:outputPanel>
-
+			<p:dialog header="Modal Dialog" widgetVar="dlg2" modal="true"
+				height="100">
+				<div id='block1'></div>
+			</p:dialog>
 
 		</h:form>
 	</ui:define>

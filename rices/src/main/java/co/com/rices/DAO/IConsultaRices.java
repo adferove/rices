@@ -371,6 +371,7 @@ public interface IConsultaRices {
 				}
 				builder.append(")");
 			}
+			//builder.append(" ORDER BY m.orden ");
 			try{
 				cs = conexion.getConnection().prepareCall(builder.toString());
 				cs.setString(1, "A");
@@ -612,7 +613,8 @@ public interface IConsultaRices {
 		try{
 			StringBuilder builder=new StringBuilder();
 			builder.append("SELECT id_pedido, id_cliente, total_pedido, fecha_pedido, hora_pedido, ");
-			builder.append("       estado_pedido, descuento,subtotal_pedido                        ");
+			builder.append("       estado_pedido, descuento,subtotal_pedido, nombre_cliente,       ");
+			builder.append("       direccion_cliente, celular_cliente, codigo_ciudad               ");
 			builder.append("FROM   rices.Pedidos                                                   ");
 			builder.append("WHERE  35 = 35                                                         ");
 			Map<Integer, Object> parametros=new HashMap<Integer,Object>();
@@ -650,6 +652,10 @@ public interface IConsultaRices {
 					pedido.setEstado(rs.getString("estado_pedido"));
 					pedido.setDescuento(rs.getBigDecimal("descuento"));
 					pedido.setSubtotal(rs.getBigDecimal("subtotal_pedido"));
+					pedido.setNombreCliente(rs.getString("nombre_cliente"));
+					pedido.setDireccionCliente(rs.getString("direccion_cliente"));
+					pedido.setCelularCliente(rs.getString("celular_cliente"));
+					pedido.setCodigoCiudad(rs.getInt("codigo_ciudad"));
 					resultados.add(pedido);
 				}
 			}catch(SQLException sq){
