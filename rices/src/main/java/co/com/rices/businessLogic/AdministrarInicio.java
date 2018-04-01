@@ -14,6 +14,7 @@ import co.com.rices.DAO.IInsertRices;
 import co.com.rices.DAO.IQueryRices;
 import co.com.rices.beans.Cliente;
 import co.com.rices.beans.Cupon;
+import co.com.rices.general.EmailSender;
 import co.com.rices.general.RicesTools;
 import co.com.rices.objects.CouponCode;
 
@@ -107,13 +108,16 @@ public class AdministrarInicio extends ConsultarFuncionesAPI{
 							couponCode.setPercentage(cupon.getPorcentaje());
 							couponCode.setUsed("N");
 							IInsertRices.saveCouponCode(couponCode);
+							this.cerrarModal("mdlDescuento");
+							this.mostrarMensajeGlobal("clienteRegistradoDescuento", "exito");
+							//String args[] = new String[1];
+							//args[0] = code;
+							//this.mostrarMensajeGlobalParametros("tuCuponDescuento", "exito", args);
+							this.mostrarMensajeGlobal("RevisaCorreoCuponDescuento", "exito");
+							String[] val = {this.clientePersiste.getNombre(), code};
+							String[] sDestinatario = {pEmail};
+							EmailSender.sendEmail(this.getMensaje("asunto"), this.getMensajeParametros("cuerpo", val), this.getMensaje("footer"), sDestinatario);
 						}
-						
-						this.cerrarModal("mdlDescuento");
-						this.mostrarMensajeGlobal("clienteRegistradoDescuento", "exito");
-						String args[] = new String[1];
-						args[0] = IConstants.CUPON_REGISTRO;
-						this.mostrarMensajeGlobalParametros("tuCuponDescuento", "exito", args);
 					}
 				}
 			}	
