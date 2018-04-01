@@ -22,9 +22,22 @@
 										style="font-weight:bold;" />
 								</p>
 								<p:commandButton update="mdlDescuento" value="Registrarse"
-									styleClass="btn btn-primary"
+									styleClass="btn btn-success"
 									action="#{administrarInicio.mostrarModalDescuento()}" />
 							</div> <img src="images/slide1.jpg" alt="" />
+						</li>
+						<li>
+							<div class="slider-caption">
+								<h1>El mejor arroz en Bucaramanga</h1>
+								<p>
+									<p:outputLabel value="#{mensaje.RegistroDescuento}"
+										style="font-weight:bold;" />
+								</p>
+								<p:commandButton update="mdlDescuento" value="Realiza tu pedido"
+									styleClass="btn btn-success"
+									action="/pages/purchase/makePurchase.xhtml?faces-redirect=true"
+									ajax="false" />
+							</div> <img src="images/slide4-1.jpg" alt="" />
 						</li>
 					</ul>
 				</div>

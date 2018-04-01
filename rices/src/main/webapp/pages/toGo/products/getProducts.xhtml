@@ -63,7 +63,7 @@
 							emptyMessage="#{mensaje.noExistenciaRegistro}">
 							<p:column headerText="">
 								<div align="center">
-									<p:graphicImage name="demo/images/#{loc.imageName}.gif"
+									<p:graphicImage name="demo/images/#{loc.imageName}.png"
 										styleClass="rounded-circle" />
 								</div>
 							</p:column>
@@ -140,14 +140,13 @@
 
 							<p:outputLabel value="Nombre producto: "
 								style="font-weight:bold; font-size:14px" />
-							<p:inputText id="txtNombreCreaProducto"
-								style="font-size:14px; " maxlength="20"
-								value="#{manageProduct.productoPersiste.name}" />
+							<p:inputText id="txtNombreCreaProducto" style="font-size:14px; "
+								maxlength="20" value="#{manageProduct.productoPersiste.name}" />
 
 							<p:outputLabel value="#{mensaje.Description} producto: "
 								style="font-weight:bold; font-size:14px" />
-							<p:inputText id="txtDescripcionCreaProducto"
-								style="font-size:14px;" maxlength="50"
+							<p:inputTextarea id="txtDescripcionCreaProducto"
+								style="font-size:14px;" maxlength="200"
 								value="#{manageProduct.productoPersiste.description}" />
 
 							<p:outputLabel value="Estado: "
@@ -234,14 +233,13 @@
 
 							<p:outputLabel value="Nombre producto: "
 								style="font-weight:bold; font-size:14px" />
-							<p:inputText id="txtNombreEditProducto"
-								style="font-size:14px; " maxlength="20"
-								value="#{manageProduct.productoClon.name}" />
+							<p:inputText id="txtNombreEditProducto" style="font-size:14px; "
+								maxlength="20" value="#{manageProduct.productoClon.name}" />
 
 							<p:outputLabel value="#{mensaje.Description} producto: "
 								style="font-weight:bold; font-size:14px" />
-							<p:inputText id="txtDescripcionEditProducto"
-								style="font-size:14px;" maxlength="50"
+							<p:inputTextarea id="txtDescripcionEditProducto"
+								style="font-size:14px;" maxlength="200"
 								value="#{manageProduct.productoClon.description}" />
 
 							<p:outputLabel value="Estado: "
@@ -315,8 +313,8 @@
 				rendered="#{manageProduct.showProductStep}">
 				<h:panelGrid columns="2" styleClass="ui-panelgrid-blank">
 					<p:commandButton value="Crear #{mensaje.eleccion}"
-						id="btnIdCreateStep" styleClass="btn btn-success" update=":formCreateStep"
-						action="#{manageProduct.nuevaEleccion()}"
+						id="btnIdCreateStep" styleClass="btn btn-success"
+						update=":formCreateStep" action="#{manageProduct.nuevaEleccion()}"
 						style="font-size:14px; font-weight: normal !important;" />
 
 					<p:commandButton value="Regresar" id="btnIdGoBackStep"
