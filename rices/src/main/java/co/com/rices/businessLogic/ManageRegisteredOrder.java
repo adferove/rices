@@ -156,7 +156,7 @@ public class ManageRegisteredOrder extends ConsultarFuncionesAPI{
 			builder.append(" 				</div></td> ");
 			builder.append(" 			<td><div align='right'> ");
 			builder.append(" 					<span style='font-size: 11px;'>$");
-			builder.append(d.getMainProduct().getPrice());
+			builder.append(d.getProductPrice());
 			builder.append("                    </span> ");
 			builder.append(" 				</div></td> ");
 			builder.append(" 		</tr> ");
@@ -300,6 +300,7 @@ public class ManageRegisteredOrder extends ConsultarFuncionesAPI{
 								pComplement.setProductStepId(ps.getId());
 								pComplement.setDetailId(d.getId());
 								List<Complement> complements = IQueryRices.getComplementsByDetail(pComplement);
+								ps.setListStepDetail(null);
 								if(complements.size()>0){
 									ps.setListStepDetail(new ArrayList<StepDetail>());
 									for(Complement complement: complements){

@@ -15,6 +15,7 @@ public class DetallePedido implements Serializable{
 	private Integer    cantidad;
 	private String     observacion;
 	private BigDecimal precio;
+	private BigDecimal productPrice;
 	
 	private Producto   producto;
 	
@@ -68,4 +69,11 @@ public class DetallePedido implements Serializable{
 	public void setMainProduct(Product mainProduct) {
 		this.mainProduct = mainProduct;
 	}
+	public BigDecimal getProductPrice() {
+		return productPrice;
+	}
+	public void setProductPrice(BigDecimal productPrice) {
+		this.productPrice = productPrice;
+	}
+	
 }

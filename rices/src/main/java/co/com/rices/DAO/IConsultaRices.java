@@ -27,7 +27,7 @@ public interface IConsultaRices {
 		List<DetallePedido> resultado=new ArrayList<DetallePedido>();
 		try{
 			StringBuilder builder=new StringBuilder();
-			builder.append(" SELECT id_detalle_pedido, id_pedido, id_producto, cantidad, observacion, precio ");
+			builder.append(" SELECT id_detalle_pedido, id_pedido, id_producto, cantidad, observacion, precio, product_price ");
 			builder.append(" FROM   rices.detalle_pedidos ");
 			builder.append(" WHERE  id_pedido = ? ");
 
@@ -47,6 +47,7 @@ public interface IConsultaRices {
 					detallepedido.setCantidad(rs.getInt("cantidad"));
 					detallepedido.setObservacion(rs.getString("observacion"));
 					detallepedido.setPrecio(rs.getBigDecimal("precio"));
+					detallepedido.setProductPrice(rs.getBigDecimal("product_price"));
 					resultado.add(detallepedido);
 				}
 			}catch(SQLException sq){

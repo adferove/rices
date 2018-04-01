@@ -175,11 +175,11 @@ public interface IInsertRices {
 		Integer resultado = null;
 		try{
 			StringBuilder builder = new StringBuilder();
-			builder.append(" INSERT INTO rices.detalle_pedidos(        ");
-			builder.append("         id_pedido, id_producto, cantidad, "); 
-			builder.append("         precio, observacion)              ");
-			builder.append(" VALUES (?, ?, ?, ?, ?)                    ");
-			builder.append(" RETURNING id_detalle_pedido;              ");
+			builder.append(" INSERT INTO rices.detalle_pedidos(         ");
+			builder.append("         id_pedido, id_producto, cantidad,  "); 
+			builder.append("         precio, observacion, product_price)");
+			builder.append(" VALUES (?, ?, ?, ?, ?, ?)                  ");
+			builder.append(" RETURNING id_detalle_pedido;               ");
 			Conexion conexion    = null;
 			CallableStatement cs = null;
 			ResultSet         rs = null;
@@ -191,6 +191,7 @@ public interface IInsertRices {
 				cs.setObject(3, pDetallePedido.getCantidad());
 				cs.setObject(4, pDetallePedido.getPrecio());
 				cs.setObject(5, pDetallePedido.getObservacion());
+				cs.setObject(6, pDetallePedido.getMainProduct().getPrice());
 				cs.execute();
 				rs = cs.getResultSet();
 				if(rs.next()){
