@@ -12,6 +12,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
 public class Conexion implements Serializable{
 
 	private static final long serialVersionUID = -8644297010476367394L;
@@ -26,25 +29,24 @@ public class Conexion implements Serializable{
 	 */
 	public Conexion() {
 		try {
-			//			InitialContext ctx = new InitialContext();
-			//			DataSource ds = (DataSource) ctx.lookup("java:/ricesDS");
-			//			this.con = ds.getConnection();
-			//			this.con.setAutoCommit(true);
+			InitialContext ctx = new InitialContext();
+			DataSource ds = (DataSource) ctx.lookup("java:/ricesToGoDS");
+			this.con = ds.getConnection();
+			this.con.setAutoCommit(true);
 			// **************openshuftV3********************
-			String DB_driver = "org.postgresql.Driver";
-
+//			String DB_driver = "org.postgresql.Driver";
 //			String url = "jdbc:postgresql://postgresql:5432/rices";
 //			String username = "admin";
 //			String password = "admin";
 //			String url = "jdbc:postgresql://localhost:5432/rices";
 //			String username = "postgres";
 //			String password = "afrv1983";
-			String url = "jdbc:postgresql://localhost:5433/rices";
-			String username = "postgres";
-			String password = "admin";
-			Class.forName(DB_driver);
-			con = DriverManager.getConnection(url, username, password);
-			con.setAutoCommit(true);
+//			String url = "jdbc:postgresql://localhost:5433/rices";
+//			String username = "postgres";
+//			String password = "admin";
+//			Class.forName(DB_driver);
+//			con = DriverManager.getConnection(url, username, password);
+//			con.setAutoCommit(true);
 		} catch (Exception e) {
 			IConstants.log.error(e.toString(), e);
 		}
