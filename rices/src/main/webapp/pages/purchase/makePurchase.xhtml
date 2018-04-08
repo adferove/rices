@@ -27,6 +27,14 @@
 	border-color: inherit;
 	padding: 0;
 }
+
+.ui-state-active {
+	background: #ffffff
+		url(/rices/javax.faces.resource/images/ui-bg_flat_65_ffffff_40x100.png.jsf?ln=primefaces-blitzer)
+		50% 50% repeat-x;
+	font-weight: bold;
+	color: #c7578f;
+}
 </style>
 			<p:messages id="messages" showDetail="true" closable="true" />
 			<p:outputPanel id="pnl1"
@@ -201,7 +209,7 @@
 											<div style="height: 10px"></div>
 											<div align="center">
 												<p:commandButton id="btnCheckOut" icon="fa fa-check"
-													style="background-image: none; color: #fff; background-color: #5cb85c; border-color: #4cae4c; font-weight: normal;"
+													style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
 													action="#{managePurchaseOrder.validarProductoSeleccionado()}"
 													value="Checkout" update=":form">
 												</p:commandButton>
@@ -260,7 +268,7 @@
 											<div style="height: 20px"></div>
 											<div align="center">
 												<p:commandButton id="btnConfimar"
-													style="background-image: none; color: #fff; background-color: #5cb85c; border-color: #4cae4c; font-weight: normal;"
+													style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
 													action="#{managePurchaseOrder.confirmarPedido()}"
 													value="Confirmar pedido" update=":form"
 													icon="fa fa-motorcycle">
