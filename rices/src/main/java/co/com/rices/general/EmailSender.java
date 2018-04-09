@@ -16,11 +16,11 @@ public class EmailSender {
 
 	static String[] asCorreoDestino;
 	
-	private final static String CORREO_REMITE = "ricestogo@gmail.com";
-	private final static String CLAVE_CORREO_REMITE = "rices2018";
-	private final static String NOMBRE_SERVIDOR = "smtp.gmail.com";
-	private final static String USUARIO = "ricestogo@gmail.com";
-	private final static int    PUERTO = 587;
+	private final static String CORREO_REMITE = "info@ricestogo.com";
+	private final static String CLAVE_CORREO_REMITE = "Rices2018";
+	private final static String NOMBRE_SERVIDOR = "mail.ricestogo.com";
+	private final static String USUARIO = "info@ricestogo.com";
+	private final static int    PUERTO = 26;
 	
 	public static boolean sendEmail( String sAsunto, String sTexto, String footer,String sDestinatario[]){
 		try	{
