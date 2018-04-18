@@ -80,11 +80,11 @@ p {
 }
 
 .logo {
-  padding: 20px 0;
+  padding: 0px 0;
 }
 
 .main-menu ul {
-  padding: 0px;
+  padding: 20px;
   margin: 0px;
   text-align: center;
 }
@@ -92,7 +92,25 @@ p {
 .main-menu li {
   list-style: none;
   display: inline-block;
-    padding: 40px 0;
+  padding: 0px 0;
+}
+
+.main-menu > ul > li {
+  float:none;
+}
+
+.main-menu > ul {
+  padding: 40px;
+}
+
+.main-menu li ul {
+  display: none;
+  position: absolute;
+  min-width:140px;
+}
+
+.main-menu li:hover > ul {
+  display: block;
 }
 
 .main-menu a {
@@ -1305,6 +1323,12 @@ footer {
     display: block;
     margin-top: -60px;
     margin-right: -35px;
+  }
+  
+  .main-menu ul {
+    padding: 120px;
+    margin: 0px;
+    text-align: left;
   }
 
   #heading-section img {
