@@ -3,6 +3,7 @@ package co.com.rices;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,12 +35,6 @@ public class Conexion implements Serializable{
 			this.con.setAutoCommit(true);
 			// **************openshuftV3********************
 //			String DB_driver = "org.postgresql.Driver";
-//			String url = "jdbc:postgresql://postgresql:5432/rices";
-//			String username = "admin";
-//			String password = "admin";
-//			String url = "jdbc:postgresql://localhost:5432/rices";
-//			String username = "postgres";
-//			String password = "afrv1983";
 //			String url = "jdbc:postgresql://localhost:5433/rices";
 //			String username = "postgres";
 //			String password = "admin";
