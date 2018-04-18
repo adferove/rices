@@ -3,7 +3,6 @@ package co.com.rices;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,18 +32,9 @@ public class Conexion implements Serializable{
 			DataSource ds = (DataSource) ctx.lookup("java:/ricesToGoDS");
 			this.con = ds.getConnection();
 			this.con.setAutoCommit(true);
-			// **************openshuftV3********************
-//			String DB_driver = "org.postgresql.Driver";
-//			String url = "jdbc:postgresql://localhost:5433/rices";
-//			String username = "postgres";
-//			String password = "admin";
-//			Class.forName(DB_driver);
-//			con = DriverManager.getConnection(url, username, password);
-//			con.setAutoCommit(true);
 		} catch (Exception e) {
 			IConstants.log.error(e.toString(), e);
 		}
-
 	}
 
 	/******************************************************************************

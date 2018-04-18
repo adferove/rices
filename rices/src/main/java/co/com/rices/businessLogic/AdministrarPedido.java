@@ -42,7 +42,7 @@ public class AdministrarPedido extends ConsultarFuncionesAPI{
 		builder.append(" 			<span style='font-size: 12px;'>B/ga, Santander</span> ");
 		builder.append(" 		</div> ");
 		builder.append(" 		<div> ");
-		builder.append(" 			<span style='font-size: 12px;'>3102158462</span> ");
+		builder.append(" 			<span style='font-size: 12px;'>3016912772</span> ");
 		builder.append(" 		</div> ");
 		builder.append(" 		<div> ");
 		builder.append(" 			<span style='font-size: 12px;'>info@ricestogo.com</span> ");

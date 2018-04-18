@@ -15,119 +15,136 @@
 		50% 50% repeat-x;
 	color: #333333;
 }
+
+.ui-widget-header {
+	background: none;
+	background-color: #c7578f;
+}
 </style>
 
-		<p:dialog header="Elige tu #{mensaje.menu}" height="650"
-			widgetVar="mdlSelectComplement" width="50%"
-			position="center center center center" modal="true" resizable="true"
-			closable="true" responsive="true">
-			<p:outputPanel id="productDetail" style="text-align:center;">
-				<p:messages id="messages2" showDetail="true" closable="true" />
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 col-sm-6">
+					<p:dialog header="Elige tu #{mensaje.menu}" height="650"
+						widgetVar="mdlSelectComplement" width="280"
+						position="center center center center" modal="true"
+						closable="true" responsive="true">
+						<p:outputPanel id="productDetail" style="text-align:center;">
+							<p:messages id="messages2" showDetail="true" closable="true" />
 
-				<div align="center">
-					<p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
-						<p:graphicImage
-							name="demo/images/#{managePurchaseOrder.mainProductSelected.imageName}_grande.png" />
-						<p:spacer width="10" />
-						<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+							<div align="left">
+								<p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
+									<p:graphicImage
+										name="demo/images/#{managePurchaseOrder.mainProductSelected.imageName}_grande.png" />
+									<p:spacer width="10" />
+									<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
 
-							<h:outputText
-								value="#{managePurchaseOrder.mainProductSelected.name}"
-								style="font-weight: bold; color:#c7578f;" />
+										<h:outputText
+											value="#{managePurchaseOrder.mainProductSelected.name}"
+											style="font-weight: bold; color:#c7578f;" />
 
-							<h:outputText
-								value="#{managePurchaseOrder.mainProductSelected.description}"
-								style="font-weight: normal; font-size:12px;" />
+										<h:outputText
+											value="#{managePurchaseOrder.mainProductSelected.description}"
+											style="font-weight: normal; font-size:12px;" />
 
-							<h:outputText
-								value="$#{managePurchaseOrder.mainProductSelected.price}"
-								style="font-weight: bold" />
+										<h:outputText
+											value="$#{managePurchaseOrder.mainProductSelected.price}"
+											style="font-weight: bold" />
 
-							<p:rating
-								value="#{managePurchaseOrder.mainProductSelected.ranking}"
-								readonly="true" />
-						</p:panelGrid>
-					</p:panelGrid>
-				</div>
-				<div style="height: 10px"></div>
-				<div align="left">
-					<p:repeat
-						value="#{managePurchaseOrder.mainProductSelected.listProductStep}"
-						var="step">
-						<p:outputPanel>
-							<h:outputText value="#{step.description}"
-								style="font-weight: bold; color:#c7578f;" />
-							<p:spacer width="10" />
-							<h:outputText rendered="#{step.selectType.equals('U')}"
-								value="Elige una #{mensaje.opcion}"
-								style="font-size:11px; font-weight: bold; color:#bdbdbd;" />
-							<h:outputText rendered="#{step.selectType.equals('M')}"
-								value="Puedes elegir #{mensaje.mas} de una #{mensaje.opcion}"
-								style="font-size:11px; font-weight: bold; color:#bdbdbd;" />
-							<p:dataTable id="idSelectMultiple" var="det"
-								value="#{step.listStepDetail}" styleClass="ui-datatable-blank">
-								<p:column width="10%"
-									style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
-									<div align="right">
-										<p:selectBooleanCheckbox value="#{det.checked}">
-											<p:ajax
-												update="idSelectMultiple,formSelectComplement:idAddSubtotal"
-												listener="#{managePurchaseOrder.seleccionUnicaListener(det)}" />
-										</p:selectBooleanCheckbox>
-									</div>
-								</p:column>
-								<p:column width="62%"
-									style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
-									<div align="left">
-										<h:outputText value="#{det.transientProduct.name}" />
-									</div>
-								</p:column>
-								<p:column width="28%"
-									style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
-									<div align="right">
-										<h:outputText value="$ #{det.price}" />
-									</div>
-								</p:column>
-							</p:dataTable>
+										<p:rating
+											value="#{managePurchaseOrder.mainProductSelected.ranking}"
+											readonly="true" />
+									</p:panelGrid>
+								</p:panelGrid>
+							</div>
+							<div style="height: 10px"></div>
+							<div align="left">
+								<p:repeat
+									value="#{managePurchaseOrder.mainProductSelected.listProductStep}"
+									var="step">
+									<p:outputPanel>
+										<h:outputText value="#{step.description}"
+											style="font-weight: bold; color:#c7578f;" />
+										<p:spacer width="10" />
+										<h:outputText rendered="#{step.selectType.equals('U')}"
+											value="Elige una #{mensaje.opcion}"
+											style="font-size:10px; font-weight: bold; color:#bdbdbd;" />
+										<h:outputText rendered="#{step.selectType.equals('M')}"
+											value="Puedes elegir #{mensaje.mas} de una #{mensaje.opcion}"
+											style="font-size:10px; font-weight: bold; color:#bdbdbd;" />
+										<div align="center">
+											<p:dataTable id="idSelectMultiple" var="det"
+												value="#{step.listStepDetail}"
+												styleClass="ui-datatable-blank">
+												<p:column width="10%"
+													style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
+													<div align="right">
+														<p:selectBooleanCheckbox value="#{det.checked}">
+															<p:ajax
+																update="idSelectMultiple,formSelectComplement:idAddSubtotal"
+																listener="#{managePurchaseOrder.seleccionUnicaListener(det)}" />
+														</p:selectBooleanCheckbox>
+													</div>
+												</p:column>
+												<p:column width="20%"
+													style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
+													<div align="left">
+														<h:outputText value="#{det.transientProduct.name}"
+															style="font-size:9px;" />
+													</div>
+												</p:column>
+												<p:column width="20%"
+													style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
+													<div align="right">
+														<h:outputText value="$ #{det.price}"
+															style="font-size:9px;" />
+													</div>
+												</p:column>
+											</p:dataTable>
+										</div>
+									</p:outputPanel>
+									<hr />
+								</p:repeat>
+							</div>
+							<div style="height: 10px"></div>
+							<div align="center">
+								<p:panelGrid columns="5" styleClass="ui-panelgrid-blank">
+									<p:commandButton icon="fa fa-minus-circle"
+										style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
+										action="#{managePurchaseOrder.restarSumarCantidad(0)}"
+										update="productDetail" />
+									<p:spacer width="10" />
+									<p:outputLabel
+										value="#{managePurchaseOrder.detallePedido.cantidad}" />
+									<p:spacer width="10" />
+									<p:commandButton icon="fa fa-plus-circle"
+										style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
+										action="#{managePurchaseOrder.restarSumarCantidad(1)}"
+										update="productDetail" />
+								</p:panelGrid>
+							</div>
+							<div style="height: 10px"></div>
+							<div align="center">
+								<p:panelGrid id="idAddSubtotal" columns="2"
+									styleClass="ui-panelgrid-blank">
+									<h:outputText value="Subtotal:" />
+									<h:outputText
+										value="$#{managePurchaseOrder.detallePedido.precio}"
+										style="font-weight: bold" />
+								</p:panelGrid>
+							</div>
+							<div style="height: 10px"></div>
+							<div align="center">
+								<p:commandButton value="Agregar a la orden"
+									style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
+									action="#{managePurchaseOrder.addProductToOrder()}"
+									update=":formSelectComplement:productDetail, form:tb, form:tbDetail, :form:idStcky,:form:messages" />
+							</div>
+
 						</p:outputPanel>
-						<hr />
-					</p:repeat>
+					</p:dialog>
 				</div>
-				<div style="height: 10px"></div>
-				<div align="center">
-					<p:panelGrid columns="5" styleClass="ui-panelgrid-blank">
-						<p:commandButton icon="fa fa-minus-circle"
-							style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
-							action="#{managePurchaseOrder.restarSumarCantidad(0)}"
-							update="productDetail" />
-						<p:spacer width="10" />
-						<p:outputLabel
-							value="#{managePurchaseOrder.detallePedido.cantidad}" />
-						<p:spacer width="10" />
-						<p:commandButton icon="fa fa-plus-circle"
-							style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
-							action="#{managePurchaseOrder.restarSumarCantidad(1)}"
-							update="productDetail" />
-					</p:panelGrid>
-				</div>
-				<div style="height: 10px"></div>
-				<div align="center">
-					<p:panelGrid id="idAddSubtotal" columns="2"
-						styleClass="ui-panelgrid-blank">
-						<h:outputText value="Subtotal:" />
-						<h:outputText value="$#{managePurchaseOrder.detallePedido.precio}"
-							style="font-weight: bold" />
-					</p:panelGrid>
-				</div>
-				<div style="height: 10px"></div>
-				<div align="center">
-					<p:commandButton value="Agregar a la orden"
-						style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
-						action="#{managePurchaseOrder.addProductToOrder()}"
-						update=":formSelectComplement:productDetail, form:tb, form:tbDetail, :form:idStcky,:form:messages" />
-				</div>
-
-			</p:outputPanel>
-		</p:dialog>
+			</div>
+		</div>
 	</h:form>
 </ui:composition>
