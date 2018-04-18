@@ -1,23 +1,24 @@
 package co.com.rices;
 
+import java.io.ByteArrayInputStream;
 import java.security.SecureRandom;
 
 public class Test {
 	
-	static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	static SecureRandom rnd = new SecureRandom();
-
-	static String randomString( int len ){
-	   StringBuilder sb = new StringBuilder( len );
-	   for( int i = 0; i < len; i++ ) 
-	      sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
-	   return sb.toString();
-	}
+//	static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+//	static SecureRandom rnd = new SecureRandom();
+//
+//	static String randomString( int len ){
+//	   StringBuilder sb = new StringBuilder( len );
+//	   for( int i = 0; i < len; i++ ) 
+//	      sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
+//	   return sb.toString();
+//	}
 
 	public static void main(String[] args) {
-
-		String code = Test.randomString(7);
-		System.out.println(code);
+		
+//		String code = Test.randomString(7);
+//		System.out.println(code);
 //	    String[] ids = TimeZone.getAvailableIDs();
 //	    for (String id : ids) {
 //	        System.out.println(displayTimeZone(TimeZone.getTimeZone(id)));
