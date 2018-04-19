@@ -1332,6 +1332,10 @@ footer {
   .main-menu li:hover > ul {
     display: none;
    }
+   
+  .main-menu a {
+    font-size: 20px;
+  }
 
   #heading-section img {
     display: none;
