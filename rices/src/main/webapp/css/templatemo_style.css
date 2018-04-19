@@ -1316,20 +1316,22 @@ footer {
   }
 
   .logo {
-    padding-bottom: 60px;
+    padding-bottom: 0px;
   }
 
   .main-menu li {
     display: block;
-    margin-top: -60px;
+    margin-top: 0px;
     margin-right: -35px;
   }
   
   .main-menu ul {
-    padding: 120px;
-    margin: 0px;
-    text-align: left;
+    text-align: center;
   }
+  
+  .main-menu li:hover > ul {
+    display: none;
+   }
 
   #heading-section img {
     display: none;
