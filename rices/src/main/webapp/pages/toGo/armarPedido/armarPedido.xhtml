@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/principal.xhtml">
+
+	<ui:define name="body">
+
+		<style type="text/css">
+.ui-steps .ui-steps-item {
+	width: 25%;
+}
+
+.ui-state-highlight {
+	text-shadow: none !important;
+}
+
+.ui-steps.custom {
+	margin-bottom: 30px;
+}
+
+.ui-steps.custom .ui-steps-item .ui-menuitem-link {
+	height: 30px;
+	padding: 0 1em;
+}
+
+.ui-steps.custom .ui-steps-item .ui-steps-number {
+	background-color: #0081c2;
+	color: #FFFFFF;
+	display: inline-block;
+	width: 30px;
+	border-radius: 10px;
+	margin-top: -10px;
+	margin-bottom: 10px;
+}
+
+.ui-steps .ui-steps-number {
+	font-size: 90%;
+	display: block;
+}
+
+.ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td,
+	.ui-datatable tfoot th {
+	padding: 0;
+}
+
+.table {
+	width: 100%;
+	margin-bottom: 0px;
+}
+
+.ui-panelgrid .ui-panelgrid-cell {
+	border-width: 1px;
+	border-style: solid;
+	border-color: inherit;
+	padding: 0;
+}
+
+.ui-state-active {
+	background: #ffffff
+		url(/rices/javax.faces.resource/images/ui-bg_flat_65_ffffff_40x100.png.jsf?ln=primefaces-blitzer)
+		50% 50% repeat-x;
+	font-weight: bold;
+	color: #c7578f;
+}
+</style>
+
+		<h:form id="form">
+			<p:messages id="msj" showDetail="true" closable="true" />
+
+			<p:outputPanel id="pnlArmaPedido"
+				rendered="#{armarPedido.showSeleccionarProducto}">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-9">
+
+							<p:steps readonly="false" activeIndex="#{armarPedido.tabActual}">
+								<p:menuitem value="Tu nombre"
+									actionListener="#{armarPedido.setTabActual(0)}" process="@this"
+									update=":form:pnlArmaPedido" />
+								<p:menuitem value="Selecciona tu box"
+									actionListener="#{armarPedido.setTabActual(1)}" process="@this"
+									update=":form:pnlArmaPedido" />
+								<p:menuitem value="Tu #{mensaje.direccion}"
+									actionListener="#{armarPedido.setTabActual(2)}" process="@this"
+									update=":form:pnlArmaPedido" />
+								<p:menuitem value="Tu pedido"
+									actionListener="#{armarPedido.setTabActual(3)}" process="@this"
+									update=":form:pnlArmaPedido" />
+							</p:steps>
+
+							<p:panel id="pnlTuNomnre" rendered="#{armarPedido.tabActual==0}">
+								<p:tab id="tabTuNombre" title="Tu nombre">
+									<div align="center">
+										<p:panelGrid styleClass="ui-panelgrid-blank" columns="1">
+											<p:outputLabel style="font-size:20px;"
+												value="#{mensaje.cuentaComoTeLlamas}" />
+											<p:inputText maxlength="50"
+												value="#{armarPedido.pedidoPersiste.nombreCliente}" />
+										</p:panelGrid>
+									</div>
+								</p:tab>
+
+								<div style="height: 10px;"></div>
+
+								<div align="center">
+									<p:commandButton id="btnValidar0"
+										style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
+										action="#{armarPedido.typeYourName()}" value="Siguiente"
+										update=":form:pnlArmaPedido,:form:msj" />
+									<p:spacer width="10" />
+								</div>
+
+							</p:panel>
+
+							<p:panel id="pnlTuBox" rendered="#{armarPedido.tabActual==1}">
+								<p:tab id="tabTuBox" title="Tu box">
+									<p:repeat value="#{armarPedido.listaRiceMenu}" var="riceMenu">
+										<p:outputPanel>
+											<h:outputText value="#{riceMenu.description}"
+												style="font-weight: bold; color:#c7578f;" />
+											<p:spacer width="10" />
+
+											<p:dataGrid var="producto" value="#{riceMenu.listProducts}"
+												columns="3" layout="grid" rows="12" id="prods">
+												<div align="center">
+													<p:panelGrid columns="1" columnClasses="logo,detail"
+														styleClass="ui-panelgrid-blank">
+														<p:commandLink update=":form"
+															actionListener="#{armarPedido.seleccionarComplemento(producto)}">
+															<p:graphicImage
+																name="demo/images/#{producto.imageName}.png" />
+														</p:commandLink>
+														<p:outputPanel>
+															<p:panelGrid columns="1" cellpadding="5">
+																<h:outputText value="#{producto.name}"
+																	style="font-weight: bold; color:#c7578f; font-size:12px;" />
+																<h:outputText value="$#{producto.price}"
+																	style="font-weight: bold; font-size:12px;" />
+																<h:outputText value="" style="font-size:12px;" />
+																<p:rating value="#{producto.ranking}" readonly="true" />
+															</p:panelGrid>
+														</p:outputPanel>
+													</p:panelGrid>
+												</div>
+
+											</p:dataGrid>
+
+										</p:outputPanel>
+									</p:repeat>
+								</p:tab>
+							</p:panel>
+						</div>
+
+						<div class="col-md-3">
+							<p:accordionPanel id="tb">
+								<p:tab title="Total">
+									<div align="center" style="padding: 0;">
+										<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+											<p:outputLabel value="Subtotal:"
+												style="font-size:10px; color:grey;" />
+											<h:outputText value="$#{armarPedido.pedidoPersiste.subtotal}"
+												style="font-weight: bold; font-size:10px;" />
+											<p:outputLabel value="Iva:"
+												style="font-size:10px; color:grey;" />
+											<p:outputLabel value="$#{armarPedido.pedidoPersiste.iva}"
+												style="font-size:10px;" />
+											<p:outputLabel value="Domicilio:"
+												style="font-size:10px; color:grey;" />
+											<p:outputLabel style="font-size:10px;"
+												value="$#{armarPedido.pedidoPersiste.cargoDomicilio}" />
+
+											<p:outputLabel value="Descuento:"
+												style="font-size:10px;  color:grey;" />
+											<p:outputLabel style="font-size:10px;"
+												value="#{armarPedido.pedidoPersiste.descuento}%" />
+
+											<p:outputLabel value="Total:"
+												style="font-size:10px;  color:grey;" />
+											<p:outputLabel style="font-size:10px;"
+												value="$#{armarPedido.pedidoPersiste.total}" />
+										</p:panelGrid>
+									</div>
+								</p:tab>
+							</p:accordionPanel>
+						</div>
+
+					</div>
+				</div>
+			</p:outputPanel>
+
+
+
+
+
+
+
+			<p:sticky id="idStcky" target="tb" />
+		</h:form>
+	</ui:define>
+</ui:composition>
