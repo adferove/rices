@@ -11,7 +11,7 @@
 		<h:form id="form">
 			<p:messages id="messages" showDetail="true" closable="true" />
 			<div align="center">
-				<p:panel id="panelAutenticarse" style="width:50%">
+				<p:panel id="panelAutenticarse">
 					<div style="height: 10px;"></div>
 					<div align="center">
 						<p:outputLabel style="font-size:20px;"
@@ -22,7 +22,7 @@
 							styleClass="ui-panelgrid-blank">
 							<p:outputLabel value="Usuario*:" />
 							<p:inputText id="idUsuario"
-								style="font-size:14px; text-transform:lowercase; " size="50"
+								style="font-size:14px; text-transform:lowercase; "
 								maxlength="50" value="#{authenticate.usuario}" />
 							<p:outputLabel value="Password*:" />
 							<p:password id="idPass" maxlength="50"

@@ -8,6 +8,7 @@ import co.com.rices.IConstants;
 import co.com.rices.objects.CouponCode;
 import co.com.rices.objects.Product;
 import co.com.rices.objects.ProductStep;
+import co.com.rices.objects.RiceMenu;
 import co.com.rices.objects.StepDetail;
 
 public interface IUpdateRices {
@@ -19,7 +20,7 @@ public interface IUpdateRices {
 			builder.append(" UPDATE rices.products                                    ");
 			builder.append(" SET    product_name=?, description=?, state=?,           ");
 			builder.append("        ranking=?, image_name=?, product_type=?, open=?,  ");
-			builder.append("        closed=?, price=?                                 "); 
+			builder.append("        closed=?, price=?, menu=?                         "); 
 			builder.append(" WHERE  id=?;                                             ");
 			Conexion conexion    = null;
 			CallableStatement cs = null;
@@ -35,7 +36,8 @@ public interface IUpdateRices {
 				cs.setObject(7, new java.sql.Time(pProduct.getOpen().getTime()));
 				cs.setObject(8, new java.sql.Time(pProduct.getClosed().getTime()));
 				cs.setObject(9, pProduct.getPrice());
-				cs.setInt(10, pProduct.getId());
+				cs.setObject(10, pProduct.getIdMenu());
+				cs.setInt(11, pProduct.getId());
 				int value = cs.executeUpdate();
 				if(value==1){
 					resultado = true;
@@ -149,4 +151,37 @@ public interface IUpdateRices {
 		return resultado;
 	}
 
+	public static boolean updateRiceMenu(RiceMenu pRiceMenu)throws Exception{
+		boolean resultado = false;
+		try{
+			StringBuilder builder = new StringBuilder();
+			builder.append(" UPDATE rices.rices_menu                                   ");
+			builder.append(" SET    description=?, orden=?, estado=?, open=?, closed=? ");
+			builder.append(" WHERE  id=?;                                              ");
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setObject(1, pRiceMenu.getDescription());
+				cs.setObject(2, pRiceMenu.getOrden());
+				cs.setObject(3, pRiceMenu.getEstado());
+				cs.setObject(4, new java.sql.Time(pRiceMenu.getOpen().getTime()));
+				cs.setObject(5, new java.sql.Time(pRiceMenu.getClosed().getTime()));
+				cs.setInt(6, pRiceMenu.getId());
+				int value = cs.executeUpdate();
+				if(value==1){
+					resultado = true;
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}
 }

@@ -23,6 +23,7 @@ public class Product implements Serializable{
 	private Date    open;
 	private Date    closed;
 	private BigDecimal price;
+	private Integer idMenu;
 
 	private List<ProductStep> listProductStep;
 
@@ -105,6 +106,12 @@ public class Product implements Serializable{
 	public void setListProductStep(List<ProductStep> listProductStep) {
 		this.listProductStep = listProductStep;
 	}
+	public Integer getIdMenu() {
+		return idMenu;
+	}
+	public void setIdMenu(Integer idMenu) {
+		this.idMenu = idMenu;
+	}
 	public Product clone(){
 		Product product = new Product();
 		product.setId(new Integer(this.id));
@@ -141,6 +148,9 @@ public class Product implements Serializable{
 		product.setPrice(new BigDecimal(0));
 		if(this.price!=null){
 			product.setPrice(product.getPrice().add(this.price));
+		}
+		if(this.idMenu!=null){
+			product.setIdMenu(new Integer(this.idMenu));
 		}
 		return product;
 	}

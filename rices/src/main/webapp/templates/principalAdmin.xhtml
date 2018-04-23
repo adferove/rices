@@ -70,25 +70,19 @@
 
 	<div class="container">
 		<div class="row">
-			<div class="product-item col-md-12">
-				<div class="row">
-
-					<div class="col-md-3">
-						<p:outputPanel rendered="#{menu.permisoMenu}">
-							<div>
-								<ui:include src="/templates/menu.xhtml" />
-							</div>
-						</p:outputPanel>
+			<div class="col-md-3">
+				<p:outputPanel rendered="#{menu.permisoMenu}">
+					<div>
+						<ui:include src="/templates/menu.xhtml" />
 					</div>
-					<div class="col-md-9">
-						<p:outputPanel rendered="#{menu.permisoPagina}">
-							<div>
-								<ui:insert name="body" />
-							</div>
-						</p:outputPanel>
+				</p:outputPanel>
+			</div>
+			<div class="col-md-9">
+				<p:outputPanel rendered="#{menu.permisoPagina}">
+					<div>
+						<ui:insert name="body" />
 					</div>
-
-				</div>
+				</p:outputPanel>
 			</div>
 		</div>
 	</div>

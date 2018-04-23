@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/principalAdmin.xhtml">
+
+
+	<ui:define name="body">
+		<h:form id="form">
+			<p:messages id="messages" showDetail="true" closable="true" />
+			<p:spacer height="10" />
+			<!-- INICIO INGRESO CRITERIOS CONSULTA -->
+			<p:outputPanel id="pnlIngresoDatos"
+				rendered="#{manageMenu.showConsulta}">
+				<p:commandButton id="btnIdCreateProduct"
+					styleClass="btn btn-success" action="#{manageMenu.nuevoMenu()}"
+					value="Crear #{mensaje.menu}" update=":form"
+					style="font-size:14px; font-weight: normal !important;" />
+
+				<div style="height: 10px;"></div>
+
+				<div align="center">
+					<p:panel header="#{mensaje.Menu}s">
+						<p:dataTable var="loc" id="dtlListadoMenu"
+							widgetVar="dtlListadoMenu" value="#{manageMenu.listadoMenu}"
+							reflow="true" emptyMessage="#{mensaje.noExistenciaRegistro}">
+
+							<p:column headerText="Nombre">
+								<div align="center">
+									<h:outputText value="#{loc.description}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Estado">
+								<div align="center">
+									<h:outputText value="Activo"
+										rendered="#{loc.estado.equals('A')}" />
+									<h:outputText value="Inactivo"
+										rendered="#{loc.estado.equals('I')}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Orden">
+								<div align="center">
+									<h:outputText value="#{loc.orden}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="#{mensaje.Mas}">
+								<div align="center">
+									<p:commandButton id="btnVerDetalle" icon="fa fa-edit"
+										action="#{manageMenu.verDetalleMenu(loc)}" update="form"
+										title="Ver/editar detalle del menu" />
+									<p:blockUI id="idBlockProducto" block=":form"
+										trigger="btnVerDetalle" />
+								</div>
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+				</div>
+			</p:outputPanel>
+
+			<p:outputPanel id="pnlCreaMenu" rendered="#{manageMenu.showCrear}">
+
+				<p:commandButton id="btnRegresar1" styleClass="btn btn-danger"
+					style="font-size:14px; font-weight: normal !important;"
+					action="#{manageMenu.regresar(1)}" value="Regresar" update=":form">
+				</p:commandButton>
+
+				<div style="height: 10px;"></div>
+
+				<p:panel header="Crear nuevo #{mensaje.menu}"
+					style="text-align:center;">
+					<div align="center">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel value="#{mensaje.Description}: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtDescriptionMenu" style="font-size:14px; "
+								maxlength="20"
+								value="#{manageMenu.persisteRiceMenu.description}" />
+
+							<p:outputLabel value="Orden: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtOrdenMenu" style="font-size:14px;"
+								maxlength="20" value="#{manageMenu.persisteRiceMenu.orden}" />
+
+							<p:outputLabel value="Estado: "
+								style="font-weight:bold; font-size:14px" />
+							<p:selectOneMenu id="slctEstadoMenu" style="padding-right: 1em;"
+								value="#{manageMenu.persisteRiceMenu.estado}">
+								<f:selectItem itemLabel="Activo" itemValue="A" />
+								<f:selectItem itemLabel="Inactivo" itemValue="I" />
+							</p:selectOneMenu>
+
+
+							<p:outputLabel value="Horario desde: "
+								style="font-weight:bold; font-size:14px" />
+							<p:calendar id="timeDesde"
+								value="#{manageMenu.persisteRiceMenu.open}" pattern="HH:mm"
+								timeOnly="true" />
+
+							<p:outputLabel value="Horario hasta: "
+								style="font-weight:bold; font-size:14px" />
+							<p:calendar id="timeHasta"
+								value="#{manageMenu.persisteRiceMenu.closed}" pattern="HH:mm"
+								timeOnly="true" />
+
+						</p:panelGrid>
+					</div>
+				</p:panel>
+				<p:spacer height="10" />
+				<div align="center">
+					<p:commandButton id="btnCrearMenu"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{manageMenu.registrarMenu()}" value="Registrar"
+						update=":form">
+					</p:commandButton>
+
+					<p:blockUI block=":form" trigger="btnCrearMenu,btnRegresar1" />
+				</div>
+
+			</p:outputPanel>
+
+			<p:outputPanel id="pnlEditaProducto"
+				rendered="#{manageMenu.showEditar}">
+				<p:commandButton id="btnRegresar2"
+					style="font-size:14px; font-weight: normal !important;"
+					action="#{manageMenu.regresar(2)}" value="Regresar"
+					update=":form" styleClass="btn btn-danger">
+				</p:commandButton>
+
+				<div style="height: 10px;"></div>
+
+				<p:panel header="Editar producto" style="text-align:center;">
+					<div align="center">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel value="#{mensaje.Description}: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtDescriptionMenuEdit" style="font-size:14px; "
+								maxlength="20"
+								value="#{manageMenu.cloneRiceMenu.description}" />
+
+							<p:outputLabel value="Orden: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtOrdenMenuEdit" style="font-size:14px;"
+								maxlength="20" value="#{manageMenu.cloneRiceMenu.orden}" />
+
+							<p:outputLabel value="Estado: "
+								style="font-weight:bold; font-size:14px" />
+							<p:selectOneMenu id="slctEstadoMenuEdit" style="padding-right: 1em;"
+								value="#{manageMenu.cloneRiceMenu.estado}">
+								<f:selectItem itemLabel="Activo" itemValue="A" />
+								<f:selectItem itemLabel="Inactivo" itemValue="I" />
+							</p:selectOneMenu>
+
+
+							<p:outputLabel value="Horario desde: "
+								style="font-weight:bold; font-size:14px" />
+							<p:calendar id="timeDesdeEdit"
+								value="#{manageMenu.cloneRiceMenu.open}" pattern="HH:mm"
+								timeOnly="true" />
+
+							<p:outputLabel value="Horario hasta: "
+								style="font-weight:bold; font-size:14px" />
+							<p:calendar id="timeHastaEdit"
+								value="#{manageMenu.cloneRiceMenu.closed}" pattern="HH:mm"
+								timeOnly="true" />
+
+						</p:panelGrid>
+					</div>
+				</p:panel>
+				<p:spacer height="10" />
+				<div align="center">
+					<p:commandButton id="btnEditarMenu"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{manageMenu.editarMenu()}" value="Editar"
+						update=":form">
+					</p:commandButton>
+
+
+					<p:blockUI block=":form" trigger="btnEditarMenu,btnRegresar2" />
+				</div>
+
+			</p:outputPanel>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

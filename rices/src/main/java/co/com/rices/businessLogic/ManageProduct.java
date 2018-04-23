@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +24,7 @@ import co.com.rices.DAO.IUpdateRices;
 import co.com.rices.beans.Usuario;
 import co.com.rices.objects.Product;
 import co.com.rices.objects.ProductStep;
+import co.com.rices.objects.RiceMenu;
 import co.com.rices.objects.StepDetail;
 
 @ManagedBean
@@ -57,6 +59,8 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 	
 	private List<StepDetail>  listStepDetail;
 	
+	private List<SelectItem>  itemMenu;
+ 	
 	private Map<Integer, String> mapProductName;
 
 	@PostConstruct
@@ -68,6 +72,11 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 			this.listadoProducto = IQueryRices.getProductsByParams(null);
 			for(Product p: this.listadoProducto){
 				this.mapProductName.put(p.getId(), p.getName());
+			}
+			List<RiceMenu> riceMenus = IQueryRices.getRiceMenus(null);
+			this.itemMenu = new ArrayList<SelectItem>();
+			for(RiceMenu rm: riceMenus){
+				this.itemMenu.add(new SelectItem(rm.getId(), rm.getDescription()));
 			}
 			FacesContext context = FacesContext.getCurrentInstance();
 			HttpSession sesion = (HttpSession) context.getExternalContext().getSession(true);
@@ -172,6 +181,7 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 					this.productoPersiste.setImageName(this.productoClon.getImageName());
 					this.productoPersiste.setProductType(this.productoClon.getProductType());
 					this.productoPersiste.setPrice(this.productoClon.getPrice());
+					this.productoPersiste.setIdMenu(this.productoClon.getIdMenu());
 					this.showConsulta = true;
 					this.showEditar   = false;
 					this.mostrarMensajeGlobal("productoActualizado", "exito");
@@ -508,6 +518,10 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 
 	public void setProductChain(String productChain) {
 		this.productChain = productChain;
+	}
+
+	public List<SelectItem> getItemMenu() {
+		return itemMenu;
 	}
 
 }

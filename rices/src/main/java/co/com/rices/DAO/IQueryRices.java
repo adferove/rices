@@ -18,6 +18,7 @@ import co.com.rices.objects.Complement;
 import co.com.rices.objects.CouponCode;
 import co.com.rices.objects.Product;
 import co.com.rices.objects.ProductStep;
+import co.com.rices.objects.RiceMenu;
 import co.com.rices.objects.StepDetail;
 
 public interface IQueryRices {
@@ -27,7 +28,7 @@ public interface IQueryRices {
 		try{
 			StringBuilder builder=new StringBuilder();
 			builder.append(" SELECT id, product_name, description, creation_date, state, login_usuario, "); 
-			builder.append("        ranking, image_name, product_type, open, closed, price              "); 
+			builder.append("        ranking, image_name, product_type, open, closed, price, menu        "); 
 			builder.append(" FROM   rices.products                                                      ");
 			builder.append(" WHERE  2018 = 2018                                                         ");
 			Map<Integer, Object> params=new HashMap<Integer,Object>();
@@ -74,6 +75,7 @@ public interface IQueryRices {
 					result.setOpen(rs.getTime("open"));
 					result.setClosed(rs.getTime("closed"));
 					result.setPrice(rs.getBigDecimal("price"));
+					result.setIdMenu(rs.getInt("menu"));
 					results.add(result);
 				}
 			}catch(SQLException sq){
@@ -397,4 +399,109 @@ public interface IQueryRices {
 		return results;
 	}	
 
+	public static List<RiceMenu> getRiceMenus(RiceMenu pRiceMenu)throws Exception{
+		List<RiceMenu> results = new ArrayList<RiceMenu>();
+		Map<Integer, Object> params = new HashMap<Integer,Object>();
+		try{
+			StringBuilder builder=new StringBuilder();
+			builder.append(" SELECT id, description, orden, estado, open, closed ");
+			builder.append(" FROM   rices.rices_menu                             ");
+			builder.append(" WHERE  2045 = 2045                                  ");
+			if(pRiceMenu!=null){
+				int i = 1;
+				if(StringUtils.trimToNull(pRiceMenu.getEstado())!=null){
+					builder.append(" AND  estado = ? ");
+					params.put(i++, pRiceMenu.getEstado());
+				}
+				if(pRiceMenu.getOpen()!=null){
+					builder.append(" AND open <= ? ");
+					params.put(i++, new java.sql.Time(pRiceMenu.getOpen().getTime()));
+				}
+				if(pRiceMenu.getClosed()!=null){
+					builder.append(" AND closed >= ? ");
+					params.put(i++, new java.sql.Time(pRiceMenu.getClosed().getTime()));
+				}
+			}
+			builder.append(" ORDER BY orden ");
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				for(int i: params.keySet()){
+					cs.setObject(i, params.get(i));
+				}
+				rs = cs.executeQuery();
+				while(rs.next()){
+					RiceMenu riceMenu = new RiceMenu();
+					riceMenu.setId(rs.getInt("id"));
+					riceMenu.setDescription(rs.getString("description"));
+					riceMenu.setOrden(rs.getInt("orden"));
+					riceMenu.setEstado(rs.getString("estado"));
+					riceMenu.setOpen(rs.getTime("open"));
+					riceMenu.setClosed(rs.getTime("closed"));
+					results.add(riceMenu);
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return results;
+	}
+	
+	public static List<Product> getProductsByMenu(Integer pMenu)  throws Exception{
+		List<Product> results=new ArrayList<Product>();
+		try{
+			StringBuilder builder=new StringBuilder();
+			builder.append(" SELECT id, product_name, description, "); 
+			builder.append("        ranking, image_name, price     "); 
+			builder.append(" FROM   rices.products                 ");
+			builder.append(" WHERE  2018         = 2018            ");
+			builder.append(" AND    open        <= ?               ");
+			builder.append(" AND    closed      >= ?               ");
+			builder.append(" AND    state        = ?               ");
+			builder.append(" AND    product_type = ?               ");
+			builder.append(" AND    menu         = ?               ");
+
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setObject(1, new java.sql.Time(Calendar.getInstance().getTime().getTime()));
+				cs.setObject(2, new java.sql.Time(Calendar.getInstance().getTime().getTime()));
+				cs.setObject(3, "A");
+				cs.setObject(4, "P");
+				cs.setInt(5, pMenu);
+				rs = cs.executeQuery();
+				while(rs.next()){
+					Product result = new Product();
+					result.setId(rs.getInt("id"));
+					result.setName(rs.getString("product_name"));
+					result.setDescription(rs.getString("description"));
+					result.setRanking(rs.getInt("ranking"));
+					result.setImageName(rs.getString("image_name"));
+					result.setPrice(rs.getBigDecimal("price"));
+					results.add(result);
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return results;
+	}
 }
