@@ -257,6 +257,10 @@
 												style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
 												action="#{armarPedido.addProductToOrder()}"
 												update=":form:productDetail, form:tb, :form:idStcky,:form:msj" />
+											<div style="height: 5px; width: 5px;"></div>
+											<p:commandButton value="Cancelar"
+												style="background-image: none; color: #fff; background-color: #FF0000; border-color: #FF0000; font-weight: normal;"
+												action="#{armarPedido.cancelarProducto()}" update=":form" />
 										</div>
 									</p:outputPanel>
 								</p:tab>

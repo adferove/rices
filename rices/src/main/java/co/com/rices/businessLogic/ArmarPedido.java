@@ -351,6 +351,10 @@ public class ArmarPedido extends ConsultarFuncionesAPI{
 			IConstants.log.error(e.toString(),e);
 		}
 	}
+	
+	public void cancelarProducto(){
+		this.showRiceMenu = true;
+	}
 
 	public boolean isShowSeleccionarProducto() {
 		return showSeleccionarProducto;
