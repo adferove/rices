@@ -117,39 +117,148 @@
 
 							<p:panel id="pnlTuBox" rendered="#{armarPedido.tabActual==1}">
 								<p:tab id="tabTuBox" title="Tu box">
-									<p:repeat value="#{armarPedido.listaRiceMenu}" var="riceMenu">
-										<p:outputPanel>
-											<h:outputText value="#{riceMenu.description}"
-												style="font-weight: bold; color:#c7578f;" />
-											<p:spacer width="10" />
+									<p:outputPanel rendered="#{armarPedido.showRiceMenu}">
+										<p:repeat value="#{armarPedido.listaRiceMenu}" var="riceMenu">
+											<p:outputPanel>
+												<h:outputText value="#{riceMenu.description}"
+													style="font-weight: bold; color:#c7578f;" />
+												<p:spacer width="10" />
 
-											<p:dataGrid var="producto" value="#{riceMenu.listProducts}"
-												columns="3" layout="grid" rows="12" id="prods">
-												<div align="center">
-													<p:panelGrid columns="1" columnClasses="logo,detail"
-														styleClass="ui-panelgrid-blank">
-														<p:commandLink update=":form"
-															actionListener="#{armarPedido.seleccionarComplemento(producto)}">
-															<p:graphicImage
-																name="demo/images/#{producto.imageName}.png" />
-														</p:commandLink>
-														<p:outputPanel>
-															<p:panelGrid columns="1" cellpadding="5">
-																<h:outputText value="#{producto.name}"
-																	style="font-weight: bold; color:#c7578f; font-size:12px;" />
-																<h:outputText value="$#{producto.price}"
-																	style="font-weight: bold; font-size:12px;" />
-																<h:outputText value="" style="font-size:12px;" />
-																<p:rating value="#{producto.ranking}" readonly="true" />
-															</p:panelGrid>
-														</p:outputPanel>
-													</p:panelGrid>
-												</div>
+												<p:dataGrid var="producto" value="#{riceMenu.listProducts}"
+													columns="3" layout="grid" rows="12" id="prods">
+													<div align="center">
+														<p:panelGrid columns="1" columnClasses="logo,detail"
+															styleClass="ui-panelgrid-blank">
+															<p:commandLink update=":form"
+																actionListener="#{armarPedido.seleccionarComplemento(producto)}">
+																<p:graphicImage
+																	name="demo/images/#{producto.imageName}.png" />
+															</p:commandLink>
+															<p:outputPanel>
+																<p:panelGrid columns="1" cellpadding="5">
+																	<h:outputText value="#{producto.name}"
+																		style="font-weight: bold; color:#c7578f; font-size:12px;" />
+																	<h:outputText value="$#{producto.price}"
+																		style="font-weight: bold; font-size:12px;" />
+																	<h:outputText value="" style="font-size:12px;" />
+																	<p:rating value="#{producto.ranking}" readonly="true" />
+																</p:panelGrid>
+															</p:outputPanel>
+														</p:panelGrid>
+													</div>
 
-											</p:dataGrid>
+												</p:dataGrid>
+											</p:outputPanel>
+										</p:repeat>
+									</p:outputPanel>
+									<p:outputPanel id="productDetail"
+										rendered="#{!armarPedido.showRiceMenu}">
+										<div align="left">
+											<p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
+												<p:graphicImage
+													name="demo/images/#{armarPedido.mainProductSelected.imageName}_grande.png" />
+												<p:spacer width="10" />
+												<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
 
-										</p:outputPanel>
-									</p:repeat>
+													<h:outputText
+														value="#{armarPedido.mainProductSelected.name}"
+														style="font-weight: bold; color:#c7578f;" />
+
+													<h:outputText
+														value="#{armarPedido.mainProductSelected.description}"
+														style="font-weight: normal; font-size:12px;" />
+
+													<h:outputText
+														value="$#{armarPedido.mainProductSelected.price}"
+														style="font-weight: bold" />
+
+													<p:rating
+														value="#{armarPedido.mainProductSelected.ranking}"
+														readonly="true" />
+												</p:panelGrid>
+											</p:panelGrid>
+										</div>
+										<div style="height: 10px"></div>
+										<div align="left">
+											<p:repeat
+												value="#{armarPedido.mainProductSelected.listProductStep}"
+												var="step">
+												<p:outputPanel>
+													<h:outputText value="#{step.description}"
+														style="font-weight: bold; color:#c7578f;" />
+													<p:spacer width="10" />
+													<h:outputText rendered="#{step.selectType.equals('U')}"
+														value="Elige una #{mensaje.opcion}"
+														style="font-size:10px; font-weight: bold; color:#bdbdbd;" />
+													<h:outputText rendered="#{step.selectType.equals('M')}"
+														value="Puedes elegir #{mensaje.mas} de una #{mensaje.opcion}"
+														style="font-size:10px; font-weight: bold; color:#bdbdbd;" />
+													<div align="center">
+														<p:dataTable id="idSelectMultiple" var="det"
+															value="#{step.listStepDetail}"
+															styleClass="ui-datatable-blank">
+															<p:column width="10%"
+																style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
+																<div align="right">
+																	<p:selectBooleanCheckbox value="#{det.checked}">
+																		<p:ajax update="idSelectMultiple,form:idAddSubtotal"
+																			listener="#{armarPedido.seleccionUnicaListener(det)}" />
+																	</p:selectBooleanCheckbox>
+																</div>
+															</p:column>
+															<p:column width="20%"
+																style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
+																<div align="left">
+																	<h:outputText value="#{det.transientProduct.name}"
+																		style="font-size:9px;" />
+																</div>
+															</p:column>
+															<p:column width="20%"
+																style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
+																<div align="right">
+																	<h:outputText value="$ #{det.price}"
+																		style="font-size:9px;" />
+																</div>
+															</p:column>
+														</p:dataTable>
+													</div>
+												</p:outputPanel>
+												<hr />
+											</p:repeat>
+										</div>
+										<div style="height: 10px"></div>
+										<div align="center">
+											<p:panelGrid columns="5" styleClass="ui-panelgrid-blank">
+												<p:commandButton icon="fa fa-minus-circle"
+													style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
+													action="#{armarPedido.restarSumarCantidad(0)}"
+													update="productDetail" />
+												<p:spacer width="10" />
+												<p:outputLabel value="#{armarPedido.detallePedido.cantidad}" />
+												<p:spacer width="10" />
+												<p:commandButton icon="fa fa-plus-circle"
+													style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
+													action="#{armarPedido.restarSumarCantidad(1)}"
+													update="productDetail" />
+											</p:panelGrid>
+										</div>
+										<div style="height: 10px"></div>
+										<div align="center">
+											<p:panelGrid id="idAddSubtotal" columns="2"
+												styleClass="ui-panelgrid-blank">
+												<h:outputText value="Subtotal:" />
+												<h:outputText value="$#{armarPedido.detallePedido.precio}"
+													style="font-weight: bold" />
+											</p:panelGrid>
+										</div>
+										<div style="height: 10px"></div>
+										<div align="center">
+											<p:commandButton value="Agregar a la orden"
+												style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
+												action="#{armarPedido.addProductToOrder()}"
+												update=":form:productDetail, form:tb, :form:idStcky,:form:msj" />
+										</div>
+									</p:outputPanel>
 								</p:tab>
 							</p:panel>
 						</div>
