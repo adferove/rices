@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import co.com.rices.DAO.IQueryRices;
 import co.com.rices.DAO.IUpdateRices;
 import co.com.rices.beans.DetallePedido;
 import co.com.rices.beans.Pedido;
+import co.com.rices.objects.City;
 import co.com.rices.objects.Complement;
 import co.com.rices.objects.CouponCode;
 import co.com.rices.objects.Product;
@@ -56,10 +58,16 @@ public class ArmarPedido extends ConsultarFuncionesAPI{
 	private List<RiceMenu> listaRiceMenu;
 			
 	private List<DetallePedido> listadoDetallePedido;
+	
+	private List<City> listCities;
 		
+	@SuppressWarnings("unchecked")
 	@PostConstruct
 	public void init(){
 		try{
+			this.mostraMensajeError      = "display:none;";
+			FacesContext context = FacesContext.getCurrentInstance();
+			HttpSession sesion = (HttpSession) context.getExternalContext().getSession(true);
 			this.showSeleccionarProducto = true;
 			this.showRiceMenu            = true;
 			this.tabActual               = 0;
@@ -69,27 +77,59 @@ public class ArmarPedido extends ConsultarFuncionesAPI{
 			this.pedidoPersiste.setIva(new BigDecimal(0));
 			this.pedidoPersiste.setTotal(new BigDecimal(0));
 			this.pedidoPersiste.setEstado("R");
-			RiceMenu pRiceMenu = new RiceMenu();
-			pRiceMenu.setEstado("A");
-			pRiceMenu.setOpen(Calendar.getInstance().getTime());
-			pRiceMenu.setClosed(Calendar.getInstance().getTime());
-			this.listaRiceMenu = IQueryRices.getRiceMenus(pRiceMenu);
-			for(RiceMenu rm: this.listaRiceMenu){
-				rm.setListProducts(IQueryRices.getProductsByMenu(rm.getId()));
-				for(Product p: rm.getListProducts()){
-					p.setListProductStep(IQueryRices.getProductStepsByProductId(p.getId(), true));
-					for(ProductStep s: p.getListProductStep()){
-						s.setTransientMainPoduct(p);
-						s.setListStepDetail(IQueryRices.getDetailsByProductStepId(s.getId(), true));
-						for(StepDetail d: s.getListStepDetail()){
-							d.setTransientProducStep(s);
-							d.setTransientProduct(new Product());
-							d.getTransientProduct().setId(d.getSelectedProductId());
-							d.getTransientProduct().setName(IQueryRices.getProductNameById(d.getSelectedProductId()));
+			//PRODUCTOS OFRECIDOS POR RICES
+			if(sesion.getAttribute("RicesListProducts")==null){
+				RiceMenu pRiceMenu = new RiceMenu();
+				pRiceMenu.setEstado("A");
+				pRiceMenu.setOpen(Calendar.getInstance().getTime());
+				pRiceMenu.setClosed(Calendar.getInstance().getTime());
+				this.listaRiceMenu = IQueryRices.getRiceMenus(pRiceMenu);
+				for(RiceMenu rm: this.listaRiceMenu){
+					rm.setListProducts(IQueryRices.getProductsByMenu(rm.getId()));
+					for(Product p: rm.getListProducts()){
+						p.setListProductStep(IQueryRices.getProductStepsByProductId(p.getId(), true));
+						for(ProductStep s: p.getListProductStep()){
+							s.setTransientMainPoduct(p);
+							s.setListStepDetail(IQueryRices.getDetailsByProductStepId(s.getId(), true));
+							for(StepDetail d: s.getListStepDetail()){
+								d.setTransientProducStep(s);
+								d.setTransientProduct(new Product());
+								d.getTransientProduct().setId(d.getSelectedProductId());
+								d.getTransientProduct().setName(IQueryRices.getProductNameById(d.getSelectedProductId()));
+							}
 						}
-					}
-				}	
+					}	
+				}
+				sesion.setAttribute("RicesListProducts", this.listaRiceMenu);
+			}else{
+				this.listaRiceMenu = (List<RiceMenu>) sesion.getAttribute("RicesListProducts");
 			}
+			
+			this.detallePedido = new DetallePedido();
+
+
+			//PRODUCTOS EN EL CARRITO
+			if(sesion.getAttribute("RiceProductInCart")==null){
+				this.listadoDetallePedido = new ArrayList<DetallePedido>();
+				sesion.setAttribute("RiceProductInCart", this.listadoDetallePedido);
+			}else{
+				this.listadoDetallePedido = (List<DetallePedido>) sesion.getAttribute("RiceProductInCart");
+				for(DetallePedido dp: this.listadoDetallePedido){
+					this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().add(dp.getPrecio()));
+					this.pedidoPersiste.setSubtotal(this.pedidoPersiste.getSubtotal().add(dp.getPrecio()));
+				}
+			}
+			
+			if(sesion.getAttribute("RiceCities")==null){
+				sesion.setAttribute("RiceCities", IQueryRices.getCities());
+			}
+			
+			this.listCities = (List<City>) sesion.getAttribute("RiceCities");
+			this.mapCity = new HashMap<Integer,String>();
+			for(City c: this.listCities){
+				this.mapCity.put(c.getId(), c.getName());
+			}
+
 		}catch(Exception e){
 			IConstants.log.error(e.toString(),e);
 		}
@@ -171,7 +211,7 @@ public class ArmarPedido extends ConsultarFuncionesAPI{
 			this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().add(dp.getPrecio()));
 			this.pedidoPersiste.setSubtotal(this.pedidoPersiste.getSubtotal().add(dp.getPrecio()));
 		}
-		this.cerrarModal("mdlSelectComplement");
+		this.showRiceMenu = true;
 	}
 
 	public void restarSumarCantidad(int pValor){
@@ -422,6 +462,10 @@ public class ArmarPedido extends ConsultarFuncionesAPI{
 
 	public List<DetallePedido> getListadoDetallePedido() {
 		return listadoDetallePedido;
+	}
+
+	public List<City> getListCities() {
+		return listCities;
 	}
 
 }
