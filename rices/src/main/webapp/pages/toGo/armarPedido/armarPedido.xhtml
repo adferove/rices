@@ -335,7 +335,8 @@
 												<p:commandButton id="btnAplicar" icon="fa fa-money"
 													style="background-image: none; color: #fff; background-color: #337ab7; border-color: #2e6da4; font-weight: normal;"
 													action="#{armarPedido.aplicarCupon()}"
-													value="Aplicar #{mensaje.Cupon}" update=":form:tbCupon, form:tb">
+													value="Aplicar #{mensaje.Cupon}"
+													update=":form:tbCupon, form:tb">
 												</p:commandButton>
 												<p:blockUI block=":form" trigger="btnAplicar" />
 											</p:panelGrid>
@@ -343,6 +344,9 @@
 									</p:accordionPanel>
 
 									<div style="height: 20px"></div>
+
+
+
 									<div align="center">
 										<p:commandButton id="btnConfimar"
 											style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
@@ -350,8 +354,17 @@
 											value="Confirmar pedido" update=":form"
 											icon="fa fa-motorcycle">
 										</p:commandButton>
-										<p:blockUI block=":form" trigger="btnConfimar" />
+
+										<p:commandButton id="btnCheckOutCO" icon="fa fa-arrow-left"
+											style="background-image: none; color: #fff; background-color: #d9534f; border-color: #d43f3a; font-weight: normal; margin-top:10px; margin-left:10px;"
+											action="#{armarPedido.regresarSeleccionProducto()}"
+											value="Regresar" update=":form">
+										</p:commandButton>
 									</div>
+
+
+
+									<p:blockUI block=":form" trigger="btnConfimar,btnCheckOutCO" />
 								</p:tab>
 							</p:panel>
 
@@ -389,7 +402,8 @@
 									</div>
 								</p:tab>
 							</p:accordionPanel>
-							<p:accordionPanel id="tbDetail">
+							<p:accordionPanel id="tbDetail"
+								rendered="#{armarPedido.tabActual==0 || armarPedido.tabActual==1}">
 								<p:tab title="Detalle de tu pedido">
 									<div align="left" style="padding: 0;">
 										<p:repeat value="#{armarPedido.listadoDetallePedido}"
@@ -483,7 +497,8 @@
 								</p:tab>
 							</p:accordionPanel>
 
-							<p:accordionPanel id="tbDetailCO">
+							<p:accordionPanel id="tbDetailCO"
+								rendered="#{armarPedido.tabActual==2}">
 								<p:tab title="Detalle de tu pedido">
 									<div align="left" style="padding: 0;">
 										<p:repeat value="#{armarPedido.listadoDetallePedido}"

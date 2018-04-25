@@ -278,8 +278,7 @@ public class ArmarPedido extends ConsultarFuncionesAPI{
 	}
 
 	public void regresarSeleccionProducto(){
-		this.showSeleccionarProducto = true;
-		this.showCheckout            = false;
+		this.tabActual = 1;
 	}
 
 	public void aplicarCupon(){
