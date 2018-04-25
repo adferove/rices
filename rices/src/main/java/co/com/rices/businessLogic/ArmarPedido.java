@@ -271,8 +271,7 @@ public class ArmarPedido extends ConsultarFuncionesAPI{
 
 	public void validarProductoSeleccionado(){
 		if(this.listadoDetallePedido.size()>0){
-			this.showSeleccionarProducto = false;
-			this.showCheckout            = true;
+			this.tabActual = 2;
 		}else{
 			this.mostrarMensajeGlobal("seleccioneUnProducto", "advertencia");
 		}
