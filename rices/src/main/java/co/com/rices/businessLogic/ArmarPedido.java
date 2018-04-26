@@ -379,8 +379,8 @@ public class ArmarPedido extends ConsultarFuncionesAPI{
 					FacesContext context = FacesContext.getCurrentInstance();
 					HttpSession sesion = (HttpSession) context.getExternalContext().getSession(true);
 					sesion.removeAttribute("RiceProductInCart");
-					this.showCheckout         = false;
-					this.showPedidoRegistrado = true;
+					this.showSeleccionarProducto = false;
+					this.showPedidoRegistrado    = true;
 				}else{
 					this.mostrarMensajeGlobal("noRegistraDetalle", "advertencia");
 				}
