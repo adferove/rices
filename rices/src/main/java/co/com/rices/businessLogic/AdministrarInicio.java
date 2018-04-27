@@ -126,6 +126,7 @@ public class AdministrarInicio extends ConsultarFuncionesAPI{
 							String[] val = {this.clientePersiste.getNombre(), code};
 							String[] sDestinatario = {pEmail};
 							EmailSender.sendEmail(this.getMensaje("asunto"), this.getMensajeParametros("cuerpo", val), this.getMensaje("footer"), sDestinatario);
+							this.clientePersiste = new Cliente();
 						}
 					}
 				}
