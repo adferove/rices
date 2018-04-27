@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/principal.xhtml">
+
+	<ui:define name="body">
+		<h:form id="form">
+			<p:messages id="msj" showDetail="true" closable="true" />
+			<div id="timeline-post">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="heading-section">
+								<h2>Regístrate y obtén un 10% de descuento</h2>
+								<img src="images/under-heading.png" alt="" />
+							</div>
+						</div>
+					</div>
+					<div style="height: 20px;"></div>
+
+					<div class="container">
+						<div class="row">
+							<div class="col-md-12">
+
+								<div align="center" class="logo">
+									<p:panelGrid id="datoCheckout" columns="1"
+										styleClass="ui-panelgrid-blank">
+
+										<h:outputText value="E-Mail"
+											style="font-weight:bold; color:#c7578f; font-size:14px; font-family:Verdana;" />
+										<p:inputText id="idEmail" style="font-size:14px; font-family:Verdana;" size="50"
+											maxlength="50"
+											value="#{administrarInicio.clientePersiste.email}" />
+										<p:watermark for="idEmail" value="e-mail" id="watermarkEmail" />
+
+										<h:outputText value="Nombre"
+											style="font-weight:bold; color:#c7578f; font-size:14px; font-family:Verdana;" />
+										<p:inputText id="idNombre" style="font-size:14px; font-family:Verdana;" size="50"
+											maxlength="50"
+											value="#{administrarInicio.clientePersiste.nombre}" />
+										<p:watermark for="idNombre" value="Nombre"
+											id="watermarkNombre" />
+
+										<h:outputText value="#{mensaje.Direccion}"
+											style="font-weight:bold; color:#c7578f; font-size:14px; font-family:Verdana;" />
+										<p:inputText id="idDireccion" style="font-size:14px; font-family:Verdana;"
+											size="50" maxlength="50"
+											value="#{administrarInicio.clientePersiste.direccion}" />
+										<p:watermark for="idDireccion" value="#{mensaje.Direccion}"
+											id="watermarkDireccion" />
+
+										<h:outputText value="#{mensaje.Telefono}/Celular"
+											style="font-weight:bold; color:#c7578f; font-size:14px; font-family:Verdana;" />
+										<p:inputText id="idCelular" style="font-size:14px; font-family:Verdana;" size="50"
+											maxlength="50"
+											value="#{administrarInicio.clientePersiste.celular}" />
+										<p:watermark for="idCelular"
+											value="#{mensaje.Telefono}/Celular" id="watermarkCelular" />
+
+									</p:panelGrid>
+
+									<div align="center">
+										<p:commandButton id="btnConfimar"
+											style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
+											action="#{administrarInicio.registrarCliente()}"
+											value="Registrarse" update=":form" icon="fa fa-sign-in">
+										</p:commandButton>
+										<p:blockUI block=":form" trigger="btnConfimar" />
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
