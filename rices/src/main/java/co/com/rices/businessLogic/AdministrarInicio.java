@@ -6,6 +6,11 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.primefaces.model.map.DefaultMapModel;
+import org.primefaces.model.map.LatLng;
+import org.primefaces.model.map.MapModel;
+import org.primefaces.model.map.Marker;
+
 import co.com.rices.ConsultarFuncionesAPI;
 import co.com.rices.IConstants;
 import co.com.rices.DAO.IActualizaRices;
@@ -27,10 +32,14 @@ public class AdministrarInicio extends ConsultarFuncionesAPI{
 	private Cliente clientePersiste;
 	private String  email;
 	private boolean aceptaTerminos;
+	
+	private MapModel simpleModel;
 		
 	@PostConstruct
 	public void init(){
-		
+		this.simpleModel = new DefaultMapModel();
+		LatLng coord1 = new LatLng(7.1191141, -73.111472);
+		this.simpleModel.addOverlay(new Marker(coord1, "Rices Bucaramanga", null,"http://ricestogo.com/rices/images/logo.png"));
 	}
 
 	public void mostrarModalDescuento(){
@@ -171,6 +180,10 @@ public class AdministrarInicio extends ConsultarFuncionesAPI{
 
 	public void setAceptaTerminos(boolean aceptaTerminos) {
 		this.aceptaTerminos = aceptaTerminos;
+	}
+
+	public MapModel getSimpleModel() {
+		return simpleModel;
 	}
 	
 }

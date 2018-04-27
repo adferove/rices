@@ -9,6 +9,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 public class RicesTools {
 
@@ -119,6 +122,15 @@ public class RicesTools {
 		for( int i = 0; i < len; i++ ) 
 			sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
 		return sb.toString();
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static String getPath(String aPosibleRuta) {
+		String path = "";
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
+		path = request.getRealPath(aPosibleRuta);
+		return path;
 	}
 
 }

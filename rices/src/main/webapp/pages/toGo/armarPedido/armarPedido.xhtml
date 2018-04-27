@@ -627,56 +627,52 @@
 										<p:tab title="Tus datos"
 											titleStyle="font-size:18px; color:#c7578f; font-weight:bold; font-family:Verdana;">
 
-											<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
-												<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
-													<div align="left">
 
-														<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+											<div align="center">
 
-															<p:outputLabel value="Cliente:"
-																style="font-size:18px; color:#c7578f; font-weight:bold; font-family:Verdana;" />
+												<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
 
-															<p:outputLabel
-																style="font-size:18px;  font-weight:bold;  font-family:Verdana;"
-																value="#{armarPedido.pedidoPersiste.nombreCliente}" />
+													<p:outputLabel value="Cliente:"
+														style="font-size:18px; color:#c7578f; font-weight:bold; font-family:Verdana;" />
 
-
-															<p:outputLabel value="#{mensaje.Direccion}:"
-																style="font-size:18px; color:#c7578f;  font-weight:bold;  font-family:Verdana;" />
-
-															<p:outputLabel
-																style="font-size:18px;  font-weight:bold;  font-family:Verdana;"
-																value="#{armarPedido.pedidoPersiste.direccionCliente}" />
+													<p:outputLabel
+														style="font-size:18px;  font-weight:bold;  font-family:Verdana;  margin-left:10px;"
+														value="#{armarPedido.pedidoPersiste.nombreCliente}" />
 
 
-															<p:outputLabel value="Municipio:"
-																style="font-size:18px; color:#c7578f;  font-weight:bold;  font-family:Verdana;" />
+													<p:outputLabel value="#{mensaje.Direccion}:"
+														style="font-size:18px; color:#c7578f;  font-weight:bold;  font-family:Verdana;" />
 
-															<p:outputLabel
-																style="font-size:18px;  font-weight:bold;  font-family:Verdana;"
-																value="#{armarPedido.pedidoPersiste.cityName}" />
-
-
-															<p:outputLabel value="#{mensaje.Telefono}/Celular: "
-																style="font-size:18px; color:#c7578f;  font-weight:bold;  font-family:Verdana;" />
-
-															<p:outputLabel
-																style="font-size:18px;  font-weight:bold;  font-family:Verdana;"
-																value="#{armarPedido.pedidoPersiste.celularCliente}" />
+													<p:outputLabel
+														style="font-size:18px;  font-weight:bold;  font-family:Verdana;  margin-left:10px;  "
+														value="#{armarPedido.pedidoPersiste.direccionCliente}" />
 
 
-														</p:panelGrid>
-													</div>
-												</p:panelGrid>
-												<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
-													<div align="center">
-														<div class="icon">
-															<i class="fa fa-phone"></i>
-														</div>
-													</div>
+													<p:outputLabel value="Municipio:"
+														style="font-size:18px; color:#c7578f;  font-weight:bold;  font-family:Verdana;" />
+
+													<p:outputLabel
+														style="font-size:18px;  font-weight:bold;  font-family:Verdana;  margin-left:10px;"
+														value="#{armarPedido.pedidoPersiste.cityName}" />
+
+
+													<p:outputLabel value="#{mensaje.Telefono}/Celular: "
+														style="font-size:18px; color:#c7578f;  font-weight:bold;  font-family:Verdana;" />
+
+													<p:outputLabel
+														style="font-size:18px;  font-weight:bold;  font-family:Verdana; margin-left:10px;"
+														value="#{armarPedido.pedidoPersiste.celularCliente}" />
+
+
 												</p:panelGrid>
 
-											</p:panelGrid>
+
+
+											</div>
+
+
+
+
 											<div style="height: 20px"></div>
 											<div align="center">
 												<p:commandButton id="btnSalir"

@@ -62,6 +62,8 @@
 						<ul>
 							<li><a href="/rices/">Inicio</a></li>
 
+							<li><a href="/rices/aboutUs.jsf">Nosotros</a></li>
+
 							<li><a href="/rices/">#{mensaje.Menu}</a>
 								<ul>
 									<li><a href="/rices/">Noon</a></li>
@@ -70,7 +72,7 @@
 
 							<li><a href="/rices/pages/toGo/armarPedido/armarPedido.jsf">Arma
 									tu pedido</a></li>
-							<li><a href="/rices/aboutUs.jsf">Nosotros</a></li>
+
 
 						</ul>
 					</div>
@@ -90,32 +92,6 @@
 	<div class="container">
 		<div class="top-footer">
 			<div class="row">
-				<div class="col-md-9">
-					<div style="height: 20px;"></div>
-					<h:form id="formSubscribe">
-						<p:messages id="messagesSubscribe" showDetail="true"
-							closable="true" />
-						<p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
-							<p:outputLabel value="#{mensaje.suscribeteNewsletter}" />
-							<p:inputText value="#{administrarInicio.email}"
-								style="text-transform:lowercase;" maxlength="50" />
-							<p:commandButton id="btnConfimar"
-								style="font-size:14px; font-weight: normal !important;"
-								action="#{administrarInicio.suscribirse()}" value="Suscribirse"
-								update="formSubscribe" icon="fa fa-send">
-							</p:commandButton>
-							<p:spacer />
-							<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
-								<p:outputLabel value="#{mensaje.AceptoTerminos}:" />
-								<p:selectBooleanButton id="value1"
-									value="#{administrarInicio.aceptaTerminos}" onLabel="Si"
-									offLabel="No" style="width:60px" onIcon="fa fa-check"
-									offIcon="fa fa-close" />
-							</p:panelGrid>
-						</p:panelGrid>
-					</h:form>
-
-				</div>
 				<div class="col-md-3">
 					<div class="social-bottom">
 						<span>#{mensaje.Siguenos}:</span>
@@ -127,77 +103,38 @@
 						</ul>
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="main-footer">
-			<div class="row">
-				<div class="col-md-3">
-					<div class="about">
-						<h4 class="footer-title">Sobre rices</h4>
-						<p>
-							#{mensaje.msjSobreRices}. <br /> <br />#{mensaje.msjSobreRices2}<br />#{mensaje.msjSobreRices3}
-						</p>
-					</div>
-				</div>
-				<div class="col-md-3">
-					<div class="shop-list">
-						<h4 class="footer-title">#{mensaje.Categorias}</h4>
-						<ul>
-							<li><a href="#"><i class="fa fa-angle-right"></i>Combo
-									Rices</a></li>
-							<li><a href="#"><i class="fa fa-angle-right"></i>Combo
-									especial</a></li>
-							<li><a href="#"><i class="fa fa-angle-right"></i>Chorizos
-									del valle de San #{mensaje.Jose}</a></li>
-							<li><a href="#"><i class="fa fa-angle-right"></i>Jugos
-									saludables</a></li>
-							<li><a href="#"><i class="fa fa-angle-right"></i>Nuestros
-									containers para comida</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-md-3">
-					<div class="recent-posts">
-						<h4 class="footer-title">Publicaciones recientes</h4>
-						<div class="recent-post">
-							<div class="recent-post-thumb">
-								<img src="/rices/images/combo_rices.gif" alt="" />
-							</div>
-							<div class="recent-post-info">
-								<h6>
-									<a href="#">Delicioso y saludable arroz</a>
-								</h6>
-								<span>24/02/2018</span>
-							</div>
-						</div>
-						<div class="recent-post">
-							<div class="recent-post-thumb">
-								<img src="/rices/images/combo_mix.gif" alt="" />
-							</div>
-							<div class="recent-post-info">
-								<h6>
-									<a href="#">Comidas sencillas y efectivas</a>
-								</h6>
-								<span>18/02/2018</span>
-							</div>
-						</div>
-					</div>
-				</div>
+
 				<div class="col-md-3">
 					<div class="more-info">
 						<h4 class="footer-title">#{mensaje.Mas}
 							#{mensaje.informacion}</h4>
+						<ul>
+							<li><a href="#"><i></i>Contáctanos</a></li>
+							<li><a href="#"><i></i>Tratamiento y protección de
+									datos personales</a></li>
+							<li><a href="#"><i></i>Política de privacidad</a></li>
+							<li><a href="#"><i></i>Mapa del sitio</a></li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="col-md-3">
+					<div class="more-info">
+						<h4 class="footer-title"></h4>
 						<p>#{mensaje.msjMasInfo}</p>
 						<ul>
 							<li><i class="fa fa-phone"></i>3016912772</li>
-							<li><i class="fa fa-globe"></i>Calle 14 Kra 27, San Alonso,
-								Bucaramanga, Santander</li>
+							<li><i class="fa fa-globe"></i>Cabecera, Bucaramanga,
+								Santander</li>
 							<li><i class="fa fa-envelope"></i><a href="#">info@ricestogo.com</a></li>
 						</ul>
 					</div>
 				</div>
+
+
 			</div>
 		</div>
+
 		<div class="bottom-footer">
 			<p>
 				Copyright © 2018 <a href="#">Rices</a>
@@ -205,6 +142,7 @@
 		</div>
 
 	</div>
+
 	</footer>
 
 

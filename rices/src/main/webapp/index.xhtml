@@ -46,100 +46,31 @@
 						<div class="col-md-4 col-sm-6">
 							<div class="service-item">
 								<div class="icon">
-									<i class="fa fa-pencil"></i>
+									<i class="fa fa-mouse-pointer"></i>
 								</div>
-								<h4>Seleccionas tu box</h4>
-								<p></p>
+								<h4>Arma tu pedido</h4>
+								<p>Selecciona tu box, acompañantes y bebidas e indicanos a
+									donde llevamos tu orden</p>
 							</div>
 						</div>
 						<div class="col-md-4 col-sm-6">
 							<div class="service-item">
 								<div class="icon">
-									<i class="fa fa-phone"></i>
+									<i class="fa fa-check"></i>
 								</div>
-								<h4>Te llamamos para confirmar</h4>
-								<p></p>
+								<h4>Confirmación del pedido</h4>
+								<p>Te llamamos para confirmar tu pedido</p>
 							</div>
 						</div>
 						<div class="col-md-4 col-sm-6">
 							<div class="service-item">
 								<div class="icon">
-									<i class="fa fa-motorcycle"></i>
+									<i class="fa fa-smile-o"></i>
 								</div>
-								<h4>Listo!!! tienes tu box</h4>
-								<p></p>
+								<h4>Disfruta tu orden!</h4>
+								<p>Preparate para probar las delicias de Rices!</p>
 							</div>
 						</div>
-					</div>
-				</div>
-			</div>
-
-			<div id="latest-blog">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-12">
-							<div class="heading-section">
-								<h2>Nuestros productos</h2>
-
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-4 col-sm-6">
-							<div class="blog-post">
-								<div class="blog-thumb">
-									<img src="images/blogpost1.jpg" alt="" />
-								</div>
-								<div class="blog-content">
-									<div class="content-show">
-										<h4>
-											<a href="single-post.html">Box supreme</a>
-										</h4>
-										<span>Arroz mixto</span>
-									</div>
-									<div class="content-hide">
-										<p></p>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 col-sm-6">
-							<div class="blog-post">
-								<div class="blog-thumb">
-									<img src="images/blogpost2.jpg" alt="" />
-								</div>
-								<div class="blog-content">
-									<div class="content-show">
-										<h4>
-											<a href="single-post.html">Box San Jose</a>
-										</h4>
-										<span>Chorizos del valle</span>
-									</div>
-									<div class="content-hide">
-										<p></p>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 col-sm-6">
-							<div class="blog-post">
-								<div class="blog-thumb">
-									<img src="images/blogpost3.jpg" alt="" />
-								</div>
-								<div class="blog-content">
-									<div class="content-show">
-										<h4>
-											<a href="single-post.html">Box Wings</a>
-										</h4>
-										<span>Alitas picantes</span>
-									</div>
-									<div class="content-hide">
-										<p></p>
-									</div>
-								</div>
-							</div>
-						</div>
-
 					</div>
 				</div>
 			</div>
@@ -199,8 +130,9 @@
 				</div>
 			</div>
 			<!-- Start Map section -->
-			<p:gmap center="7.1182289, -73.1180726" zoom="14" type="ROADMAP"
-				style="width:100%;height:400px" />
+			<p:gmap center="7.1182289, -73.1180726" zoom="15" type="ROADMAP"
+				style="width:100%;height:400px"
+				model="#{administrarInicio.simpleModel}" />
 			<!-- End Map section -->
 
 			<p:dialog id="mdlDescuento" widgetVar="mdlDescuento" modal="true"
