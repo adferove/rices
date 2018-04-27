@@ -1,9 +1,17 @@
 package co.com.rices.objects;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -24,6 +32,7 @@ public class Product implements Serializable{
 	private Date    closed;
 	private BigDecimal price;
 	private Integer idMenu;
+	private byte[]  image;
 
 	private List<ProductStep> listProductStep;
 
@@ -111,6 +120,25 @@ public class Product implements Serializable{
 	}
 	public void setIdMenu(Integer idMenu) {
 		this.idMenu = idMenu;
+	}
+	public byte[] getImage() {
+		if(this.image==null){
+			try {
+				BufferedImage originalImage = ImageIO.read(new File("/etc/images/out.png"));
+				// convert BufferedImage to byte array
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ImageIO.write(originalImage, "png", baos);
+				baos.flush();
+				this.image = baos.toByteArray();
+				baos.close();
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		return image;
+	}
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
 	public Product clone(){
 		Product product = new Product();
