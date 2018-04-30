@@ -4,7 +4,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	template="/templates/principalAdmin.xhtml">
+	template="/templates/principalAdmin.xhtml"
+	xmlns:o="http://omnifaces.org/ui">
 
 	<ui:define name="body">
 		<h:form id="form">
@@ -278,11 +279,6 @@
 								<f:selectItem itemLabel="5" itemValue="5" />
 							</p:selectOneMenu>
 
-							<p:outputLabel value="Nombre imagen: "
-								style="font-weight:bold; font-size:14px" />
-							<p:inputText id="txtImagenEditProducto" style="font-size:14px;"
-								maxlength="12" value="#{manageProduct.productoClon.imageName}" />
-
 							<p:outputLabel value="Horario desde: "
 								style="font-weight:bold; font-size:14px" />
 							<p:calendar id="timeEditDesde"
@@ -307,6 +303,36 @@
 								<f:selectItem noSelectionOption="true" itemLabel="-Seleccione-" />
 								<f:selectItems value="#{manageProduct.itemMenu}" />
 							</p:selectOneMenu>
+
+							<p:outputLabel value="Nombre imagen: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtImagenEditProducto" style="font-size:14px;"
+								maxlength="12" value="#{manageProduct.productoClon.imageName}" />
+
+							<p:outputLabel value="Imagen: "
+								rendered="#{manageProduct.file==null}"
+								style="font-weight:bold; font-size:14px" />
+							<p:fileUpload id="fileImagenPersonal" cancelLabel="true"
+								dragDropSupport="true" rendered="#{manageProduct.file==null}"
+								fileUploadListener="#{manageProduct.recibirArchivoRecurso}"
+								multiple="false" fileLimit="1" fileLimitMessage="Sólo 1 archivo"
+								label="Seleccionar foto" mode="advanced"
+								update=":form:pnlEditaProducto" auto="true" sizeLimit="1000000"
+								invalidSizeMessage="Excede el tamaño  permitido de 1024KB!"
+								invalidFileMessage="Extensión de archivo incorrecta, solo archivos gif,jpeg,png"
+								allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+
+							<p:outputLabel value="" style="font-weight:bold; font-size:14px"
+								rendered="#{manageProduct.file!=null}" />
+							<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+								<o:graphicImage rendered="#{manageProduct.file!=null}"
+									value="#{manageProduct.file.contents}" dataURI="true" />
+								<p:commandLink value="Quitar imagen"
+									style="font-size:12px;text-decoration:underline; color:#0000FF;"
+									action="#{manageProduct.limpiarArchivoCargado()}"
+									process="@this" update=":form:pnlEditaProducto"
+									rendered="#{manageProduct.file!=null}" />
+							</p:panelGrid>
 
 						</p:panelGrid>
 					</div>

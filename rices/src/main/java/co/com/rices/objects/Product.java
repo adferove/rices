@@ -124,7 +124,8 @@ public class Product implements Serializable{
 	public byte[] getImage() {
 		if(this.image==null){
 			try {
-				BufferedImage originalImage = ImageIO.read(new File("/etc/images/out.png"));
+				//BufferedImage originalImage = ImageIO.read(new File("/home/ricestog/etc/images/out.png"));
+				BufferedImage originalImage = ImageIO.read(new File("c:/Web/"+this.imageName+".png"));
 				// convert BufferedImage to byte array
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ImageIO.write(originalImage, "png", baos);

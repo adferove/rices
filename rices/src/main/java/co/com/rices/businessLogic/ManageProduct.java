@@ -1,5 +1,9 @@
 package co.com.rices.businessLogic;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,9 +16,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 
 import co.com.rices.ConsultarFuncionesAPI;
 import co.com.rices.IConstants;
@@ -52,6 +59,8 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 	private ProductStep productStepClone;
 	private StepDetail  stepDetailPersist;
 	private StepDetail  stepDetailClone;
+	
+    private UploadedFile file;
 	
 	private List<Product> listadoProducto;
 	
@@ -182,6 +191,27 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 					this.productoPersiste.setProductType(this.productoClon.getProductType());
 					this.productoPersiste.setPrice(this.productoClon.getPrice());
 					this.productoPersiste.setIdMenu(this.productoClon.getIdMenu());
+					
+					//Guarda la imagen
+					if(this.file!=null){
+						String mime = null;
+						String fileName = this.file.getFileName().trim().toLowerCase();
+						if(fileName.contains(".png")){
+							mime = "png";
+						}else if(fileName.contains(".gif")){
+							mime = "gif";
+						}else if(fileName.contains(".jpg")){
+							mime = "jpg";
+						}else if(fileName.contains(".jpeg")){
+							mime = "jpeg";
+						}
+						if(mime!=null){
+							InputStream in = new ByteArrayInputStream(this.file.getContents());
+							BufferedImage bImageFromConvert = ImageIO.read(in);
+							ImageIO.write(bImageFromConvert, mime, new File("c:/Web/"+this.productoPersiste.getImageName()+"."+mime));
+						}
+					}
+					
 					this.showConsulta = true;
 					this.showEditar   = false;
 					this.mostrarMensajeGlobal("productoActualizado", "exito");
@@ -419,6 +449,24 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 			IConstants.log.error(e.toString(),e);
 		}
 	}
+	
+	/**
+	 * Recibir el archivo y asignarlo al recurso.
+	 * 
+	 * @param event
+	 */
+	public void recibirArchivoRecurso(FileUploadEvent event) {
+		try {
+			this.file = event.getFile();
+			this.mostrarMensajeGlobal("archivoRecibido", "advertencia");
+		} catch (Exception e) {
+			IConstants.log.error(e.toString(), e);
+		}
+	}
+	
+	public void limpiarArchivoCargado() {
+		this.file = null;
+	}
 
 	public boolean isShowConsulta() {
 		return showConsulta;
@@ -522,6 +570,14 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 
 	public List<SelectItem> getItemMenu() {
 		return itemMenu;
+	}
+
+	public UploadedFile getFile() {
+		return file;
+	}
+
+	public void setFile(UploadedFile file) {
+		this.file = file;
 	}
 
 }
