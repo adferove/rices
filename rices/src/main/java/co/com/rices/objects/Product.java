@@ -1,11 +1,9 @@
 package co.com.rices.objects;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -14,6 +12,8 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.lang3.StringUtils;
+
+import co.com.rices.IConstants;
 
 public class Product implements Serializable{
 
@@ -33,6 +33,8 @@ public class Product implements Serializable{
 	private BigDecimal price;
 	private Integer idMenu;
 	private byte[]  image;
+	private String  contentType;
+	private String  mime;
 
 	private List<ProductStep> listProductStep;
 
@@ -124,14 +126,15 @@ public class Product implements Serializable{
 	public byte[] getImage() {
 		if(this.image==null){
 			try {
-				//BufferedImage originalImage = ImageIO.read(new File("/home/ricestog/etc/images/out.png"));
-				BufferedImage originalImage = ImageIO.read(new File("c:/Web/"+this.imageName+".png"));
-				// convert BufferedImage to byte array
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				ImageIO.write(originalImage, "png", baos);
-				baos.flush();
-				this.image = baos.toByteArray();
-				baos.close();
+				if(StringUtils.trimToNull(this.contentType)!=null){
+					BufferedImage originalImage = ImageIO.read(new File(IConstants.PATH_DISK+this.getImageName()+"."+this.getMime()));
+					// convert BufferedImage to byte array
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					ImageIO.write(originalImage, this.getMime(), baos);
+					baos.flush();
+					this.image = baos.toByteArray();
+					baos.close();
+				}
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 			}
@@ -141,6 +144,30 @@ public class Product implements Serializable{
 	public void setImage(byte[] image) {
 		this.image = image;
 	}
+	
+	public String getContentType() {
+		return contentType;
+	}
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+	public String getMime() {
+		this.mime = "";
+		if(this.contentType.equals("image/png")){
+			this.mime = "png";
+		}else if(this.contentType.equals("image/gif")){
+			this.mime = "gif";
+		}else if(this.contentType.equals("image/jpeg")){
+			this.mime = "jpeg";
+		}else if(this.contentType.equals("image/jpg")){
+			this.mime = "jpg";
+		} 
+		return mime;
+	}
+	public void setMime(String mime) {
+		this.mime = mime;
+	}
+	
 	public Product clone(){
 		Product product = new Product();
 		product.setId(new Integer(this.id));
@@ -183,5 +210,6 @@ public class Product implements Serializable{
 		}
 		return product;
 	}
+
 
 }

@@ -4,7 +4,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	template="/templates/principal.xhtml">
+	template="/templates/principal.xhtml" xmlns:o="http://omnifaces.org/ui">
 
 	<ui:define name="body">
 
@@ -147,8 +147,8 @@
 															styleClass="ui-panelgrid-blank">
 															<p:commandLink update=":form"
 																actionListener="#{armarPedido.seleccionarComplemento(producto)}">
-																<p:graphicImage style="border-radius:10px;"
-																	name="demo/images/#{producto.imageName}.png" />
+																<o:graphicImage value="#{producto.image}" dataURI="true"
+																	height="70px" width="70px" />
 															</p:commandLink>
 															<p:outputPanel>
 																<p:panelGrid columns="1" cellpadding="5">
@@ -180,8 +180,9 @@
 										rendered="#{!armarPedido.showRiceMenu}">
 										<div align="left">
 											<p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
-												<p:graphicImage style="border-radius:10px;"
-													name="demo/images/#{armarPedido.mainProductSelected.imageName}_grande.png" />
+												<o:graphicImage
+													value="#{armarPedido.mainProductSelected.image}"
+													dataURI="true" height="140px" width="140px" />
 												<p:spacer width="10" />
 												<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
 

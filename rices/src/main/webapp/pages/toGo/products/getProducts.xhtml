@@ -64,8 +64,8 @@
 							emptyMessage="#{mensaje.noExistenciaRegistro}">
 							<p:column headerText="">
 								<div align="center">
-									<p:graphicImage name="demo/images/#{loc.imageName}.png"
-										styleClass="rounded-circle" />
+									<o:graphicImage rendered="#{loc.image!=null}"
+										value="#{loc.image}" dataURI="true" height="70px" width="70px" />
 								</div>
 							</p:column>
 
@@ -316,7 +316,7 @@
 								dragDropSupport="true" rendered="#{manageProduct.file==null}"
 								fileUploadListener="#{manageProduct.recibirArchivoRecurso}"
 								multiple="false" fileLimit="1" fileLimitMessage="Sólo 1 archivo"
-								label="Seleccionar foto" mode="advanced"
+								label="Seleccionar imagen" mode="advanced"
 								update=":form:pnlEditaProducto" auto="true" sizeLimit="1000000"
 								invalidSizeMessage="Excede el tamaño  permitido de 1024KB!"
 								invalidFileMessage="Extensión de archivo incorrecta, solo archivos gif,jpeg,png"

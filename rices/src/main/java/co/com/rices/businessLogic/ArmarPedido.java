@@ -23,7 +23,6 @@ import co.com.rices.DAO.IQueryRices;
 import co.com.rices.DAO.IUpdateRices;
 import co.com.rices.beans.DetallePedido;
 import co.com.rices.beans.Pedido;
-import co.com.rices.general.RicesTools;
 import co.com.rices.objects.City;
 import co.com.rices.objects.Complement;
 import co.com.rices.objects.CouponCode;
@@ -143,8 +142,6 @@ public class ArmarPedido extends ConsultarFuncionesAPI{
 		if(StringUtils.trimToNull(this.pedidoPersiste.getNombreCliente())!=null){
 			this.tabActual = 1;
 			this.showRiceMenu = true;
-			System.out.println("HOLA: "+RicesTools.getPath(""));
-			IConstants.log.error(RicesTools.getPath(""));
 		}else{
 			this.mostrarMensajeGlobal("paraContinuarNombre", "advertencia");
 		}

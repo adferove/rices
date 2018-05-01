@@ -27,10 +27,10 @@ public interface IQueryRices {
 		List<Product> results=new ArrayList<Product>();
 		try{
 			StringBuilder builder=new StringBuilder();
-			builder.append(" SELECT id, product_name, description, creation_date, state, login_usuario, "); 
-			builder.append("        ranking, image_name, product_type, open, closed, price, menu        "); 
-			builder.append(" FROM   rices.products                                                      ");
-			builder.append(" WHERE  2018 = 2018                                                         ");
+			builder.append(" SELECT id, product_name, description, creation_date, state, login_usuario,        "); 
+			builder.append("        ranking, image_name, product_type, open, closed, price, menu, content_type "); 
+			builder.append(" FROM   rices.products                                                             ");
+			builder.append(" WHERE  2018 = 2018                                                                ");
 			Map<Integer, Object> params=new HashMap<Integer,Object>();
 			int i=1;
 			if(pParam!=null){
@@ -76,6 +76,7 @@ public interface IQueryRices {
 					result.setClosed(rs.getTime("closed"));
 					result.setPrice(rs.getBigDecimal("price"));
 					result.setIdMenu(rs.getInt("menu"));
+					result.setContentType(rs.getString("content_type"));
 					results.add(result);
 				}
 			}catch(SQLException sq){
@@ -184,14 +185,14 @@ public interface IQueryRices {
 		List<Product> results=new ArrayList<Product>();
 		try{
 			StringBuilder builder=new StringBuilder();
-			builder.append(" SELECT id, product_name, description, "); 
-			builder.append("        ranking, image_name, price     "); 
-			builder.append(" FROM   rices.products                 ");
-			builder.append(" WHERE  2018         = 2018            ");
-			builder.append(" AND    open        <= ?               ");
-			builder.append(" AND    closed      >= ?               ");
-			builder.append(" AND    state        = ?               ");
-			builder.append(" AND    product_type = ?               ");
+			builder.append(" SELECT id, product_name, description,           "); 
+			builder.append("        ranking, image_name, price, content_type "); 
+			builder.append(" FROM   rices.products                           ");
+			builder.append(" WHERE  2018         = 2018                      ");
+			builder.append(" AND    open        <= ?                         ");
+			builder.append(" AND    closed      >= ?                         ");
+			builder.append(" AND    state        = ?                         ");
+			builder.append(" AND    product_type = ?                         ");
 
 			Conexion conexion    = null;
 			CallableStatement cs = null;
@@ -212,6 +213,7 @@ public interface IQueryRices {
 					result.setRanking(rs.getInt("ranking"));
 					result.setImageName(rs.getString("image_name"));
 					result.setPrice(rs.getBigDecimal("price"));
+					result.setContentType(rs.getString("content_type"));
 					results.add(result);
 				}
 			}catch(SQLException sq){
@@ -460,15 +462,15 @@ public interface IQueryRices {
 		List<Product> results=new ArrayList<Product>();
 		try{
 			StringBuilder builder=new StringBuilder();
-			builder.append(" SELECT id, product_name, description, "); 
-			builder.append("        ranking, image_name, price     "); 
-			builder.append(" FROM   rices.products                 ");
-			builder.append(" WHERE  2018         = 2018            ");
-			builder.append(" AND    open        <= ?               ");
-			builder.append(" AND    closed      >= ?               ");
-			builder.append(" AND    state        = ?               ");
-			builder.append(" AND    product_type = ?               ");
-			builder.append(" AND    menu         = ?               ");
+			builder.append(" SELECT id, product_name, description,          "); 
+			builder.append("        ranking, image_name, price,content_type "); 
+			builder.append(" FROM   rices.products                          ");
+			builder.append(" WHERE  2018         = 2018                     ");
+			builder.append(" AND    open        <= ?                        ");
+			builder.append(" AND    closed      >= ?                        ");
+			builder.append(" AND    state        = ?                        ");
+			builder.append(" AND    product_type = ?                        ");
+			builder.append(" AND    menu         = ?                        ");
 
 			Conexion conexion    = null;
 			CallableStatement cs = null;
@@ -490,6 +492,7 @@ public interface IQueryRices {
 					result.setRanking(rs.getInt("ranking"));
 					result.setImageName(rs.getString("image_name"));
 					result.setPrice(rs.getBigDecimal("price"));
+					result.setContentType(rs.getString("content_type"));
 					results.add(result);
 				}
 			}catch(SQLException sq){
