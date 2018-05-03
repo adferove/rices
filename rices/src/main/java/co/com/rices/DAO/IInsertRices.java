@@ -11,6 +11,7 @@ import co.com.rices.beans.DetallePedido;
 import co.com.rices.beans.Pedido;
 import co.com.rices.objects.Complement;
 import co.com.rices.objects.CouponCode;
+import co.com.rices.objects.Parametro;
 import co.com.rices.objects.Product;
 import co.com.rices.objects.ProductStep;
 import co.com.rices.objects.RiceMenu;
@@ -314,6 +315,39 @@ public interface IInsertRices {
 				cs.setObject(3, pRiceMenu.getEstado());
 				cs.setObject(4, new java.sql.Time(pRiceMenu.getOpen().getTime()));
 				cs.setObject(5, new java.sql.Time(pRiceMenu.getClosed().getTime()));
+				int value = cs.executeUpdate();
+				if(value==1){
+					resultado = true;
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}
+	
+	public static boolean saveParametro(Parametro pParametro)throws Exception{
+		boolean resultado = false;
+		try{
+			StringBuilder builder = new StringBuilder();
+			
+			builder.append(" INSERT INTO rices.parametros(                     ");
+			builder.append("         id, valor_num, texto_corto, texto_largo)  ");
+			builder.append(" VALUES (?, ?, ?, ?);                              ");
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setObject(1, pParametro.getId().trim());
+				cs.setObject(2, pParametro.getValorNumerico());
+				cs.setObject(3, pParametro.getTextCorto());
+				cs.setObject(4, pParametro.getTextLargo());
 				int value = cs.executeUpdate();
 				if(value==1){
 					resultado = true;

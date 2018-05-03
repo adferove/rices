@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import co.com.rices.Conexion;
 import co.com.rices.IConstants;
 import co.com.rices.objects.CouponCode;
+import co.com.rices.objects.Parametro;
 import co.com.rices.objects.Product;
 import co.com.rices.objects.ProductStep;
 import co.com.rices.objects.RiceMenu;
@@ -174,6 +175,38 @@ public interface IUpdateRices {
 				cs.setObject(4, new java.sql.Time(pRiceMenu.getOpen().getTime()));
 				cs.setObject(5, new java.sql.Time(pRiceMenu.getClosed().getTime()));
 				cs.setInt(6, pRiceMenu.getId());
+				int value = cs.executeUpdate();
+				if(value==1){
+					resultado = true;
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return resultado;
+	}
+	
+	public static boolean updateParametro(Parametro pParametro)throws Exception{
+		boolean resultado = false;
+		try{
+			StringBuilder builder = new StringBuilder();
+			builder.append(" UPDATE rices.parametros                           ");
+			builder.append(" SET    valor_num=?, texto_corto=?, texto_largo=?  ");
+			builder.append(" WHERE  id=?                                       ");
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setObject(1, pParametro.getValorNumerico());
+				cs.setObject(2, pParametro.getTextCorto());
+				cs.setObject(3, pParametro.getTextLargo());
+				cs.setObject(4, pParametro.getId().trim());
 				int value = cs.executeUpdate();
 				if(value==1){
 					resultado = true;

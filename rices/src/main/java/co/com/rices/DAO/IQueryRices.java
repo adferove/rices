@@ -16,6 +16,7 @@ import co.com.rices.IConstants;
 import co.com.rices.objects.City;
 import co.com.rices.objects.Complement;
 import co.com.rices.objects.CouponCode;
+import co.com.rices.objects.Parametro;
 import co.com.rices.objects.Product;
 import co.com.rices.objects.ProductStep;
 import co.com.rices.objects.RiceMenu;
@@ -555,6 +556,47 @@ public interface IQueryRices {
 					result.setAgrupaMenu(rs.getString("agrupa_menu"));
 					result.setContentTypeBig(rs.getString("content_type_big"));
 					results.add(result);
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return results;
+	}
+	
+	public static List<Parametro> getParametrosById(String pId)throws Exception{
+		List<Parametro> results = new ArrayList<Parametro>();
+		try{
+			StringBuilder builder=new StringBuilder();
+			builder.append(" SELECT id, valor_num, texto_corto, texto_largo ");
+			builder.append(" FROM   rices.parametros                        ");
+			builder.append(" WHERE  2018=2018                               ");
+			if(StringUtils.trimToNull(pId)!=null){
+				builder.append(" AND id LIKE ? ");
+			}
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				if(StringUtils.trimToNull(pId)!=null){
+					cs.setObject(1, "%"+pId.trim()+"%");
+				}
+				rs = cs.executeQuery();
+				while(rs.next()){
+					Parametro parametro = new Parametro();
+					parametro.setId(rs.getString("id"));
+					parametro.setValorNumerico(rs.getBigDecimal("valor_num"));
+					parametro.setTextCorto(rs.getString("texto_corto"));
+					parametro.setTextLargo(rs.getString("texto_largo"));
+					results.add(parametro);
 				}
 			}catch(SQLException sq){
 				IConstants.log.error(sq.toString(),sq);
