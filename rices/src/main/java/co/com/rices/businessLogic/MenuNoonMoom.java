@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import co.com.rices.IConstants;
 import co.com.rices.DAO.IQueryRices;
+import co.com.rices.objects.Parametro;
 import co.com.rices.objects.Product;
 
 @ManagedBean
@@ -22,21 +23,48 @@ public class MenuNoonMoom implements Serializable{
 	private static final String URI_NOON  = "/rices/noon.jsf";
 	private static final String URI_MOON  = "/rices/moon.jsf";
 	
+	private String textoMoon;
+	private String textoNoon;
 	private List<Product> productList;
 	
 	@PostConstruct
 	public void init(){
 		try{
+			List<Parametro> parametros = null;
 			this.productList = null;
 			HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 			if (req != null){
 				if(req.getRequestURI()!=null){
 					if(req.getRequestURI().trim().contains(URI_TODO)){
 						this.productList = IQueryRices.getProductsNoonMoon(null);
+						if(this.textoMoon==null){
+							parametros = IQueryRices.getParametrosById(IConstants.TX_MOON);
+							if(parametros.size()>0){
+								this.textoMoon = parametros.get(0).getTextLargo();
+							}
+						}
+						if(this.textoNoon==null){
+							parametros = IQueryRices.getParametrosById(IConstants.TX_NOON);
+							if(parametros.size()>0){
+								this.textoNoon = parametros.get(0).getTextLargo();;
+							}
+						}
 					}else if(req.getRequestURI().trim().contains(URI_NOON)){
 						this.productList = IQueryRices.getProductsNoonMoon("N");
+						if(this.textoNoon==null){
+							parametros = IQueryRices.getParametrosById(IConstants.TX_NOON);
+							if(parametros.size()>0){
+								this.textoNoon = parametros.get(0).getTextLargo();;
+							}
+						}
 					}else if(req.getRequestURI().trim().contains(URI_MOON)){
 						this.productList = IQueryRices.getProductsNoonMoon("M");
+						if(this.textoMoon==null){
+							parametros = IQueryRices.getParametrosById(IConstants.TX_MOON);
+							if(parametros.size()>0){
+								this.textoMoon = parametros.get(0).getTextLargo();
+							}
+						}
 					}
 				}
 			}	
@@ -47,6 +75,14 @@ public class MenuNoonMoom implements Serializable{
 
 	public List<Product> getProductList() {
 		return productList;
+	}
+
+	public String getTextoMoon() {
+		return textoMoon;
+	}
+
+	public String getTextoNoon() {
+		return textoNoon;
 	}
 
 }
