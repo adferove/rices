@@ -23,8 +23,8 @@
 						<div class="filters col-md-12 col-xs-12">
 							<ul id="filters" class="clearfix">
 								<li><span class="filter" data-filter="all">Todo</span></li>
-								<li><span class="filter" data-filter=".noon">Noon</span></li>
-								<li><span class="filter" data-filter=".moon">Moon</span></li>
+								<li><span class="filter" data-filter=".N">Noon</span></li>
+								<li><span class="filter" data-filter=".M">Moon</span></li>
 							</ul>
 						</div>
 					</div>
@@ -61,58 +61,34 @@
 					</div>
 
 					<div class="row" id="Container">
-						<div class="col-md-3 col-sm-6 mix portfolio-item noon">
-							<div class="portfolio-wrapper">
-								<div class="portfolio-thumb">
-									<img src="images/product1.jpg" alt="" />
-									<div class="hover">
-										<div class="hover-iner">
-											<a class="fancybox" href="images/product1.jpg"><img
-												src="images/open-icon.png" alt="" /></a> <span>Pizza</span>
+
+						<p:repeat value="#{menuNoonMoom.productList}" var="product">
+							<div
+								class="col-md-3 col-sm-6 mix portfolio-item #{product.agrupaMenu}">
+								<div class="portfolio-wrapper">
+									<div class="portfolio-thumb">
+										<img
+											src="http://ricestogo.com/images/#{product.imageName}.#{product.mime}"
+											alt="" />
+										<div class="hover">
+											<div class="hover-iner">
+												<a class="fancybox"
+													href="http://ricestogo.com/images/#{product.imageName}_grande.#{product.mimeBig}"><img
+													src="images/open-icon.png" alt="" /></a> <span>#{product.name}</span>
+											</div>
 										</div>
 									</div>
-								</div>
-								<div class="label-text">
-									<h3>
-										<a href="single-post.html">Vege Pizza</a>
-									</h3>
-									<span class="text-category">$16.00</span> Nulla sodales ut
-									tellus blandit accumsan. Aliquam erat volutpat. Morbi quis
-									vestibulum erat. Nam malesuada lobortis tempus. Fusce fermentum
-									libero fringilla odio pharetra malesuada. Suspendisse potenti.
-									Vestibulum ante ipsum primis in faucibus orci luctus et
-									ultrices posuere cubilia Curae; Nullam ultrices lectus quis
-									consequat fringilla. Mauris non ex et purus sollicitudin tempus
-									vitae quis nisi.
-								</div>
-							</div>
-						</div>
-						<div class="col-md-3 col-sm-6 mix portfolio-item moon">
-							<div class="portfolio-wrapper">
-								<div class="portfolio-thumb">
-									<img src="http://ricestogo.com/images/carbonara.png" alt="" />
-									<div class="hover">
-										<div class="hover-iner">
-											<a class="fancybox"
-												href="http://ricestogo.com/images/carbonara.png"><img
-												src="images/open-icon.png" alt="" /></a> <span>Ginger</span>
-										</div>
+									<div class="label-text">
+										<h3>#{product.name}</h3>
+										<span class="text-category">$#{product.price}</span>
+										<h5>#{product.description}</h5>
+										<h6>#{product.texto}</h6>
 									</div>
 								</div>
-								<div class="label-text">
-									<h3>
-										<a href="single-post.html">Ginger Tea</a>
-									</h3>
-									<span class="text-category">$24.00</span>
-								</div>
 							</div>
-						</div>
+						</p:repeat>
 					</div>
-
 				</div>
-
-
-
 			</div>
 			<script src="js/vendor/jquery-1.11.0.min.js"></script>
 		</h:form>

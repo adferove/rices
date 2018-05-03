@@ -510,4 +510,62 @@ public interface IQueryRices {
 		}
 		return results;
 	}
+	
+	public static List<Product> getProductsNoonMoon(String pNoonMoon)  throws Exception{
+		List<Product> results=new ArrayList<Product>();
+		try{
+			StringBuilder builder=new StringBuilder();
+			builder.append(" SELECT id, product_name, description, creation_date, state, login_usuario, texto, content_type_big, "); 
+			builder.append("        ranking, image_name, product_type, open, closed, price, menu, content_type, agrupa_menu      "); 
+			builder.append(" FROM   rices.products                                                                               ");
+			builder.append(" WHERE  state = ?                                                                                    ");
+			builder.append(" AND    product_type = ?                                                                             ");
+			if(pNoonMoon!=null){
+				builder.append(" AND agrupa_menu = ? ");
+			}
+			Conexion conexion    = null;
+			CallableStatement cs = null;
+			ResultSet rs         = null;
+			try{
+				conexion = new Conexion();
+				cs = conexion.getConnection().prepareCall(builder.toString());
+				cs.setObject(1, "A");
+				cs.setObject(2, "P");
+				if(pNoonMoon!=null){
+					cs.setObject(3, pNoonMoon);
+				}
+				rs = cs.executeQuery();
+				while(rs.next()){
+					Product result = new Product();
+					result.setId(rs.getInt("id"));
+					result.setName(rs.getString("product_name"));
+					result.setDescription(rs.getString("description"));
+					result.setCreationDate(rs.getDate("creation_date"));
+					result.setState(rs.getString("state"));
+					result.setLoginUsuario(rs.getString("login_usuario"));
+					result.setRanking(rs.getInt("ranking"));
+					result.setImageName(rs.getString("image_name"));
+					result.setProductType(rs.getString("product_type"));
+					result.setOpen(rs.getTime("open"));
+					result.setClosed(rs.getTime("closed"));
+					result.setPrice(rs.getBigDecimal("price"));
+					result.setIdMenu(rs.getInt("menu"));
+					result.setContentType(rs.getString("content_type"));
+					result.setTexto(rs.getString("texto"));
+					result.setAgrupaMenu(rs.getString("agrupa_menu"));
+					result.setContentTypeBig(rs.getString("content_type_big"));
+					results.add(result);
+				}
+			}catch(SQLException sq){
+				IConstants.log.error(sq.toString(),sq);
+			}finally{
+				rs.close();
+				cs.close();
+				conexion.cerrarConexion();
+			}
+		}catch(Exception e){
+			throw new Exception(e);
+		}
+		return results;
+	}
 }
