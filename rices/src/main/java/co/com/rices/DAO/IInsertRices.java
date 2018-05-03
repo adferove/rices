@@ -344,7 +344,7 @@ public interface IInsertRices {
 			try{
 				conexion = new Conexion();
 				cs = conexion.getConnection().prepareCall(builder.toString());
-				cs.setObject(1, pParametro.getId().trim());
+				cs.setObject(1, pParametro.getId().trim().toUpperCase());
 				cs.setObject(2, pParametro.getValorNumerico());
 				cs.setObject(3, pParametro.getTextCorto());
 				cs.setObject(4, pParametro.getTextLargo());

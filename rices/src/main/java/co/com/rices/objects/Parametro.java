@@ -3,6 +3,8 @@ package co.com.rices.objects;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class Parametro implements Serializable{
 
 	private static final long serialVersionUID = 6574212824949484907L;
@@ -37,5 +39,20 @@ public class Parametro implements Serializable{
 		this.textLargo = textLargo;
 	}
 
-	
+	public Parametro clone(){
+		Parametro parametro = new Parametro();
+		if(StringUtils.trimToNull(this.id)!=null){
+			parametro.setId(new String(this.id));
+		}
+		if(StringUtils.trimToNull(this.textCorto)!=null){
+			parametro.setTextCorto(new String(this.textCorto));
+		}
+		if(StringUtils.trimToNull(this.textLargo)!=null){
+			parametro.setTextLargo(new String(this.textLargo));
+		}
+		if(this.valorNumerico!=null){
+			parametro.setValorNumerico(this.valorNumerico);
+		}
+		return parametro;
+	}
 }

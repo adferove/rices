@@ -587,7 +587,7 @@ public interface IQueryRices {
 				conexion = new Conexion();
 				cs = conexion.getConnection().prepareCall(builder.toString());
 				if(StringUtils.trimToNull(pId)!=null){
-					cs.setObject(1, "%"+pId.trim()+"%");
+					cs.setObject(1, "%"+pId.trim().toUpperCase()+"%");
 				}
 				rs = cs.executeQuery();
 				while(rs.next()){

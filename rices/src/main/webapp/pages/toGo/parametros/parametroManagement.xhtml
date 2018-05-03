@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/principalAdmin.xhtml">
+
+
+	<ui:define name="body">
+		<h:form id="form">
+			<p:messages id="messages" showDetail="true" closable="true" />
+			<p:spacer height="10" />
+			<!-- INICIO INGRESO CRITERIOS CONSULTA -->
+			<p:outputPanel id="pnlIngresoDatos"
+				rendered="#{manageParametro.showConsulta}">
+				<p:commandButton id="btnIdCreateProduct"
+					styleClass="btn btn-success"
+					action="#{manageParametro.nuevoParametro()}"
+					value="Crear #{mensaje.menu}" update=":form"
+					style="font-size:14px; font-weight: normal !important;" />
+
+				<div style="height: 10px;"></div>
+
+				<div align="center">
+					<p:panel header="#{mensaje.Menu}s">
+						<p:dataTable var="loc" id="dtlListadoMenu"
+							widgetVar="dtlListadoMenu"
+							value="#{manageParametro.listaParametro}" reflow="true"
+							emptyMessage="#{mensaje.noExistenciaRegistro}">
+
+							<p:column headerText="Identificador">
+								<div align="center">
+									<h:outputText value="#{loc.id}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Valor numérico">
+								<div align="right">
+									<h:outputText value="#{loc.valorNumerico}" />
+								</div>
+							</p:column>
+							<p:column headerText="Texto corto">
+								<div align="left">
+									<h:outputText value="#{loc.textCorto}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="Texto largo">
+								<div align="left">
+									<h:outputText value="#{loc.textCorto}" />
+								</div>
+							</p:column>
+
+							<p:column headerText="#{mensaje.Mas}">
+								<div align="center">
+									<p:commandButton id="btnVerDetalle" icon="fa fa-edit"
+										action="#{manageParametro.editarParametro(loc)}" update="form"
+										title="Editar parámetro" />
+									<p:blockUI id="idBlockProducto" block=":form"
+										trigger="btnVerDetalle" />
+								</div>
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+				</div>
+			</p:outputPanel>
+
+			<p:outputPanel id="pnlCreaParametro"
+				rendered="#{manageParametro.showCrear}">
+
+				<p:commandButton id="btnRegresar1" styleClass="btn btn-danger"
+					style="font-size:14px; font-weight: normal !important;"
+					action="#{manageParametro.regresar(1)}" value="Regresar"
+					update=":form">
+				</p:commandButton>
+
+				<div style="height: 10px;"></div>
+
+				<p:panel header="Crear nuevo parámetro" style="text-align:center;">
+					<div align="center">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel value="Identificador: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtIdentificador"
+								style="font-size:14px; text-transform:uppercase;" maxlength="8"
+								value="#{manageParametro.persisteParametro.id}" />
+
+							<p:outputLabel value="Valor numérico: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtValorNumerico" style="font-size:14px;"
+								maxlength="20"
+								value="#{manageParametro.persisteParametro.valorNumerico}" />
+
+							<p:outputLabel value="Texto corto(200 caracteres): "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputTextarea id="txtTextoCorto" style="font-size:14px;"
+								maxlength="200"
+								value="#{manageParametro.persisteParametro.textCorto}" />
+
+							<p:outputLabel value="Texto largo(sin límite): "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputTextarea id="txtTextoLargo" style="font-size:14px;"
+								value="#{manageParametro.persisteParametro.textLargo}" />
+
+						</p:panelGrid>
+					</div>
+				</p:panel>
+				<p:spacer height="10" />
+				<div align="center">
+					<p:commandButton id="btnCrearParametro"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{manageParametro.registrarParametro()}" value="Registrar"
+						update=":form">
+					</p:commandButton>
+
+					<p:blockUI block=":form" trigger="btnCrearParametro,btnRegresar1" />
+				</div>
+
+			</p:outputPanel>
+
+			<p:outputPanel id="pnlEditaParametro"
+				rendered="#{manageParametro.showEditar}">
+				<p:commandButton id="btnRegresar2"
+					style="font-size:14px; font-weight: normal !important;"
+					action="#{manageParametro.regresar(2)}" value="Regresar"
+					update=":form" styleClass="btn btn-danger">
+				</p:commandButton>
+
+				<div style="height: 10px;"></div>
+
+				<p:panel header="Editar parámetro" style="text-align:center;">
+					<div align="center">
+						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel value="Identificador: "
+								style="font-weight:bold; font-size:14px" />
+							<p:outputLabel id="txtIdentificadorEdit"
+								style="font-size:14px; text-transform:uppercase;" maxlength="8"
+								value="#{manageParametro.cloneParametro.id}" />
+
+							<p:outputLabel value="Valor numérico: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtValorNumericoEdit" style="font-size:14px;"
+								maxlength="20"
+								value="#{manageParametro.cloneParametro.valorNumerico}" />
+
+							<p:outputLabel value="Texto corto(200 caracteres): "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputTextarea id="txtTextoCortoEdit" style="font-size:14px;"
+								maxlength="200"
+								value="#{manageParametro.cloneParametro.textCorto}" />
+
+							<p:outputLabel value="Texto largo(sin límite): "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputTextarea id="txtTextoLargoEdit" style="font-size:14px;"
+								value="#{manageParametro.cloneParametro.textLargo}" />
+						</p:panelGrid>
+					</div>
+				</p:panel>
+				<p:spacer height="10" />
+				<div align="center">
+					<p:commandButton id="btnEditarParametro"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{manageParametro.editarParametro()}" value="Editar"
+						update=":form">
+					</p:commandButton>
+
+
+					<p:blockUI block=":form" trigger="btnEditarParametro,btnRegresar2" />
+				</div>
+
+			</p:outputPanel>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

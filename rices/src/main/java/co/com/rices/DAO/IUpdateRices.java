@@ -206,7 +206,7 @@ public interface IUpdateRices {
 				cs.setObject(1, pParametro.getValorNumerico());
 				cs.setObject(2, pParametro.getTextCorto());
 				cs.setObject(3, pParametro.getTextLargo());
-				cs.setObject(4, pParametro.getId().trim());
+				cs.setObject(4, pParametro.getId().trim().toUpperCase());
 				int value = cs.executeUpdate();
 				if(value==1){
 					resultado = true;
