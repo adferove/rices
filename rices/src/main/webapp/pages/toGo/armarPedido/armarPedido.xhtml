@@ -147,8 +147,9 @@
 															styleClass="ui-panelgrid-blank">
 															<p:commandLink update=":form"
 																actionListener="#{armarPedido.seleccionarComplemento(producto)}">
-																<o:graphicImage value="#{producto.image}" dataURI="true"
-																	height="70px" width="70px" />
+																<o:graphicImage rendered="#{producto.image!=null}"
+																	style="border-radius:10px;" value="#{producto.image}"
+																	dataURI="true" height="125px" width="140px" />
 															</p:commandLink>
 															<p:outputPanel>
 																<p:panelGrid columns="1" cellpadding="5">
@@ -178,11 +179,16 @@
 									</p:outputPanel>
 									<p:outputPanel id="productDetail"
 										rendered="#{!armarPedido.showRiceMenu}">
+										<div align="center">
+											<o:graphicImage
+												rendered="#{armarPedido.mainProductSelected.image!=null}"
+												value="#{armarPedido.mainProductSelected.image}"
+												dataURI="true" height="250px" width="270px"
+												style="border-radius:10px;" />
+										</div>
 										<div align="left">
-											<p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
-												<o:graphicImage
-													value="#{armarPedido.mainProductSelected.image}"
-													dataURI="true" height="140px" width="140px" />
+											<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+
 												<p:spacer width="10" />
 												<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
 

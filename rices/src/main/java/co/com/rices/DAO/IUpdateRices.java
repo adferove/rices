@@ -17,11 +17,11 @@ public interface IUpdateRices {
 		boolean resultado = false;
 		try{
 			StringBuilder builder = new StringBuilder();
-			builder.append(" UPDATE rices.products                                    ");
-			builder.append(" SET    product_name=?, description=?, state=?,           ");
-			builder.append("        ranking=?, image_name=?, product_type=?, open=?,  ");
-			builder.append("        closed=?, price=?, menu=?, content_type=?         "); 
-			builder.append(" WHERE  id=?;                                             ");
+			builder.append(" UPDATE rices.products                                                    ");
+			builder.append(" SET    product_name=?, description=?, state=?,                           ");
+			builder.append("        ranking=?, image_name=?, product_type=?, open=?,                  ");
+			builder.append("        closed=?, price=?, menu=?, content_type=?, texto=?, agrupa_menu=? "); 
+			builder.append(" WHERE  id=?;                                                             ");
 			Conexion conexion    = null;
 			CallableStatement cs = null;
 			try{
@@ -38,7 +38,9 @@ public interface IUpdateRices {
 				cs.setObject(9, pProduct.getPrice());
 				cs.setObject(10, pProduct.getIdMenu());
 				cs.setObject(11, pProduct.getContentType());
-				cs.setInt(12, pProduct.getId());
+				cs.setObject(12, pProduct.getTexto());
+				cs.setObject(13, pProduct.getAgrupaMenu());
+				cs.setInt(14, pProduct.getId());
 				int value = cs.executeUpdate();
 				if(value==1){
 					resultado = true;

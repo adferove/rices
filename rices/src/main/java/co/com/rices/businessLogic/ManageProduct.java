@@ -2,9 +2,7 @@ package co.com.rices.businessLogic;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -64,6 +62,7 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 	private StepDetail  stepDetailClone;
 	
 	private RiceFile    file;
+	private RiceFile    fileBig;
 	
 	private List<Product> listadoProducto;
 	
@@ -198,14 +197,21 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 					this.productoPersiste.setProductType(this.productoClon.getProductType());
 					this.productoPersiste.setPrice(this.productoClon.getPrice());
 					this.productoPersiste.setIdMenu(this.productoClon.getIdMenu());
-
+					this.productoPersiste.setTexto(this.productoClon.getTexto());
+					this.productoPersiste.setAgrupaMenu(this.productoClon.getAgrupaMenu());
 					//Guarda la imagen en disco
 					if(this.file!=null){
 						InputStream in = new ByteArrayInputStream(this.file.getContents());
 						BufferedImage bImageFromConvert = ImageIO.read(in);
 						ImageIO.write(bImageFromConvert, this.productoClon.getMime(), new File(IConstants.PATH_DISK+this.productoClon.getImageName()+"."+this.productoClon.getMime()));
 						this.productoPersiste.setImage(this.file.getContents());
+						if(this.fileBig!=null){
+							InputStream in2 = new ByteArrayInputStream(this.fileBig.getContents());
+							BufferedImage bImageFromConvert2 = ImageIO.read(in2);
+							ImageIO.write(bImageFromConvert2, this.productoClon.getMime(), new File(IConstants.PATH_DISK+this.productoClon.getImageName()+"_grande."+this.productoClon.getMime()));
+						}
 					}
+					this.productoPersiste.setImage(this.file.getContents());
 					this.showConsulta = true;
 					this.showEditar   = false;
 					this.mostrarMensajeGlobal("productoActualizado", "exito");
@@ -237,11 +243,17 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 		this.productoClon     = pProducto.clone();
 		this.showConsulta = false;
 		this.showEditar   = true;
-		this.file = null;
+		this.file    = null;
+		this.fileBig = null;
 		if(pProducto.getImage()!=null){
 			this.file = new RiceFile();
 			this.file.setContentType(pProducto.getContentType());
 			this.file.setContents(pProducto.getImage());
+		}
+		if(pProducto.getImageBig()!=null){
+			this.fileBig = new RiceFile();
+			this.fileBig.setContentType(pProducto.getContentType());
+			this.fileBig.setContents(pProducto.getImageBig());
 		}
 	}
 	
@@ -468,8 +480,25 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 		}
 	}
 	
+	public void recibirFileBig(FileUploadEvent event) {
+		try {
+			UploadedFile f = event.getFile();
+			this.fileBig = new RiceFile();
+			this.fileBig.setFileName(f.getFileName());
+			this.fileBig.setContentType(f.getContentType());
+			this.fileBig.setContents(f.getContents());
+			this.mostrarMensajeGlobal("archivoRecibido", "advertencia");
+		} catch (Exception e) {
+			IConstants.log.error(e.toString(), e);
+		}
+	}
+	
 	public void limpiarArchivoCargado() {
 		this.file = null;
+	}
+	
+	public void limpiarFileBig() {
+		this.fileBig = null;
 	}
 
 	public boolean isShowConsulta() {
@@ -582,6 +611,14 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 
 	public void setFile(RiceFile file) {
 		this.file = file;
+	}
+
+	public RiceFile getFileBig() {
+		return fileBig;
+	}
+
+	public void setFileBig(RiceFile fileBig) {
+		this.fileBig = fileBig;
 	}
 
 }

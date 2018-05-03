@@ -27,10 +27,10 @@ public interface IQueryRices {
 		List<Product> results=new ArrayList<Product>();
 		try{
 			StringBuilder builder=new StringBuilder();
-			builder.append(" SELECT id, product_name, description, creation_date, state, login_usuario,        "); 
-			builder.append("        ranking, image_name, product_type, open, closed, price, menu, content_type "); 
-			builder.append(" FROM   rices.products                                                             ");
-			builder.append(" WHERE  2018 = 2018                                                                ");
+			builder.append(" SELECT id, product_name, description, creation_date, state, login_usuario, texto,              "); 
+			builder.append("        ranking, image_name, product_type, open, closed, price, menu, content_type, agrupa_menu "); 
+			builder.append(" FROM   rices.products                                                                          ");
+			builder.append(" WHERE  2018 = 2018                                                                             ");
 			Map<Integer, Object> params=new HashMap<Integer,Object>();
 			int i=1;
 			if(pParam!=null){
@@ -77,6 +77,8 @@ public interface IQueryRices {
 					result.setPrice(rs.getBigDecimal("price"));
 					result.setIdMenu(rs.getInt("menu"));
 					result.setContentType(rs.getString("content_type"));
+					result.setTexto(rs.getString("texto"));
+					result.setAgrupaMenu(rs.getString("agrupa_menu"));
 					results.add(result);
 				}
 			}catch(SQLException sq){

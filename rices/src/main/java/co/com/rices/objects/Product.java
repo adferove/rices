@@ -33,8 +33,11 @@ public class Product implements Serializable{
 	private BigDecimal price;
 	private Integer idMenu;
 	private byte[]  image;
+	private byte[]  imageBig;
 	private String  contentType;
 	private String  mime;
+	private String  texto;
+	private String  agrupaMenu;
 
 	private List<ProductStep> listProductStep;
 
@@ -136,10 +139,33 @@ public class Product implements Serializable{
 					baos.close();
 				}
 			} catch (IOException e) {
-				System.out.println(e.getMessage());
+				IConstants.log.error(e.toString(),e);
 			}
 		}
 		return image;
+	}
+	
+	
+	public byte[] getImageBig() {
+		if(this.imageBig==null){
+			try {
+				if(StringUtils.trimToNull(this.contentType)!=null){
+					BufferedImage originalImage = ImageIO.read(new File(IConstants.PATH_DISK+this.getImageName()+"_big."+this.getMime()));
+					// convert BufferedImage to byte array
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					ImageIO.write(originalImage, this.getMime(), baos);
+					baos.flush();
+					this.imageBig = baos.toByteArray();
+					baos.close();
+				}
+			} catch (IOException e) {
+				IConstants.log.error(e.toString(),e);
+			}
+		}
+		return imageBig;
+	}
+	public void setImageBig(byte[] imageBig) {
+		this.imageBig = imageBig;
 	}
 	public void setImage(byte[] image) {
 		this.image = image;
@@ -166,6 +192,19 @@ public class Product implements Serializable{
 	}
 	public void setMime(String mime) {
 		this.mime = mime;
+	}
+	
+	public String getTexto() {
+		return texto;
+	}
+	public void setTexto(String texto) {
+		this.texto = texto;
+	}
+	public String getAgrupaMenu() {
+		return agrupaMenu;
+	}
+	public void setAgrupaMenu(String agrupaMenu) {
+		this.agrupaMenu = agrupaMenu;
 	}
 	
 	public Product clone(){
@@ -207,6 +246,14 @@ public class Product implements Serializable{
 		}
 		if(this.idMenu!=null){
 			product.setIdMenu(new Integer(this.idMenu));
+		}
+		
+		if(StringUtils.trimToNull(this.texto)!=null){
+			product.setTexto(new String(this.texto));
+		}
+		
+		if(StringUtils.trimToNull(this.agrupaMenu)!=null){
+			product.setAgrupaMenu(new String(this.agrupaMenu));
 		}
 		return product;
 	}

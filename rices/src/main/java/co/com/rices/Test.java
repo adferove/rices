@@ -72,28 +72,33 @@ public class Test {
 //        System.out.println("Done");
 //    }
 	
+//	public static void main(String[] args) {
+//
+//		try {
+//
+//			byte[] imageInByte;
+//			BufferedImage originalImage = ImageIO.read(new File("c:/Web/out.png"));
+//
+//			// convert BufferedImage to byte array
+//			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//			ImageIO.write(originalImage, "jpg", baos);
+//			baos.flush();
+//			imageInByte = baos.toByteArray();
+//			baos.close();
+//
+//			// convert byte array back to BufferedImage
+//			InputStream in = new ByteArrayInputStream(imageInByte);
+//			BufferedImage bImageFromConvert = ImageIO.read(in);
+//
+//			ImageIO.write(bImageFromConvert, "png", new File("c:/Web/new-darksouls.png"));
+//
+//		} catch (IOException e) {
+//			System.out.println(e.getMessage());
+//		}
+//	}
+	
 	public static void main(String[] args) {
-
-		try {
-
-			byte[] imageInByte;
-			BufferedImage originalImage = ImageIO.read(new File("c:/Web/out.png"));
-
-			// convert BufferedImage to byte array
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(originalImage, "jpg", baos);
-			baos.flush();
-			imageInByte = baos.toByteArray();
-			baos.close();
-
-			// convert byte array back to BufferedImage
-			InputStream in = new ByteArrayInputStream(imageInByte);
-			BufferedImage bImageFromConvert = ImageIO.read(in);
-
-			ImageIO.write(bImageFromConvert, "png", new File("c:/Web/new-darksouls.png"));
-
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
-		}
+		String cadena = "Nulla sodales ut tellus blandit accumsan. Aliquam erat volutpat. Morbi quis vestibulum erat. Nam malesuada lobortis tempus. Fusce fermentum libero fringilla odio pharetra malesuada. Suspendisse potenti. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nullam ultrices lectus quis consequat fringilla. Mauris non ex et purus sollicitudin tempus vitae quis nisi.";
+		System.out.println(cadena.length());
 	}
 }

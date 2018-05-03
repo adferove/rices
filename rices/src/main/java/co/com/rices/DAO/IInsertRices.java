@@ -26,8 +26,9 @@ public interface IInsertRices {
 			builder.append("         description, creation_date,        ");
 			builder.append("         state, login_usuario, ranking,     ");
 			builder.append("         image_name, product_type, open,    ");
-			builder.append("         closed, price, menu, content_type) ");
-			builder.append(" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)");
+			builder.append("         closed, price, menu, content_type, ");
+			builder.append("         texto, agrupa_menu)                ");
+			builder.append(" VALUES (?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)");
 			builder.append(" RETURNING id;                              ");
 			Conexion conexion    = null;
 			CallableStatement cs = null;
@@ -48,6 +49,8 @@ public interface IInsertRices {
 				cs.setObject(11, pProduct.getPrice());
 				cs.setObject(12, pProduct.getIdMenu());
 				cs.setObject(13, pProduct.getContentType());
+				cs.setObject(14, pProduct.getTexto());
+				cs.setObject(15, pProduct.getAgrupaMenu());
 				cs.execute();
 				rs = cs.getResultSet();
 				if(rs.next()){

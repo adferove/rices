@@ -8,5 +8,5 @@ public interface IConstants {
 	String	INACTIVO	= "I";
 	Integer ROL_ADMINISTRADOR = 1;
 	String  CUPON_REGISTRO = "RICESTOGO";
-	String PATH_DISK = "/home/ricestog/etc/images/";//"c:/Web/";"/home/ricestog/etc/images/"
+	String PATH_DISK = "c:/Web/";//"c:/Web/";"/home/ricestog/public_html/images/"
 }
