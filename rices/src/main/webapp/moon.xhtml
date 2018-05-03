@@ -8,7 +8,7 @@
 
 	<ui:define name="body">
 		<h:form id="form">
-			<div id="timeline-post">
+			<div id="products-post">
 				<div class="container">
 					<div class="row">
 						<div class="col-md-12">
@@ -18,8 +18,52 @@
 							</div>
 						</div>
 					</div>
+
+					<div class="row">
+
+						<div class="col-md-12">
+							<h3>Menú Moon</h3>
+							<p>Suspendisse quis consectetur nisi, vitae consequat sem. In
+								et quam id libero venenatis venenatis. Morbi vitae justo
+								vulputate, auctor augue eu, pulvinar augue. Vestibulum placerat
+								sem eu posuere laoreet. Ut ac ex nec urna maximus tristique
+								interdum eget ipsum. Duis at pharetra neque, ut condimentum ex.
+								Nunc tincidunt magna nec aliquam rhoncus. Morbi a posuere nunc.</p>
+						</div>
+					</div>
+
+
+					<div class="row" id="Container">
+
+						<p:repeat value="#{menuNoonMoom.productList}" var="product">
+							<div
+								class="col-md-3 col-sm-6 mix portfolio-item #{product.agrupaMenu}">
+								<div class="portfolio-wrapper">
+									<div class="portfolio-thumb">
+										<img
+											src="http://ricestogo.com/images/#{product.imageName}.#{product.mime}"
+											alt="" />
+										<div class="hover">
+											<div class="hover-iner">
+												<a class="fancybox"
+													href="http://ricestogo.com/images/#{product.imageName}_grande.#{product.mimeBig}"><img
+													src="images/open-icon.png" alt="" /></a> <span>#{product.name}</span>
+											</div>
+										</div>
+									</div>
+									<div class="label-text">
+										<h3>#{product.name}</h3>
+										<span class="text-category">$#{product.price}</span>
+										<h5>#{product.description}</h5>
+										<h6>#{product.texto}</h6>
+									</div>
+								</div>
+							</div>
+						</p:repeat>
+					</div>
 				</div>
 			</div>
+			<script src="js/vendor/jquery-1.11.0.min.js"></script>
 		</h:form>
 	</ui:define>
 </ui:composition>

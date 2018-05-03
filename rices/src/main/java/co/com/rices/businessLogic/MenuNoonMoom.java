@@ -19,8 +19,8 @@ public class MenuNoonMoom implements Serializable{
 
 	private static final long serialVersionUID = -6455045348536360298L;
 	private static final String URI_TODO  = "/rices/menuRices.jsf";
-	private static final String URI_NOON  = "/rices/moon.jsf";
-	private static final String URI_MOON  = "/rices/noon.jsf";
+	private static final String URI_NOON  = "/rices/noon.jsf";
+	private static final String URI_MOON  = "/rices/moon.jsf";
 	
 	private List<Product> productList;
 	

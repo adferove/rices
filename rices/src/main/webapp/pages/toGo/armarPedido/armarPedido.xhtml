@@ -145,12 +145,13 @@
 													<div align="center">
 														<p:panelGrid columns="1" columnClasses="logo,detail"
 															styleClass="ui-panelgrid-blank">
-															<p:commandLink update=":form"
+															<p:commandLink id="idSelectProduct" update=":form"
 																actionListener="#{armarPedido.seleccionarComplemento(producto)}">
 																<o:graphicImage rendered="#{producto.image!=null}"
 																	style="border-radius:10px;" value="#{producto.image}"
 																	dataURI="true" height="125px" width="140px" />
 															</p:commandLink>
+															<p:blockUI block=":form" trigger="idSelectProduct" />
 															<p:outputPanel>
 																<p:panelGrid columns="1" cellpadding="5">
 																	<h:outputText value="#{producto.name}"
@@ -286,13 +287,14 @@
 										</div>
 										<div style="height: 10px"></div>
 										<div align="center">
-											<p:commandButton value="Agregar a la orden"
+											<p:commandButton id="idAddProduct" value="Agregar a la orden"
 												style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
 												action="#{armarPedido.addProductToOrder()}"
 												update=":form:pnlArmaPedido, form:tb, form:tbDetail, :form:idStcky,:form:msj" />
-											<p:commandButton value="Cancelar"
+											<p:commandButton id="idCancelAdd" value="Cancelar"
 												style="background-image: none; color: #fff; background-color: #FF0000; border-color: #FF0000; font-weight: normal; margin-top:10px; margin-left:10px;"
 												action="#{armarPedido.cancelarProducto()}" update=":form" />
+											<p:blockUI block=":form" trigger="idAddProduct,idCancelAdd" />
 										</div>
 									</p:outputPanel>
 								</p:tab>
