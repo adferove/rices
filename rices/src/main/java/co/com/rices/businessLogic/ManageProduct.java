@@ -101,8 +101,10 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 
 	public void nuevoProducto(){
 		this.productoPersiste = new Product();
-		this.showConsulta = false;
-		this.showCrear    = true;
+		this.file             = null;
+		this.fileBig          = null;
+		this.showConsulta     = false;
+		this.showCrear        = true;
 	}
 
 	public void consultarProducto(){
@@ -136,10 +138,33 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 				this.mostrarMensajeGlobal("ingreseRutaImagenProducto", "error");
 			}
 			if(!error){
+				this.productoPersiste.setContentType(null);
+				if(this.file!=null){
+					this.productoPersiste.setContentType(this.file.getContentType());
+				}
+				
+				this.productoPersiste.setContentTypeBig(null);
+				if(this.fileBig!=null){
+					this.productoPersiste.setContentTypeBig(this.fileBig.getContentType());
+				}
 				this.productoPersiste.setCreationDate(Calendar.getInstance().getTime());
 				this.productoPersiste.setLoginUsuario(this.usuario.getLogin());
 				int idProducto = IInsertRices.saveProduct(this.productoPersiste);
 				if(idProducto > 0){
+					//Guarda la imagen en disco
+					if(this.file!=null){
+						InputStream in = new ByteArrayInputStream(this.file.getContents());
+						BufferedImage bImageFromConvert = ImageIO.read(in);
+						ImageIO.write(bImageFromConvert, this.productoPersiste.getMime(), new File(IConstants.PATH_DISK+this.productoPersiste.getImageName()+"."+this.productoPersiste.getMime()));
+						this.productoPersiste.setImage(this.file.getContents());
+					}
+					if(this.fileBig!=null){
+						InputStream in = new ByteArrayInputStream(this.fileBig.getContents());
+						BufferedImage bImageFromConvert = ImageIO.read(in);
+						ImageIO.write(bImageFromConvert, this.productoPersiste.getMimeBig(), new File(IConstants.PATH_DISK+this.productoPersiste.getImageName()+"_grande."+this.productoPersiste.getMimeBig()));
+						this.productoPersiste.setImageBig(this.fileBig.getContents());
+					}
+					
 					this.mapProductName.put(idProducto, this.productoPersiste.getName());
 					this.productoPersiste.setId(idProducto);
 					this.listadoProducto.add(this.productoPersiste);
@@ -160,6 +185,9 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 		}
 	}
 
+	/**
+	 * TODO ACTUALIZAR DETALLE
+	 */
 	public void editarProducto(){
 		try{	
 			boolean error = false;
@@ -183,10 +211,17 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 				this.mostrarMensajeGlobal("ingreseRutaImagenProducto", "error");
 			}
 			if(!error){
+				
 				this.productoClon.setContentType(null);
 				if(this.file!=null){
 					this.productoClon.setContentType(this.file.getContentType());
 				}
+				
+				this.productoClon.setContentTypeBig(null);
+				if(this.fileBig!=null){
+					this.productoClon.setContentTypeBig(this.fileBig.getContentType());
+				}
+				
 				if(IUpdateRices.updateProduct(this.productoClon)){
 					this.mapProductName.put(this.productoClon.getId(), this.productoClon.getName());
 					this.productoPersiste.setDescription(this.productoClon.getDescription());
@@ -205,13 +240,13 @@ public class ManageProduct extends ConsultarFuncionesAPI{
 						BufferedImage bImageFromConvert = ImageIO.read(in);
 						ImageIO.write(bImageFromConvert, this.productoClon.getMime(), new File(IConstants.PATH_DISK+this.productoClon.getImageName()+"."+this.productoClon.getMime()));
 						this.productoPersiste.setImage(this.file.getContents());
-						if(this.fileBig!=null){
-							InputStream in2 = new ByteArrayInputStream(this.fileBig.getContents());
-							BufferedImage bImageFromConvert2 = ImageIO.read(in2);
-							ImageIO.write(bImageFromConvert2, this.productoClon.getMime(), new File(IConstants.PATH_DISK+this.productoClon.getImageName()+"_grande."+this.productoClon.getMime()));
-						}
 					}
-					this.productoPersiste.setImage(this.file.getContents());
+					if(this.fileBig!=null){
+						InputStream in = new ByteArrayInputStream(this.fileBig.getContents());
+						BufferedImage bImageFromConvert = ImageIO.read(in);
+						ImageIO.write(bImageFromConvert, this.productoClon.getMimeBig(), new File(IConstants.PATH_DISK+this.productoClon.getImageName()+"_grande."+this.productoClon.getMimeBig()));
+						this.productoPersiste.setImageBig(this.fileBig.getContents());
+					}
 					this.showConsulta = true;
 					this.showEditar   = false;
 					this.mostrarMensajeGlobal("productoActualizado", "exito");

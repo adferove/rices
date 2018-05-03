@@ -35,7 +35,9 @@ public class Product implements Serializable{
 	private byte[]  image;
 	private byte[]  imageBig;
 	private String  contentType;
+	private String  contentTypeBig;
 	private String  mime;
+	private String  mimeBig;
 	private String  texto;
 	private String  agrupaMenu;
 
@@ -149,11 +151,11 @@ public class Product implements Serializable{
 	public byte[] getImageBig() {
 		if(this.imageBig==null){
 			try {
-				if(StringUtils.trimToNull(this.contentType)!=null){
-					BufferedImage originalImage = ImageIO.read(new File(IConstants.PATH_DISK+this.getImageName()+"_big."+this.getMime()));
+				if(StringUtils.trimToNull(this.contentTypeBig)!=null){
+					BufferedImage originalImage = ImageIO.read(new File(IConstants.PATH_DISK+this.getImageName()+"_grande."+this.getMimeBig()));
 					// convert BufferedImage to byte array
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					ImageIO.write(originalImage, this.getMime(), baos);
+					ImageIO.write(originalImage, this.getMimeBig(), baos);
 					baos.flush();
 					this.imageBig = baos.toByteArray();
 					baos.close();
@@ -190,6 +192,21 @@ public class Product implements Serializable{
 		} 
 		return mime;
 	}
+	
+	public String getMimeBig() {
+		this.mimeBig = "";
+		if(this.contentTypeBig.equals("image/png")){
+			this.mimeBig = "png";
+		}else if(this.contentTypeBig.equals("image/gif")){
+			this.mimeBig = "gif";
+		}else if(this.contentTypeBig.equals("image/jpeg")){
+			this.mimeBig = "jpeg";
+		}else if(this.contentTypeBig.equals("image/jpg")){
+			this.mimeBig = "jpg";
+		} 
+		return mimeBig;
+	}
+	
 	public void setMime(String mime) {
 		this.mime = mime;
 	}
@@ -206,7 +223,16 @@ public class Product implements Serializable{
 	public void setAgrupaMenu(String agrupaMenu) {
 		this.agrupaMenu = agrupaMenu;
 	}
-	
+
+	public void setMimeBig(String mimeBig) {
+		this.mimeBig = mimeBig;
+	}
+	public String getContentTypeBig() {
+		return contentTypeBig;
+	}
+	public void setContentTypeBig(String contentTypeBig) {
+		this.contentTypeBig = contentTypeBig;
+	}
 	public Product clone(){
 		Product product = new Product();
 		product.setId(new Integer(this.id));

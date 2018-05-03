@@ -22,14 +22,14 @@ public interface IInsertRices {
 		Integer resultado = null;
 		try{
 			StringBuilder builder = new StringBuilder();
-			builder.append(" INSERT INTO rices.products(product_name,   "); 
-			builder.append("         description, creation_date,        ");
-			builder.append("         state, login_usuario, ranking,     ");
-			builder.append("         image_name, product_type, open,    ");
-			builder.append("         closed, price, menu, content_type, ");
-			builder.append("         texto, agrupa_menu)                ");
-			builder.append(" VALUES (?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)");
-			builder.append(" RETURNING id;                              ");
+			builder.append(" INSERT INTO rices.products(product_name,      "); 
+			builder.append("         description, creation_date,           ");
+			builder.append("         state, login_usuario, ranking,        ");
+			builder.append("         image_name, product_type, open,       ");
+			builder.append("         closed, price, menu, content_type,    ");
+			builder.append("         texto, agrupa_menu, content_type_big) ");
+			builder.append(" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)      ");
+			builder.append(" RETURNING id;                                 ");
 			Conexion conexion    = null;
 			CallableStatement cs = null;
 			ResultSet rs         = null;  
@@ -51,6 +51,7 @@ public interface IInsertRices {
 				cs.setObject(13, pProduct.getContentType());
 				cs.setObject(14, pProduct.getTexto());
 				cs.setObject(15, pProduct.getAgrupaMenu());
+				cs.setObject(16, pProduct.getContentTypeBig());
 				cs.execute();
 				rs = cs.getResultSet();
 				if(rs.next()){

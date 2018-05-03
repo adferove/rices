@@ -20,7 +20,8 @@ public interface IUpdateRices {
 			builder.append(" UPDATE rices.products                                                    ");
 			builder.append(" SET    product_name=?, description=?, state=?,                           ");
 			builder.append("        ranking=?, image_name=?, product_type=?, open=?,                  ");
-			builder.append("        closed=?, price=?, menu=?, content_type=?, texto=?, agrupa_menu=? "); 
+			builder.append("        closed=?, price=?, menu=?, content_type=?, texto=?, agrupa_menu=?,");
+			builder.append("        content_type_big=?                                                ");
 			builder.append(" WHERE  id=?;                                                             ");
 			Conexion conexion    = null;
 			CallableStatement cs = null;
@@ -40,7 +41,8 @@ public interface IUpdateRices {
 				cs.setObject(11, pProduct.getContentType());
 				cs.setObject(12, pProduct.getTexto());
 				cs.setObject(13, pProduct.getAgrupaMenu());
-				cs.setInt(14, pProduct.getId());
+				cs.setObject(14, pProduct.getContentTypeBig());
+				cs.setInt(15, pProduct.getId());
 				int value = cs.executeUpdate();
 				if(value==1){
 					resultado = true;

@@ -137,92 +137,153 @@
 
 				<p:panel header="Crear nuevo producto" style="text-align:center;">
 					<div align="center">
-						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+						<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
 
-							<p:outputLabel value="Nombre producto: "
-								style="font-weight:bold; font-size:14px" />
-							<p:inputText id="txtNombreCreaProducto" style="font-size:14px; "
-								maxlength="20" value="#{manageProduct.productoPersiste.name}" />
+							<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
 
-							<p:outputLabel value="#{mensaje.Description} producto: "
-								style="font-weight:bold; font-size:14px" />
-							<p:inputTextarea id="txtDescripcionCreaProducto"
-								style="font-size:14px;" maxlength="200"
-								value="#{manageProduct.productoPersiste.description}" />
+								<p:outputLabel value="Nombre producto: "
+									style="font-weight:bold; font-size:14px" />
+								<p:inputText id="txtNombreCreaProducto" style="font-size:14px; "
+									maxlength="20" value="#{manageProduct.productoPersiste.name}" />
 
-							<p:outputLabel value="#{mensaje.Description} Larga: "
-								style="font-weight:bold; font-size:14px" />
-							<p:inputTextarea id="txtDescripcionLargaCreate"
-								style="font-size:14px;" maxlength="400"
-								value="#{manageProduct.productoPersiste.texto}" />
+								<p:outputLabel value="#{mensaje.Description} producto: "
+									style="font-weight:bold; font-size:14px" />
+								<p:inputTextarea id="txtDescripcionCreaProducto"
+									style="font-size:14px;" maxlength="200"
+									value="#{manageProduct.productoPersiste.description}" />
 
-							<p:outputLabel value="Estado: "
-								style="font-weight:bold; font-size:14px" />
-							<p:selectOneMenu id="slctCreaProducto"
-								style="padding-right: 1em;"
-								value="#{manageProduct.productoPersiste.state}">
-								<f:selectItem itemLabel="Activo" itemValue="A" />
-								<f:selectItem itemLabel="Inactivo" itemValue="I" />
-							</p:selectOneMenu>
+								<p:outputLabel value="#{mensaje.Description} Larga: "
+									style="font-weight:bold; font-size:14px" />
+								<p:inputTextarea id="txtDescripcionLargaCreate"
+									style="font-size:14px;" maxlength="400"
+									value="#{manageProduct.productoPersiste.texto}" />
 
-							<p:outputLabel value="Noon-Moon: "
-								style="font-weight:bold; font-size:14px" />
-							<p:selectOneMenu id="slctCreaMoonNoon"
-								style="padding-right: 1em;"
-								value="#{manageProduct.productoPersiste.agrupaMenu}">
-								<f:selectItem itemLabel="Noon" itemValue="N" />
-								<f:selectItem itemLabel="Moon" itemValue="M" />
-							</p:selectOneMenu>
+								<p:outputLabel value="Estado: "
+									style="font-weight:bold; font-size:14px" />
+								<p:selectOneMenu id="slctCreaProducto"
+									style="padding-right: 1em;"
+									value="#{manageProduct.productoPersiste.state}">
+									<f:selectItem itemLabel="Activo" itemValue="A" />
+									<f:selectItem itemLabel="Inactivo" itemValue="I" />
+								</p:selectOneMenu>
 
-							<p:outputLabel value="Tipo: "
-								style="font-weight:bold; font-size:14px" />
-							<p:selectOneMenu id="txtCreaType" style="padding-right: 1em;"
-								value="#{manageProduct.productoPersiste.productType}">
-								<f:selectItem itemLabel="Complemento" itemValue="C" />
-								<f:selectItem itemLabel="Principal" itemValue="P" />
-							</p:selectOneMenu>
+								<p:outputLabel value="Noon-Moon: "
+									style="font-weight:bold; font-size:14px" />
+								<p:selectOneMenu id="slctCreaMoonNoon"
+									style="padding-right: 1em;"
+									value="#{manageProduct.productoPersiste.agrupaMenu}">
+									<f:selectItem itemLabel="Noon" itemValue="N" />
+									<f:selectItem itemLabel="Moon" itemValue="M" />
+								</p:selectOneMenu>
 
-							<p:outputLabel value="Ranking: "
-								style="font-weight:bold; font-size:14px" />
-							<p:selectOneMenu id="txtCreaRanking" style="padding-right: 1em;"
-								value="#{manageProduct.productoPersiste.ranking}">
-								<f:selectItem itemLabel="1" itemValue="1" />
-								<f:selectItem itemLabel="2" itemValue="2" />
-								<f:selectItem itemLabel="3" itemValue="3" />
-								<f:selectItem itemLabel="4" itemValue="4" />
-								<f:selectItem itemLabel="5" itemValue="5" />
-							</p:selectOneMenu>
+								<p:outputLabel value="Tipo: "
+									style="font-weight:bold; font-size:14px" />
+								<p:selectOneMenu id="txtCreaType" style="padding-right: 1em;"
+									value="#{manageProduct.productoPersiste.productType}">
+									<f:selectItem itemLabel="Complemento" itemValue="C" />
+									<f:selectItem itemLabel="Principal" itemValue="P" />
+								</p:selectOneMenu>
 
-							<p:outputLabel value="Nombre imagen: "
-								style="font-weight:bold; font-size:14px" />
-							<p:inputText id="txtImagenCreaProducto" style="font-size:14px;"
-								maxlength="12"
-								value="#{manageProduct.productoPersiste.imageName}" />
+								<p:outputLabel value="Ranking: "
+									style="font-weight:bold; font-size:14px" />
+								<p:selectOneMenu id="txtCreaRanking" style="padding-right: 1em;"
+									value="#{manageProduct.productoPersiste.ranking}">
+									<f:selectItem itemLabel="1" itemValue="1" />
+									<f:selectItem itemLabel="2" itemValue="2" />
+									<f:selectItem itemLabel="3" itemValue="3" />
+									<f:selectItem itemLabel="4" itemValue="4" />
+									<f:selectItem itemLabel="5" itemValue="5" />
+								</p:selectOneMenu>
 
-							<p:outputLabel value="Horario desde: "
-								style="font-weight:bold; font-size:14px" />
-							<p:calendar id="timeDesde"
-								value="#{manageProduct.productoPersiste.open}" pattern="HH:mm"
-								timeOnly="true" />
+								<p:outputLabel value="Horario desde: "
+									style="font-weight:bold; font-size:14px" />
+								<p:calendar id="timeDesde"
+									value="#{manageProduct.productoPersiste.open}" pattern="HH:mm"
+									timeOnly="true" />
 
-							<p:outputLabel value="Horario hasta: "
-								style="font-weight:bold; font-size:14px" />
-							<p:calendar id="timeHasta"
-								value="#{manageProduct.productoPersiste.closed}" pattern="HH:mm"
-								timeOnly="true" />
+								<p:outputLabel value="Horario hasta: "
+									style="font-weight:bold; font-size:14px" />
+								<p:calendar id="timeHasta"
+									value="#{manageProduct.productoPersiste.closed}"
+									pattern="HH:mm" timeOnly="true" />
 
-							<p:outputLabel value="Precio: "
-								style="font-weight:bold; font-size:14px" />
-							<p:inputNumber id="txtCreateProductPrice" style="font-size:14px;"
-								value="#{manageProduct.productoPersiste.price}" />
+								<p:outputLabel value="Precio: "
+									style="font-weight:bold; font-size:14px" />
+								<p:inputNumber id="txtCreateProductPrice"
+									style="font-size:14px;"
+									value="#{manageProduct.productoPersiste.price}" />
 
-							<p:outputLabel value="#{mensaje.Menu}: "
-								style="font-weight:bold; font-size:14px" />
-							<p:selectOneMenu id="slctCreaMenu" style="padding-right: 1em;"
-								value="#{manageProduct.productoPersiste.idMenu}">
-								<f:selectItem noSelectionOption="true" itemLabel="-Seleccione-" />
-								<f:selectItems value="#{manageProduct.itemMenu}" />
-							</p:selectOneMenu>
+								<p:outputLabel value="#{mensaje.Menu}: "
+									style="font-weight:bold; font-size:14px" />
+								<p:selectOneMenu id="slctCreaMenu" style="padding-right: 1em;"
+									value="#{manageProduct.productoPersiste.idMenu}">
+									<f:selectItem noSelectionOption="true" itemLabel="-Seleccione-" />
+									<f:selectItems value="#{manageProduct.itemMenu}" />
+								</p:selectOneMenu>
+
+								<p:outputLabel value="Nombre imagen: "
+									style="font-weight:bold; font-size:14px" />
+								<p:inputText id="txtImagenCreaProducto" style="font-size:14px;"
+									maxlength="12"
+									value="#{manageProduct.productoPersiste.imageName}" />
+							</p:panelGrid>
+
+							<p:panelGrid id="pnlCreaImagen" columns="2"
+								styleClass="ui-panelgrid-blank">
+								<p:outputLabel value="Imagen: "
+									rendered="#{manageProduct.file==null}"
+									style="font-weight:bold; font-size:14px" />
+								<p:fileUpload id="fileImagenCrea" cancelLabel="true"
+									dragDropSupport="true" rendered="#{manageProduct.file==null}"
+									fileUploadListener="#{manageProduct.recibirArchivoRecurso}"
+									multiple="false" fileLimit="1"
+									fileLimitMessage="Sólo 1 archivo" label="Seleccionar imagen"
+									mode="advanced" update=":form:pnlCreaImagen" auto="true"
+									sizeLimit="1000000"
+									invalidSizeMessage="Excede el tamaño  permitido de 1024KB!"
+									invalidFileMessage="Extensión de archivo incorrecta, solo archivos gif,jpeg,png"
+									allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+
+								<p:outputLabel value="" style="font-weight:bold; font-size:14px"
+									rendered="#{manageProduct.file!=null}" />
+								<p:panelGrid columns="1" styleClass="ui-panelgrid-blank"
+									rendered="#{manageProduct.file!=null}">
+									<o:graphicImage style="max-width: 317px; max-height: 183px;"
+										value="#{manageProduct.file.contents}" dataURI="true" />
+									<p:commandLink value="Quitar imagen"
+										style="font-size:12px;text-decoration:underline; color:#0000FF;"
+										action="#{manageProduct.limpiarArchivoCargado()}"
+										process="@this" update=":form:pnlCreaImagen" />
+								</p:panelGrid>
+
+								<p:outputLabel value="Imagen grande: "
+									rendered="#{manageProduct.fileBig==null}"
+									style="font-weight:bold; font-size:14px" />
+								<p:fileUpload id="fileImagenGrandeCrea" cancelLabel="true"
+									dragDropSupport="true"
+									rendered="#{manageProduct.fileBig==null}"
+									fileUploadListener="#{manageProduct.recibirFileBig}"
+									multiple="false" fileLimit="1"
+									fileLimitMessage="Sólo 1 archivo" label="Seleccionar imagen"
+									mode="advanced" update=":form:pnlCreaImagen" auto="true"
+									sizeLimit="1000000"
+									invalidSizeMessage="Excede el tamaño  permitido de 1024KB!"
+									invalidFileMessage="Extensión de archivo incorrecta, solo archivos gif,jpeg,png"
+									allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+
+								<p:outputLabel value="" style="font-weight:bold; font-size:14px"
+									rendered="#{manageProduct.fileBig!=null}" />
+								<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+									<o:graphicImage rendered="#{manageProduct.fileBig!=null}"
+										style="max-width: 317px; max-height: 183px;"
+										value="#{manageProduct.fileBig.contents}" dataURI="true" />
+									<p:commandLink value="Quitar imagen"
+										style="font-size:12px;text-decoration:underline; color:#0000FF;"
+										action="#{manageProduct.limpiarFileBig()}" process="@this"
+										update=":form:pnlCreaImagen"
+										rendered="#{manageProduct.fileBig!=null}" />
+								</p:panelGrid>
+							</p:panelGrid>
 
 
 						</p:panelGrid>
@@ -253,140 +314,150 @@
 
 				<p:panel header="Editar producto" style="text-align:center;">
 					<div align="center">
-						<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+						<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
 
-							<p:outputLabel value="Nombre producto: "
-								style="font-weight:bold; font-size:14px" />
-							<p:inputText id="txtNombreEditProducto" style="font-size:14px; "
-								maxlength="20" value="#{manageProduct.productoClon.name}" />
+							<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+								<p:outputLabel value="Nombre producto: "
+									style="font-weight:bold; font-size:14px" />
+								<p:inputText id="txtNombreEditProducto" style="font-size:14px; "
+									maxlength="20" value="#{manageProduct.productoClon.name}" />
 
-							<p:outputLabel value="#{mensaje.Description} producto: "
-								style="font-weight:bold; font-size:14px" />
-							<p:inputTextarea id="txtDescripcionEditProducto"
-								style="font-size:14px;" maxlength="200"
-								value="#{manageProduct.productoClon.description}" />
+								<p:outputLabel value="#{mensaje.Description} producto: "
+									style="font-weight:bold; font-size:14px" />
+								<p:inputTextarea id="txtDescripcionEditProducto"
+									style="font-size:14px;" maxlength="200"
+									value="#{manageProduct.productoClon.description}" />
 
-							<p:outputLabel value="#{mensaje.Description} Larga: "
-								style="font-weight:bold; font-size:14px" />
-							<p:inputTextarea id="txtDescripcionLargaEdit"
-								style="font-size:14px;" maxlength="400"
-								value="#{manageProduct.productoClon.texto}" />
+								<p:outputLabel value="#{mensaje.Description} Larga: "
+									style="font-weight:bold; font-size:14px" />
+								<p:inputTextarea id="txtDescripcionLargaEdit"
+									style="font-size:14px;" maxlength="400"
+									value="#{manageProduct.productoClon.texto}" />
 
-							<p:outputLabel value="Estado: "
-								style="font-weight:bold; font-size:14px" />
-							<p:selectOneMenu id="slctEditProducto"
-								style="padding-right: 1em;"
-								value="#{manageProduct.productoClon.state}">
-								<f:selectItem itemLabel="Activo" itemValue="A" />
-								<f:selectItem itemLabel="Inactivo" itemValue="I" />
-							</p:selectOneMenu>
+								<p:outputLabel value="Estado: "
+									style="font-weight:bold; font-size:14px" />
+								<p:selectOneMenu id="slctEditProducto"
+									style="padding-right: 1em;"
+									value="#{manageProduct.productoClon.state}">
+									<f:selectItem itemLabel="Activo" itemValue="A" />
+									<f:selectItem itemLabel="Inactivo" itemValue="I" />
+								</p:selectOneMenu>
 
-							<p:outputLabel value="Noon-Moon: "
-								style="font-weight:bold; font-size:14px" />
-							<p:selectOneMenu id="slctEditaMoonNoon"
-								style="padding-right: 1em;"
-								value="#{manageProduct.productoClon.agrupaMenu}">
-								<f:selectItem itemLabel="Noon" itemValue="N" />
-								<f:selectItem itemLabel="Moon" itemValue="M" />
-							</p:selectOneMenu>
+								<p:outputLabel value="Noon-Moon: "
+									style="font-weight:bold; font-size:14px" />
+								<p:selectOneMenu id="slctEditaMoonNoon"
+									style="padding-right: 1em;"
+									value="#{manageProduct.productoClon.agrupaMenu}">
+									<f:selectItem itemLabel="Noon" itemValue="N" />
+									<f:selectItem itemLabel="Moon" itemValue="M" />
+								</p:selectOneMenu>
 
-							<p:outputLabel value="Tipo: "
-								style="font-weight:bold; font-size:14px" />
-							<p:selectOneMenu id="txtEditType" style="padding-right: 1em;"
-								value="#{manageProduct.productoClon.productType}">
-								<f:selectItem itemLabel="Complemento" itemValue="C" />
-								<f:selectItem itemLabel="Principal" itemValue="P" />
-							</p:selectOneMenu>
+								<p:outputLabel value="Tipo: "
+									style="font-weight:bold; font-size:14px" />
+								<p:selectOneMenu id="txtEditType" style="padding-right: 1em;"
+									value="#{manageProduct.productoClon.productType}">
+									<f:selectItem itemLabel="Complemento" itemValue="C" />
+									<f:selectItem itemLabel="Principal" itemValue="P" />
+								</p:selectOneMenu>
 
-							<p:outputLabel value="Ranking: "
-								style="font-weight:bold; font-size:14px" />
-							<p:selectOneMenu id="txtEditRanking" style="padding-right: 1em;"
-								value="#{manageProduct.productoClon.ranking}">
-								<f:selectItem itemLabel="1" itemValue="1" />
-								<f:selectItem itemLabel="2" itemValue="2" />
-								<f:selectItem itemLabel="3" itemValue="3" />
-								<f:selectItem itemLabel="4" itemValue="4" />
-								<f:selectItem itemLabel="5" itemValue="5" />
-							</p:selectOneMenu>
+								<p:outputLabel value="Ranking: "
+									style="font-weight:bold; font-size:14px" />
+								<p:selectOneMenu id="txtEditRanking" style="padding-right: 1em;"
+									value="#{manageProduct.productoClon.ranking}">
+									<f:selectItem itemLabel="1" itemValue="1" />
+									<f:selectItem itemLabel="2" itemValue="2" />
+									<f:selectItem itemLabel="3" itemValue="3" />
+									<f:selectItem itemLabel="4" itemValue="4" />
+									<f:selectItem itemLabel="5" itemValue="5" />
+								</p:selectOneMenu>
 
-							<p:outputLabel value="Horario desde: "
-								style="font-weight:bold; font-size:14px" />
-							<p:calendar id="timeEditDesde"
-								value="#{manageProduct.productoClon.open}" pattern="HH:mm"
-								timeOnly="true" />
+								<p:outputLabel value="Horario desde: "
+									style="font-weight:bold; font-size:14px" />
+								<p:calendar id="timeEditDesde"
+									value="#{manageProduct.productoClon.open}" pattern="HH:mm"
+									timeOnly="true" />
 
-							<p:outputLabel value="Horario hasta: "
-								style="font-weight:bold; font-size:14px" />
-							<p:calendar id="timeEditHasta"
-								value="#{manageProduct.productoClon.closed}" pattern="HH:mm"
-								timeOnly="true" />
+								<p:outputLabel value="Horario hasta: "
+									style="font-weight:bold; font-size:14px" />
+								<p:calendar id="timeEditHasta"
+									value="#{manageProduct.productoClon.closed}" pattern="HH:mm"
+									timeOnly="true" />
 
-							<p:outputLabel value="Precio: "
-								style="font-weight:bold; font-size:14px" />
-							<p:inputNumber id="txtEditProductPrice" style="font-size:14px;"
-								value="#{manageProduct.productoClon.price}" />
+								<p:outputLabel value="Precio: "
+									style="font-weight:bold; font-size:14px" />
+								<p:inputNumber id="txtEditProductPrice" style="font-size:14px;"
+									value="#{manageProduct.productoClon.price}" />
 
-							<p:outputLabel value="#{mensaje.Menu}: "
-								style="font-weight:bold; font-size:14px" />
-							<p:selectOneMenu id="slctEditMenu" style="padding-right: 1em;"
-								value="#{manageProduct.productoClon.idMenu}">
-								<f:selectItem noSelectionOption="true" itemLabel="-Seleccione-" />
-								<f:selectItems value="#{manageProduct.itemMenu}" />
-							</p:selectOneMenu>
+								<p:outputLabel value="#{mensaje.Menu}: "
+									style="font-weight:bold; font-size:14px" />
+								<p:selectOneMenu id="slctEditMenu" style="padding-right: 1em;"
+									value="#{manageProduct.productoClon.idMenu}">
+									<f:selectItem noSelectionOption="true" itemLabel="-Seleccione-" />
+									<f:selectItems value="#{manageProduct.itemMenu}" />
+								</p:selectOneMenu>
 
-							<p:outputLabel value="Nombre imagen: "
-								style="font-weight:bold; font-size:14px" />
-							<p:inputText id="txtImagenEditProducto" style="font-size:14px;"
-								maxlength="12" value="#{manageProduct.productoClon.imageName}" />
 
-							<p:outputLabel value="Imagen: "
-								rendered="#{manageProduct.file==null}"
-								style="font-weight:bold; font-size:14px" />
-							<p:fileUpload id="fileImagenPersonal" cancelLabel="true"
-								dragDropSupport="true" rendered="#{manageProduct.file==null}"
-								fileUploadListener="#{manageProduct.recibirArchivoRecurso}"
-								multiple="false" fileLimit="1" fileLimitMessage="Sólo 1 archivo"
-								label="Seleccionar imagen" mode="advanced"
-								update=":form:pnlEditaProducto" auto="true" sizeLimit="1000000"
-								invalidSizeMessage="Excede el tamaño  permitido de 1024KB!"
-								invalidFileMessage="Extensión de archivo incorrecta, solo archivos gif,jpeg,png"
-								allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
-
-							<p:outputLabel value="" style="font-weight:bold; font-size:14px"
-								rendered="#{manageProduct.file!=null}" />
-							<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
-								<o:graphicImage rendered="#{manageProduct.file!=null}"
-									value="#{manageProduct.file.contents}" dataURI="true" />
-								<p:commandLink value="Quitar imagen"
-									style="font-size:12px;text-decoration:underline; color:#0000FF;"
-									action="#{manageProduct.limpiarArchivoCargado()}"
-									process="@this" update=":form:pnlEditaProducto"
-									rendered="#{manageProduct.file!=null}" />
+								<p:outputLabel value="Nombre imagen: "
+									style="font-weight:bold; font-size:14px" />
+								<p:inputText id="txtImagenEditProducto" style="font-size:14px;"
+									maxlength="12" value="#{manageProduct.productoClon.imageName}" />
 							</p:panelGrid>
 
-							<p:outputLabel value="Imagen grande: "
-								rendered="#{manageProduct.fileBig==null}"
-								style="font-weight:bold; font-size:14px" />
-							<p:fileUpload id="fileImagenGrande" cancelLabel="true"
-								dragDropSupport="true" rendered="#{manageProduct.fileBig==null}"
-								fileUploadListener="#{manageProduct.recibirFileBig}"
-								multiple="false" fileLimit="1" fileLimitMessage="Sólo 1 archivo"
-								label="Seleccionar imagen" mode="advanced"
-								update=":form:pnlEditaProducto" auto="true" sizeLimit="1000000"
-								invalidSizeMessage="Excede el tamaño  permitido de 1024KB!"
-								invalidFileMessage="Extensión de archivo incorrecta, solo archivos gif,jpeg,png"
-								allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+							<p:panelGrid id="pnlEditaImagen" columns="2"
+								styleClass="ui-panelgrid-blank">
+								<p:outputLabel value="Imagen: "
+									rendered="#{manageProduct.file==null}"
+									style="font-weight:bold; font-size:14px" />
+								<p:fileUpload id="fileImagenPersonal" cancelLabel="true"
+									dragDropSupport="true" rendered="#{manageProduct.file==null}"
+									fileUploadListener="#{manageProduct.recibirArchivoRecurso}"
+									multiple="false" fileLimit="1"
+									fileLimitMessage="Sólo 1 archivo" label="Seleccionar imagen"
+									mode="advanced" update=":form:pnlEditaImagen" auto="true"
+									sizeLimit="1000000"
+									invalidSizeMessage="Excede el tamaño  permitido de 1024KB!"
+									invalidFileMessage="Extensión de archivo incorrecta, solo archivos gif,jpeg,png"
+									allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 
-							<p:outputLabel value="" style="font-weight:bold; font-size:14px"
-								rendered="#{manageProduct.fileBig!=null}" />
-							<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
-								<o:graphicImage rendered="#{manageProduct.fileBig!=null}"
-									value="#{manageProduct.fileBig.contents}" dataURI="true" />
-								<p:commandLink value="Quitar imagen"
-									style="font-size:12px;text-decoration:underline; color:#0000FF;"
-									action="#{manageProduct.limpiarFileBig()}" process="@this"
-									update=":form:pnlEditaProducto"
+								<p:outputLabel value="" style="font-weight:bold; font-size:14px"
+									rendered="#{manageProduct.file!=null}" />
+								<p:panelGrid columns="1" styleClass="ui-panelgrid-blank"
+									rendered="#{manageProduct.file!=null}">
+									<o:graphicImage style="max-width: 317px; max-height: 183px;"
+										value="#{manageProduct.file.contents}" dataURI="true" />
+									<p:commandLink value="Quitar imagen"
+										style="font-size:12px;text-decoration:underline; color:#0000FF;"
+										action="#{manageProduct.limpiarArchivoCargado()}"
+										process="@this" update=":form:pnlEditaImagen" />
+								</p:panelGrid>
+
+								<p:outputLabel value="Imagen grande: "
+									rendered="#{manageProduct.fileBig==null}"
+									style="font-weight:bold; font-size:14px" />
+								<p:fileUpload id="fileImagenGrande" cancelLabel="true"
+									dragDropSupport="true"
+									rendered="#{manageProduct.fileBig==null}"
+									fileUploadListener="#{manageProduct.recibirFileBig}"
+									multiple="false" fileLimit="1"
+									fileLimitMessage="Sólo 1 archivo" label="Seleccionar imagen"
+									mode="advanced" update=":form:pnlEditaImagen" auto="true"
+									sizeLimit="1000000"
+									invalidSizeMessage="Excede el tamaño  permitido de 1024KB!"
+									invalidFileMessage="Extensión de archivo incorrecta, solo archivos gif,jpeg,png"
+									allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+
+								<p:outputLabel value="" style="font-weight:bold; font-size:14px"
 									rendered="#{manageProduct.fileBig!=null}" />
+								<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+									<o:graphicImage rendered="#{manageProduct.fileBig!=null}"
+										style="max-width: 317px; max-height: 183px;"
+										value="#{manageProduct.fileBig.contents}" dataURI="true" />
+									<p:commandLink value="Quitar imagen"
+										style="font-size:12px;text-decoration:underline; color:#0000FF;"
+										action="#{manageProduct.limpiarFileBig()}" process="@this"
+										update=":form:pnlEditaImagen"
+										rendered="#{manageProduct.fileBig!=null}" />
+								</p:panelGrid>
 							</p:panelGrid>
 
 						</p:panelGrid>
