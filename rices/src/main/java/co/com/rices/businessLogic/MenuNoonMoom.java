@@ -19,12 +19,15 @@ import co.com.rices.objects.Product;
 public class MenuNoonMoom implements Serializable{
 
 	private static final long serialVersionUID = -6455045348536360298L;
-	private static final String URI_TODO  = "/rices/menuRices.jsf";
-	private static final String URI_NOON  = "/rices/noon.jsf";
-	private static final String URI_MOON  = "/rices/moon.jsf";
+	private static final String URI_TODO    = "/rices/menuRices.jsf";
+	private static final String URI_NOON    = "/rices/noon.jsf";
+	private static final String URI_MOON    = "/rices/moon.jsf";
+	private static final String URI_POLICY  = "/rices/privacyPolicy.jsf";
+	private static final String URI_DATA    = "/rices/privacyData.jsf";
 	
 	private String textoMoon;
 	private String textoNoon;
+	private String texto;
 	private List<Product> productList;
 	
 	@PostConstruct
@@ -65,6 +68,16 @@ public class MenuNoonMoom implements Serializable{
 								this.textoMoon = parametros.get(0).getTextLargo();
 							}
 						}
+					}else if(req.getRequestURI().trim().contains(URI_POLICY)){
+						parametros = IQueryRices.getParametrosById(IConstants.TX_PR_PO);
+						if(parametros.size()>0){
+							this.texto = parametros.get(0).getTextLargo();
+						}
+					}else if(req.getRequestURI().trim().contains(URI_DATA)){
+						parametros = IQueryRices.getParametrosById(IConstants.TX_PR_DA);
+						if(parametros.size()>0){
+							this.texto = parametros.get(0).getTextLargo();
+						}
 					}
 				}
 			}	
@@ -84,5 +97,10 @@ public class MenuNoonMoom implements Serializable{
 	public String getTextoNoon() {
 		return textoNoon;
 	}
+
+	public String getTexto() {
+		return texto;
+	}
+
 
 }

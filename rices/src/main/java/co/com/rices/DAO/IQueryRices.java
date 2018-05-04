@@ -524,6 +524,7 @@ public interface IQueryRices {
 			if(pNoonMoon!=null){
 				builder.append(" AND agrupa_menu = ? ");
 			}
+			builder.append(" ORDER BY  agrupa_menu DESC ");
 			Conexion conexion    = null;
 			CallableStatement cs = null;
 			ResultSet rs         = null;

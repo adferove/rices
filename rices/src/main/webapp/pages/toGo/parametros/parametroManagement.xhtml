@@ -35,9 +35,9 @@
 								</div>
 							</p:column>
 
-							<p:column headerText="Valor numérico">
-								<div align="right">
-									<h:outputText value="#{loc.valorNumerico}" />
+							<p:column headerText="#{mensaje.Description}">
+								<div align="left">
+									<h:outputText value="#{loc.textCorto}" />
 								</div>
 							</p:column>
 
@@ -76,17 +76,17 @@
 								style="font-size:14px; text-transform:uppercase;" maxlength="8"
 								value="#{manageParametro.persisteParametro.id}" />
 
+							<p:outputLabel value="#{mensaje.Description}: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputTextarea id="txtTextoCorto" style="font-size:14px;"
+								maxlength="50"
+								value="#{manageParametro.persisteParametro.textCorto}" />
+
 							<p:outputLabel value="Valor numérico: "
 								style="font-weight:bold; font-size:14px" />
 							<p:inputText id="txtValorNumerico" style="font-size:14px;"
 								maxlength="20"
 								value="#{manageParametro.persisteParametro.valorNumerico}" />
-
-							<p:outputLabel value="Texto corto(200 caracteres): "
-								style="font-weight:bold; font-size:14px" />
-							<p:inputTextarea id="txtTextoCorto" style="font-size:14px;"
-								maxlength="200"
-								value="#{manageParametro.persisteParametro.textCorto}" />
 
 							<p:outputLabel value="Texto largo(sin límite): "
 								style="font-weight:bold; font-size:14px" />
@@ -129,17 +129,17 @@
 								style="font-size:14px; text-transform:uppercase;" maxlength="8"
 								value="#{manageParametro.cloneParametro.id}" />
 
+							<p:outputLabel value="#{mensaje.Description}: "
+								style="font-weight:bold; font-size:14px" />
+							<p:inputTextarea id="txtTextoCortoEdit" style="font-size:14px;"
+								maxlength="50"
+								value="#{manageParametro.cloneParametro.textCorto}" />
+
 							<p:outputLabel value="Valor numérico: "
 								style="font-weight:bold; font-size:14px" />
 							<p:inputText id="txtValorNumericoEdit" style="font-size:14px;"
 								maxlength="20"
 								value="#{manageParametro.cloneParametro.valorNumerico}" />
-
-							<p:outputLabel value="Texto corto(200 caracteres): "
-								style="font-weight:bold; font-size:14px" />
-							<p:inputTextarea id="txtTextoCortoEdit" style="font-size:14px;"
-								maxlength="200"
-								value="#{manageParametro.cloneParametro.textCorto}" />
 
 							<p:outputLabel value="Texto largo(sin límite): "
 								style="font-weight:bold; font-size:14px" />
