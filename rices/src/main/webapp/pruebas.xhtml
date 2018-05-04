@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/principal.xhtml">
+
+	<ui:define name="body">
+		<h:form id="form">
+			<div id="products-post">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="heading-section">
+								<h2>Nuestro Menú Rices</h2>
+								<img src="images/under-heading.png" alt="" />
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="filters col-md-12 col-xs-12">
+							<ul id="filters" class="clearfix">
+								<li><span class="filter" data-filter="all">Todo</span></li>
+								<li><span class="filter" data-filter=".N">Noon</span></li>
+								<li><span class="filter" data-filter=".M">Moon</span></li>
+							</ul>
+						</div>
+					</div>
+
+
+					<div class="row">
+						<div class="col-md-6">
+							<h3>Menú Noon</h3>
+							<p>#{menuNoonMoom.textoNoon}</p>
+						</div>
+						<div class="col-md-6">
+							<h3>Menú Moon</h3>
+							<p>#{menuNoonMoom.textoMoon}</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<a href="/rices/noon.jsf">Ver menú Noon</a>
+						</div>
+						<div class="col-md-6">
+							<a href="/rices/moon.jsf">Ver menú Moon</a>
+						</div>
+					</div>
+
+					<div class="row" id="Container">
+
+						<div class="col-md-3 col-sm-6 mix portfolio-item N"
+							style="display: inline-block;">
+							<div class="portfolio-wrapper">
+								<div class="portfolio-thumb">
+									<img alt="" src="http://ricestogo.com/images/sea.jpeg" />
+										<div class="hover">
+											<div class="hover-iner">
+												<a class="fancybox"
+													href="http://ricestogo.com/images/sea_grande.jpeg"><img
+													alt="" src="images/open-icon.png" /></a> <span>Sea</span>
+											</div>
+										</div>
+								</div>
+								<div class="label-text">
+									<h3>Sea</h3>
+									<span class="text-category">$13000.00</span>
+									<h5>8 Piezas de Alitas de Pollo seleccionadas en salsa: -
+										BBQ - Miel Mostaza - Spicy</h5>
+									<h6></h6>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3 col-sm-6 mix portfolio-item N"
+							style="display: inline-block;">
+							<div class="portfolio-wrapper">
+								<div class="portfolio-thumb">
+									<img alt="" src="http://ricestogo.com/images/chorizo.jpeg" />
+										<div class="hover">
+											<div class="hover-iner">
+												<a class="fancybox"
+													href="http://ricestogo.com/images/chorizo_grande.jpeg"><img
+													alt="" src="images/open-icon.png" /></a> <span>Chorizos</span>
+											</div>
+										</div>
+								</div>
+								<div class="label-text">
+									<h3>Chorizos</h3>
+									<span class="text-category">$12000.00</span>
+									<h5>8 Piezas de Alitas de Pollo seleccionadas en salsa: -
+										BBQ - Miel Mostaza - Spicy</h5>
+									<h6></h6>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3 col-sm-6 mix portfolio-item N"
+							style="display: inline-block;">
+							<div class="portfolio-wrapper">
+								<div class="portfolio-thumb">
+									<img alt="" src="http://ricestogo.com/images/Costillitas.jpeg" />
+										<div class="hover">
+											<div class="hover-iner">
+												<a class="fancybox"
+													href="http://ricestogo.com/images/Costillitas_grande.jpeg"><img
+													alt="" src="images/open-icon.png" /></a> <span>Costillitas</span>
+											</div>
+										</div>
+								</div>
+								<div class="label-text">
+									<h3>Costillitas</h3>
+									<span class="text-category">$17000.00</span>
+									<h5>8 Piezas de Alitas de Pollo seleccionadas en salsa: -
+										BBQ - Miel Mostaza - Spicy</h5>
+									<h6></h6>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3 col-sm-6 mix portfolio-item N"
+							style="display: inline-block;">
+							<div class="portfolio-wrapper">
+								<div class="portfolio-thumb">
+									<img alt="" src="http://ricestogo.com/images/rice_mix.jpeg" />
+										<div class="hover">
+											<div class="hover-iner">
+												<a class="fancybox"
+													href="http://ricestogo.com/images/rice_mix_grande.jpeg"><img
+													alt="" src="images/open-icon.png" /></a> <span>Aloha</span>
+											</div>
+										</div>
+								</div>
+								<div class="label-text">
+									<h3>Aloha</h3>
+									<span class="text-category">$13000.00</span>
+									<h5>8 Piezas de Alitas de Pollo seleccionadas en salsa: -
+										BBQ - Miel Mostaza - Spicy</h5>
+									<h6></h6>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3 col-sm-6 mix portfolio-item N"
+							style="display: inline-block;">
+							<div class="portfolio-wrapper">
+								<div class="portfolio-thumb">
+									<img alt="" src="http://ricestogo.com/images/carbonara.jpeg" />
+										<div class="hover">
+											<div class="hover-iner">
+												<a class="fancybox"
+													href="http://ricestogo.com/images/carbonara_grande.jpeg"><img
+													alt="" src="images/open-icon.png" /></a> <span>Carbonara</span>
+											</div>
+										</div>
+								</div>
+								<div class="label-text">
+									<h3>Carbonara</h3>
+									<span class="text-category">$14000.00</span>
+									<h5>8 Piezas de Alitas de Pollo seleccionadas en salsa: -
+										BBQ - Miel Mostaza - Spicy</h5>
+									<h6></h6>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3 col-sm-6 mix portfolio-item M"
+							style="display: inline-block;">
+							<div class="portfolio-wrapper">
+								<div class="portfolio-thumb">
+									<img alt="" src="http://ricestogo.com/images/mad.jpeg" />
+										<div class="hover">
+											<div class="hover-iner">
+												<a class="fancybox"
+													href="http://ricestogo.com/images/mad_grande.jpeg"><img
+													alt="" src="images/open-icon.png" /></a> <span>Mad</span>
+											</div>
+										</div>
+								</div>
+								<div class="label-text">
+									<h3>Mad</h3>
+									<span class="text-category">$13000.00</span>
+									<h5>8 Piezas de Alitas de Pollo seleccionadas en salsa: -
+										BBQ - Miel Mostaza - Spicy</h5>
+									<h6></h6>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3 col-sm-6 mix portfolio-item M"
+							style="display: inline-block;">
+							<div class="portfolio-wrapper">
+								<div class="portfolio-thumb">
+									<img alt="" src="http://ricestogo.com/images/veggie.jpeg" />
+										<div class="hover">
+											<div class="hover-iner">
+												<a class="fancybox"
+													href="http://ricestogo.com/images/veggie_grande.jpeg"><img
+													alt="" src="images/open-icon.png" /></a> <span>Veggie</span>
+											</div>
+										</div>
+								</div>
+								<div class="label-text">
+									<h3>Veggie</h3>
+									<span class="text-category">$13000.00</span>
+									<h5>8 Piezas de Alitas de Pollo seleccionadas en salsa: -
+										BBQ - Miel Mostaza - Spicy</h5>
+									<h6></h6>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3 col-sm-6 mix portfolio-item M"
+							style="display: inline-block;">
+							<div class="portfolio-wrapper">
+								<div class="portfolio-thumb">
+									<img alt="" src="http://ricestogo.com/images/bolognesa.jpeg" />
+										<div class="hover">
+											<div class="hover-iner">
+												<a class="fancybox"
+													href="http://ricestogo.com/images/bolognesa_grande.jpeg"><img
+													alt="" src="images/open-icon.png" /></a> <span>Bolognesa</span>
+											</div>
+										</div>
+								</div>
+								<div class="label-text">
+									<h3>Bolognesa</h3>
+									<span class="text-category">$14000.00</span>
+									<h5>8 Piezas de Alitas de Pollo seleccionadas en salsa: -
+										BBQ - Miel Mostaza - Spicy</h5>
+									<h6></h6>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3 col-sm-6 mix portfolio-item M"
+							style="display: inline-block;">
+							<div class="portfolio-wrapper">
+								<div class="portfolio-thumb">
+									<img alt="" src="http://ricestogo.com/images/alitas.jpeg" />
+										<div class="hover">
+											<div class="hover-iner">
+												<a class="fancybox"
+													href="http://ricestogo.com/images/alitas_grande.jpeg"><img
+													alt="" src="images/open-icon.png" /></a> <span>Alitas</span>
+											</div>
+										</div>
+								</div>
+								<div class="label-text">
+									<h3>Alitas</h3>
+									<span class="text-category">$15000.00</span>
+									<h5>8 Piezas de Alitas de Pollo seleccionadas en salsa: -
+										BBQ - Miel Mostaza - Spicy</h5>
+									<h6></h6>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<script src="js/vendor/jquery-1.11.0.min.js"></script>
+		</h:form>
+	</ui:define>
+</ui:composition>
