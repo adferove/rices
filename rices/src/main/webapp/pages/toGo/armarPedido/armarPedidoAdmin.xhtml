@@ -1,0 +1,815 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/principal.xhtml" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="body">
+
+		<style type="text/css">
+.ui-steps .ui-steps-item {
+	width: 33.333%;
+}
+
+.ui-state-highlight {
+	text-shadow: none !important;
+}
+
+.ui-steps.custom {
+	margin-bottom: 30px;
+}
+
+.ui-steps.custom .ui-steps-item .ui-menuitem-link {
+	height: 30px;
+	padding: 0 1em;
+}
+
+.ui-steps.custom .ui-steps-item .ui-steps-number {
+	background-color: #0081c2;
+	color: #FFFFFF;
+	display: inline-block;
+	width: 30px;
+	border-radius: 10px;
+	margin-top: -10px;
+	margin-bottom: 10px;
+}
+
+.ui-steps .ui-steps-number {
+	font-size: 90%;
+	display: block;
+}
+
+.ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td,
+	.ui-datatable tfoot th {
+	padding: 0;
+}
+
+.table {
+	width: 100%;
+	margin-bottom: 0px;
+}
+
+.ui-panelgrid .ui-panelgrid-cell {
+	border-width: 1px;
+	border-style: solid;
+	border-color: inherit;
+	padding: 0;
+}
+
+.ui-state-active {
+	background: #ffffff
+		url(/rices/javax.faces.resource/images/ui-bg_flat_65_ffffff_40x100.png.jsf?ln=primefaces-blitzer)
+		50% 50% repeat-x;
+	font-weight: bold;
+	color: #c7578f;
+}
+
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited
+	{
+	color: #c7578f;
+	text-decoration: none;
+}
+</style>
+
+		<h:form id="form">
+			<p:messages id="msj" showDetail="true" closable="true" />
+
+			<p:outputPanel id="pnlArmaPedido"
+				rendered="#{armarPedidoAdmin.showSeleccionarProducto}">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-9">
+
+							<p:steps readonly="false"
+								activeIndex="#{armarPedidoAdmin.tabActual}">
+								<p:menuitem value="Tu nombre" style="color:#c7578f;"
+									actionListener="#{armarPedidoAdmin.setTabActual(0)}"
+									process="@this" update=":form:pnlArmaPedido" />
+								<p:menuitem value="Selecciona tu box"
+									actionListener="#{armarPedidoAdmin.setTabActual(1)}"
+									process="@this" update=":form:pnlArmaPedido" />
+								<p:menuitem value="Checkout"
+									actionListener="#{armarPedidoAdmin.setTabActual(2)}"
+									process="@this" update=":form:pnlArmaPedido" />
+							</p:steps>
+
+							<p:panel id="pnlTuNomnre"
+								rendered="#{armarPedidoAdmin.tabActual==0}">
+								<p:tab id="tabTuNombre" title="Tu nombre">
+									<div align="center">
+										<p:panelGrid styleClass="ui-panelgrid-blank" columns="1">
+											<p:outputLabel
+												style="font-size:20px; font-family:Verdana; color:#c7578f;"
+												value="#{mensaje.cuentaComoTeLlamas}" />
+											<p:inputText maxlength="50"
+												style="font-size:16px; font-family:Verdana; font-weight:bold; text-align:center;"
+												value="#{armarPedidoAdmin.pedidoPersiste.nombreCliente}" />
+										</p:panelGrid>
+									</div>
+								</p:tab>
+
+								<div style="height: 10px;"></div>
+
+								<div align="center">
+									<p:commandButton id="btnValidar0"
+										style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
+										action="#{armarPedidoAdmin.typeYourName()}" value="Siguiente"
+										update=":form:pnlArmaPedido,:form:msj" />
+									<p:spacer width="10" />
+								</div>
+
+							</p:panel>
+
+							<p:panel id="pnlTuBox"
+								rendered="#{armarPedidoAdmin.tabActual==1}">
+								<p:tab id="tabTuBox"
+									title="#{armarPedidoAdmin.pedidoPersiste.nombreCliente}">
+									<p:outputPanel rendered="#{armarPedidoAdmin.showRiceMenu}">
+
+										<div align="center">
+											<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+												<h:outputText
+													value="#{armarPedidoAdmin.pedidoPersiste.nombreCliente} selecciona tu box"
+													style="font-weight: bold; color:#c7578f; font-size:20px; font-family:Verdana;" />
+												<h:outputText value="Click sobre el nombre del producto"
+													style="font-size:14px; font-family:Verdana; font-weight: bold; color:#bdbdbd;" />
+											</p:panelGrid>
+										</div>
+
+										<p:repeat value="#{armarPedidoAdmin.listaRiceMenu}"
+											var="riceMenu">
+											<p:outputPanel>
+												<h:outputText value="#{riceMenu.description}"
+													style="font-weight: bold; color:#c7578f; font-size:20px; font-family:Verdana;" />
+												<p:spacer width="10" />
+												<p:dataGrid var="producto" value="#{riceMenu.listProducts}"
+													columns="3" layout="grid" rows="12" id="prods">
+													<div align="center">
+														<p:panelGrid columns="1" columnClasses="logo,detail"
+															styleClass="ui-panelgrid-blank">
+															<p:commandLink id="idSelectProduct" update=":form"
+																actionListener="#{armarPedidoAdmin.seleccionarComplemento(producto)}">
+																<h:outputText value="#{producto.name}"
+																	style="font-weight: bold; color:#c7578f; font-size:14px; font-family:Verdana;" />
+															</p:commandLink>
+															<p:blockUI block=":form" trigger="idSelectProduct" />
+															<p:outputPanel>
+																<p:panelGrid columns="1" cellpadding="5">
+
+																	<h:outputText value="$#{producto.price}"
+																		style="font-weight: bold; font-size:14px; font-family:Verdana;" />
+																	<h:outputText value="" style="font-size:12px;" />
+																	<p:rating value="#{producto.ranking}" readonly="true" />
+																</p:panelGrid>
+															</p:outputPanel>
+														</p:panelGrid>
+													</div>
+
+												</p:dataGrid>
+											</p:outputPanel>
+										</p:repeat>
+										<div style="height: 10px"></div>
+										<div align="center">
+											<p:commandButton id="btnCheckOut" icon="fa fa-check"
+												style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
+												action="#{armarPedidoAdmin.validarProductoSeleccionado()}"
+												value="Checkout" update=":form">
+											</p:commandButton>
+											<p:blockUI block=":form" trigger="btnCheckOut" />
+										</div>
+									</p:outputPanel>
+									<p:outputPanel id="productDetail"
+										rendered="#{!armarPedidoAdmin.showRiceMenu}">
+										<div align="left">
+											<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+
+												<p:spacer width="10" />
+												<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+
+													<h:outputText
+														value="#{armarPedidoAdmin.mainProductSelected.name}"
+														style="font-weight: bold; color:#c7578f; font-size:20px; font-family:Verdana;" />
+
+													<h:outputText
+														value="#{armarPedidoAdmin.mainProductSelected.description}"
+														style="font-weight: normal;  font-size:14px; font-family:Verdana;" />
+
+													<h:outputText
+														value="$#{armarPedidoAdmin.mainProductSelected.price}"
+														style="font-weight: bold;  font-size:14px; font-family:Verdana;" />
+
+													<p:rating
+														value="#{armarPedidoAdmin.mainProductSelected.ranking}"
+														readonly="true" />
+												</p:panelGrid>
+											</p:panelGrid>
+										</div>
+										<div style="height: 10px"></div>
+										<div align="left">
+											<p:repeat
+												value="#{armarPedidoAdmin.mainProductSelected.listProductStep}"
+												var="step">
+												<p:outputPanel>
+													<h:outputText value="#{step.description}"
+														style="font-weight: bold; color:#c7578f; font-size:14px; font-family:Verdana;" />
+													<p:spacer width="10" />
+													<h:outputText rendered="#{step.selectType.equals('U')}"
+														value="Elige una #{mensaje.opcion}"
+														style="font-size:14px; font-family:Verdana; font-weight: bold; color:#bdbdbd;" />
+													<h:outputText rendered="#{step.selectType.equals('M')}"
+														value="Puedes elegir #{mensaje.mas} de una #{mensaje.opcion}"
+														style="font-size:14px; font-family:Verdana; font-weight: bold; color:#bdbdbd;" />
+													<div align="center">
+														<p:dataTable id="idSelectMultiple" var="det"
+															value="#{step.listStepDetail}"
+															styleClass="ui-datatable-blank">
+															<p:column width="10%"
+																style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
+																<div align="right">
+																	<p:selectBooleanCheckbox value="#{det.checked}">
+																		<p:ajax update="idSelectMultiple,form:idAddSubtotal"
+																			listener="#{armarPedidoAdmin.seleccionUnicaListener(det)}" />
+																	</p:selectBooleanCheckbox>
+																</div>
+															</p:column>
+															<p:column width="20%"
+																style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
+																<div align="left">
+																	<h:outputText value="#{det.transientProduct.name}"
+																		style="font-size:14px; font-family:Verdana;" />
+																</div>
+															</p:column>
+															<p:column width="20%"
+																style="background-color:#ffffff;border: 1px solid #ffffff; background:none;">
+																<div align="right">
+																	<h:outputText value="$ #{det.price}"
+																		style="font-size:14px; font-family:Verdana;" />
+																</div>
+															</p:column>
+														</p:dataTable>
+													</div>
+												</p:outputPanel>
+												<hr />
+											</p:repeat>
+										</div>
+										<div style="height: 10px"></div>
+										<div align="center">
+											<p:panelGrid columns="5" styleClass="ui-panelgrid-blank">
+												<p:commandButton icon="fa fa-minus-circle"
+													style="background-image: none; color: #c7578f; background-color: #fff; border-color: #c7578f; font-weight: normal;"
+													action="#{armarPedidoAdmin.restarSumarCantidad(0)}"
+													update="productDetail" />
+												<p:spacer width="10" />
+												<p:outputLabel
+													value="#{armarPedidoAdmin.detallePedido.cantidad}" />
+												<p:spacer width="10" />
+												<p:commandButton icon="fa fa-plus-circle"
+													style="background-image: none; color: #c7578f; background-color: #fff; border-color: #c7578f; font-weight: normal;"
+													action="#{armarPedidoAdmin.restarSumarCantidad(1)}"
+													update="productDetail" />
+											</p:panelGrid>
+										</div>
+										<div style="height: 10px"></div>
+										<div align="center">
+											<p:panelGrid id="idAddSubtotal" columns="2"
+												styleClass="ui-panelgrid-blank">
+												<h:outputText value="Subtotal:"
+													style="font-size:14px; font-family:Verdana;" />
+												<h:outputText
+													value="$#{armarPedidoAdmin.detallePedido.precio}"
+													style="font-weight: bold; font-size:14px; font-family:Verdana;" />
+											</p:panelGrid>
+										</div>
+										<div style="height: 10px"></div>
+										<div align="center">
+											<p:commandButton id="idAddProduct" value="Agregar a la orden"
+												style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
+												action="#{armarPedidoAdmin.addProductToOrder()}"
+												update=":form:pnlArmaPedido, form:tb, form:tbDetail, :form:idStcky,:form:msj" />
+											<p:commandButton id="idCancelAdd" value="Cancelar"
+												style="background-image: none; color: #fff; background-color: #FF0000; border-color: #FF0000; font-weight: normal; margin-top:10px; margin-left:10px;"
+												action="#{armarPedidoAdmin.cancelarProducto()}"
+												update=":form" />
+											<p:blockUI block=":form" trigger="idAddProduct,idCancelAdd" />
+										</div>
+									</p:outputPanel>
+								</p:tab>
+							</p:panel>
+
+							<p:panel id="pnlTuDireccion"
+								rendered="#{armarPedidoAdmin.tabActual==2}">
+								<p:tab id="tabTuDireccion" title="Direccion">
+									<p:accordionPanel id="tbTypeContact">
+										<p:tab
+											title="#{armarPedidoAdmin.pedidoPersiste.nombreCliente} #{mensaje.ingresaDatoPedido}"
+											titleStyle="color:#c7578f; font-size:20px;">
+											<div align="left">
+												<p:panelGrid id="datoCheckout" columns="1"
+													styleClass="ui-panelgrid-blank">
+
+													<h:outputText value="Municipio"
+														style="font-weight:bold; color:#c7578f; font-size:14px;" />
+													<p:selectOneMenu id="idSomCiti"
+														value="#{armarPedidoAdmin.pedidoPersiste.codigoCiudad}"
+														style="font-size:14px; padding-right: 1em;">
+														<f:selectItems value="#{armarPedidoAdmin.listCities}"
+															itemValue="#{city.id}" itemLabel="#{city.name}"
+															var="city" />
+													</p:selectOneMenu>
+
+													<h:outputText value="#{mensaje.Direccion}"
+														style="font-weight:bold; color:#c7578f; font-size:14px;" />
+													<p:inputText style="font-size:14px; " size="50"
+														maxlength="50"
+														value="#{armarPedidoAdmin.pedidoPersiste.direccionCliente}" />
+													<h:outputText value="#{mensaje.Telefono}/Celular"
+														style="font-weight:bold; color:#c7578f; font-size:14px;" />
+													<p:inputText style="font-size:14px; " size="50"
+														maxlength="200"
+														value="#{armarPedidoAdmin.pedidoPersiste.celularCliente}" />
+													<h:outputText value="" />
+													<h:outputText value="#{mensaje.RicesContacta}"
+														style="color:#8f949a;font-size:14px;" />
+												</p:panelGrid>
+											</div>
+
+										</p:tab>
+
+									</p:accordionPanel>
+									<p:accordionPanel id="tbCupon">
+										<p:tab title="Modificar total" titleStyle="color:#c7578f;">
+											<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+
+												<p:outputLabel value="Subtotal:"
+													style="font-size:14px; color:grey;" />
+												<p:inputText
+													value="#{armarPedidoAdmin.pedidoPersiste.subtotal}"
+													style="font-weight: bold; font-size:14px;" />
+
+												<p:outputLabel value="Iva:"
+													style="font-size:14px; color:grey;" />
+												<p:inputText value="#{armarPedidoAdmin.pedidoPersiste.iva}"
+													style="font-size:14px;" />
+
+												<p:outputLabel value="Domicilio:"
+													style="font-size:14px; color:grey;" />
+												<p:inputText style="font-size:14px;"
+													value="#{armarPedidoAdmin.pedidoPersiste.cargoDomicilio}" />
+
+												<p:outputLabel value="% de descuento:"
+													style="font-size:14px;  color:grey;" />
+												<p:inputText style="font-size:14px;"
+													value="#{armarPedidoAdmin.pedidoPersiste.descuento}" />
+
+												<p:outputLabel value="Total:"
+													style="font-size:14px;  color:grey;" />
+												<p:inputText style="font-size:14px;"
+													value="#{armarPedidoAdmin.pedidoPersiste.total}" />
+
+												<div style="height: 10px;"></div>
+
+												<div align="center">
+													<p:commandButton id="btnAplicar" icon="fa fa-money"
+														style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
+														action="#{armarPedidoAdmin.actualizarTotal()}"
+														value="Actualizar"
+														update=":form:tbCupon, form:tb">
+													</p:commandButton>
+												</div>
+												<p:blockUI block=":form" trigger="btnAplicar" />
+											</p:panelGrid>
+										</p:tab>
+									</p:accordionPanel>
+
+									<div style="height: 20px"></div>
+
+
+
+									<div align="center">
+										<p:commandButton id="btnConfimar"
+											style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
+											action="#{armarPedidoAdmin.confirmarPedido()}"
+											value="Confirmar pedido" update=":form"
+											icon="fa fa-motorcycle">
+										</p:commandButton>
+
+										<p:commandButton id="btnCheckOutCO" icon="fa fa-arrow-left"
+											style="background-image: none; color: #fff; background-color: #d9534f; border-color: #d43f3a; font-weight: normal; margin-top:10px; margin-left:10px;"
+											action="#{armarPedidoAdmin.regresarSeleccionProducto()}"
+											value="Regresar" update=":form">
+										</p:commandButton>
+									</div>
+
+
+
+									<p:blockUI block=":form" trigger="btnConfimar,btnCheckOutCO" />
+								</p:tab>
+							</p:panel>
+
+
+						</div>
+
+						<div class="col-md-3">
+							<p:accordionPanel id="tb">
+								<p:tab title="Total">
+									<div align="center" style="padding: 0;">
+										<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+											<p:outputLabel value="Subtotal:"
+												style="font-size:14px; color:grey;" />
+											<h:outputText
+												value="$#{armarPedidoAdmin.pedidoPersiste.subtotal}"
+												style="font-weight: bold; font-size:14px;" />
+											<p:outputLabel value="Iva:"
+												style="font-size:14px; color:grey;" />
+											<p:outputLabel
+												value="$#{armarPedidoAdmin.pedidoPersiste.iva}"
+												style="font-size:14px;" />
+											<p:outputLabel value="Domicilio:"
+												style="font-size:14px; color:grey;" />
+											<p:outputLabel style="font-size:14px;"
+												value="$#{armarPedidoAdmin.pedidoPersiste.cargoDomicilio}" />
+
+											<p:outputLabel value="% de descuento:"
+												style="font-size:14px;  color:grey;" />
+											<p:outputLabel style="font-size:14px;"
+												value="#{armarPedidoAdmin.pedidoPersiste.descuento}" />
+
+											<p:outputLabel value="Total:"
+												style="font-size:14px;  color:grey;" />
+											<p:outputLabel style="font-size:14px;"
+												value="$#{armarPedidoAdmin.pedidoPersiste.total}" />
+										</p:panelGrid>
+									</div>
+								</p:tab>
+							</p:accordionPanel>
+							<p:accordionPanel id="tbDetail"
+								rendered="#{armarPedidoAdmin.tabActual==0 || armarPedidoAdmin.tabActual==1}">
+								<p:tab title="Detalle de tu pedido">
+									<div align="left" style="padding: 0;">
+										<p:repeat value="#{armarPedidoAdmin.listadoDetallePedido}"
+											var="detalle">
+											<p:outputPanel>
+												<p:dataTable value="1" styleClass="ui-datatable-blank">
+													<p:column width="62%">
+														<div align="left">
+															<h:outputText value="#{detalle.mainProduct.name}"
+																style="font-weight: bold; color:#c7578f; font-size:10px;" />
+														</div>
+													</p:column>
+													<p:column width="28%">
+														<div align="right">
+															<h:outputText value="$#{detalle.mainProduct.price}"
+																style="font-weight: bold; font-size:10px;" />
+														</div>
+													</p:column>
+												</p:dataTable>
+											</p:outputPanel>
+
+
+											<p:repeat value="#{detalle.mainProduct.listProductStep}"
+												var="step">
+												<p:outputPanel>
+													<h:outputText value="#{step.description}"
+														style="font-weight: bold; color:grey; font-size:10px;" />
+													<p:spacer width="10" />
+													<p:dataTable id="idSelectMultiple" var="det"
+														value="#{step.listStepDetail}"
+														styleClass="ui-datatable-blank">
+														<p:column width="62%"
+															style="background-color:#ffffff;border: 1px solid #ffffff; background:none; ">
+															<div align="left">
+																<h:outputText value="#{det.transientProduct.name}"
+																	style="font-size:10px; color:grey;" />
+															</div>
+														</p:column>
+														<p:column width="28%"
+															style="background-color:#ffffff;border: 1px solid #ffffff; background:none; ">
+															<div align="right">
+																<h:outputText value="$ #{det.price}"
+																	style="font-size:10px; color:grey;" />
+															</div>
+														</p:column>
+													</p:dataTable>
+												</p:outputPanel>
+											</p:repeat>
+											<hr style="margin-top: 0px; margin-bottom: 0px;" />
+											<table class="table table-md">
+												<thead>
+													<tr>
+														<th scope="col"><div align="left"
+																style="font-size: 12px; color: red;">Subtotal</div></th>
+
+														<th scope="col"><div align="center"
+																style="font-size: 12px;">
+																<h:outputText value="#{detalle.cantidad}"
+																	style="font-size:12px;" />
+															</div></th>
+
+														<th scope="col"><div align="right"
+																style="font-size: 12px;">$#{detalle.precio}</div></th>
+
+														<th scope="col"><div align="right"
+																style="font-size: 12px;">
+																<p:commandLink
+																	update="form:tbDetail,form:idStcky, form:tb"
+																	action="#{armarPedidoAdmin.quitarDetalle(detalle)}"
+																	value="X" title="Eliminar"
+																	style="font-size:12px; font-weight:bold; color:red;" />
+															</div></th>
+													</tr>
+												</thead>
+											</table>
+											<div style="height: 10px;"></div>
+										</p:repeat>
+									</div>
+								</p:tab>
+							</p:accordionPanel>
+
+							<p:accordionPanel id="tbDetailCO"
+								rendered="#{armarPedidoAdmin.tabActual==2}">
+								<p:tab title="Detalle de tu pedido">
+									<div align="left" style="padding: 0;">
+										<p:repeat value="#{armarPedidoAdmin.listadoDetallePedido}"
+											var="detalle">
+											<p:outputPanel>
+												<p:dataTable value="1" styleClass="ui-datatable-blank">
+													<p:column width="62%">
+														<div align="left">
+															<h:outputText value="#{detalle.mainProduct.name}"
+																style="font-weight: bold; color:#c7578f; font-size:10px;" />
+														</div>
+													</p:column>
+													<p:column width="28%">
+														<div align="right">
+															<h:outputText value="$#{detalle.mainProduct.price}"
+																style="font-weight: bold; font-size:10px;" />
+														</div>
+													</p:column>
+												</p:dataTable>
+											</p:outputPanel>
+
+
+											<p:repeat value="#{detalle.mainProduct.listProductStep}"
+												var="step">
+												<p:outputPanel>
+													<h:outputText value="#{step.description}"
+														style="font-weight: bold; color:grey; font-size:10px;" />
+													<p:spacer width="10" />
+													<p:dataTable id="idSelectMultipleCO" var="det"
+														value="#{step.listStepDetail}"
+														styleClass="ui-datatable-blank">
+														<p:column width="62%"
+															style="background-color:#ffffff;border: 1px solid #ffffff; background:none; ">
+															<div align="left">
+																<h:outputText value="#{det.transientProduct.name}"
+																	style="font-size:10px; color:grey;" />
+															</div>
+														</p:column>
+														<p:column width="28%"
+															style="background-color:#ffffff;border: 1px solid #ffffff; background:none; ">
+															<div align="right">
+																<h:outputText value="$ #{det.price}"
+																	style="font-size:10px; color:grey;" />
+															</div>
+														</p:column>
+													</p:dataTable>
+												</p:outputPanel>
+											</p:repeat>
+											<hr style="margin-top: 0px; margin-bottom: 0px;" />
+											<table class="table table-md">
+												<thead>
+													<tr>
+														<th scope="col"><div align="left"
+																style="font-size: 12px; color: red;">Subtotal</div></th>
+
+														<th scope="col"><div align="center"
+																style="font-size: 12px;">
+																<p:spacer width="10" />
+																<h:outputText value="#{detalle.cantidad}"
+																	style="font-size:12px;" />
+																<p:spacer width="10" />
+
+															</div></th>
+
+														<th scope="col"><div align="right"
+																style="font-size: 12px;">$#{detalle.precio}</div></th>
+
+
+													</tr>
+												</thead>
+											</table>
+											<div style="height: 10px;"></div>
+										</p:repeat>
+									</div>
+								</p:tab>
+							</p:accordionPanel>
+						</div>
+
+					</div>
+				</div>
+			</p:outputPanel>
+
+			<p:outputPanel id="pnl3"
+				rendered="#{armarPedidoAdmin.showPedidoRegistrado}">
+				<div class="container">
+					<div class="row">
+						<div class="product-item col-md-12">
+							<div class="row">
+								<div class="col-md-9">
+
+									<p:outputLabel
+										value="#{armarPedidoAdmin.pedidoPersiste.nombreCliente} #{mensaje.PedidoRegistrado}"
+										style="color:#c7578f;font-size:20px; font-weigh:bold; font-family:Verdana;" />
+									<div style="height: 10px;"></div>
+
+									<p:accordionPanel id="tbTypeContactReg">
+										<p:tab title="Tus datos"
+											titleStyle="font-size:18px; color:#c7578f; font-weight:bold; font-family:Verdana;">
+
+
+											<div align="center">
+
+												<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+													<p:outputLabel value="Cliente:"
+														style="font-size:18px; color:#c7578f; font-weight:bold; font-family:Verdana;" />
+
+													<p:outputLabel
+														style="font-size:18px;  font-weight:bold;  font-family:Verdana;  margin-left:10px;"
+														value="#{armarPedidoAdmin.pedidoPersiste.nombreCliente}" />
+
+
+													<p:outputLabel value="#{mensaje.Direccion}:"
+														style="font-size:18px; color:#c7578f;  font-weight:bold;  font-family:Verdana;" />
+
+													<p:outputLabel
+														style="font-size:18px;  font-weight:bold;  font-family:Verdana;  margin-left:10px;  "
+														value="#{armarPedidoAdmin.pedidoPersiste.direccionCliente}" />
+
+
+													<p:outputLabel value="Municipio:"
+														style="font-size:18px; color:#c7578f;  font-weight:bold;  font-family:Verdana;" />
+
+													<p:outputLabel
+														style="font-size:18px;  font-weight:bold;  font-family:Verdana;  margin-left:10px;"
+														value="#{armarPedidoAdmin.pedidoPersiste.cityName}" />
+
+
+													<p:outputLabel value="#{mensaje.Telefono}/Celular: "
+														style="font-size:18px; color:#c7578f;  font-weight:bold;  font-family:Verdana;" />
+
+													<p:outputLabel
+														style="font-size:18px;  font-weight:bold;  font-family:Verdana; margin-left:10px;"
+														value="#{armarPedidoAdmin.pedidoPersiste.celularCliente}" />
+
+
+												</p:panelGrid>
+
+
+
+											</div>
+
+
+
+
+											<div style="height: 20px"></div>
+											<div align="center">
+												<p:commandButton id="btnSalir"
+													style="background-image: none; color: #fff; background-color: #d9534f; border-color: #d43f3a; font-weight: normal;"
+													action="/index.xhtml?faces-redirect=true" ajax="false"
+													value="Salir" icon="fa fa-sign-out">
+												</p:commandButton>
+												<p:blockUI block=":form" trigger="btnSalir" />
+											</div>
+										</p:tab>
+									</p:accordionPanel>
+								</div>
+
+								<div class="col-md-3">
+
+
+									<p:accordionPanel id="tb3">
+										<p:tab title="Valor del pedido">
+											<div align="center" style="padding: 0;">
+												<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+													<p:outputLabel value="Subtotal:"
+														style="font-size:14px; color:grey;" />
+													<h:outputText
+														value="$#{armarPedidoAdmin.pedidoPersiste.subtotal}"
+														style="font-weight: bold; font-size:14px;" />
+													<p:outputLabel value="Iva:"
+														style="font-size:14px; color:grey;" />
+													<p:outputLabel
+														value="$#{armarPedidoAdmin.pedidoPersiste.iva}"
+														style="font-size:14px;" />
+													<p:outputLabel value="Domicilio:"
+														style="font-size:14px; color:grey;" />
+													<p:outputLabel style="font-size:14px;"
+														value="$#{armarPedidoAdmin.pedidoPersiste.cargoDomicilio}" />
+
+													<p:outputLabel value="% de descuento:"
+														style="font-size:14px;  color:grey;" />
+													<p:outputLabel style="font-size:14px;"
+														value="#{armarPedidoAdmin.pedidoPersiste.descuento}" />
+
+													<p:outputLabel value="Total:"
+														style="font-size:14px;  color:grey;" />
+													<p:outputLabel style="font-size:14px;"
+														value="$#{armarPedidoAdmin.pedidoPersiste.total}" />
+												</p:panelGrid>
+											</div>
+										</p:tab>
+									</p:accordionPanel>
+
+									<p:accordionPanel id="tbDetailReg">
+										<p:tab title="Detalle de tu pedido">
+											<div align="left" style="padding: 0;">
+												<p:repeat value="#{armarPedidoAdmin.listadoDetallePedido}"
+													var="detalle">
+													<p:outputPanel>
+														<p:dataTable value="1" styleClass="ui-datatable-blank">
+															<p:column width="62%">
+																<div align="left">
+																	<h:outputText value="#{detalle.mainProduct.name}"
+																		style="font-weight: bold; color:#c7578f; font-size:10px;" />
+																</div>
+															</p:column>
+															<p:column width="28%">
+																<div align="right">
+																	<h:outputText value="$#{detalle.mainProduct.price}"
+																		style="font-weight: bold; font-size:10px;" />
+																</div>
+															</p:column>
+														</p:dataTable>
+													</p:outputPanel>
+
+
+													<p:repeat value="#{detalle.mainProduct.listProductStep}"
+														var="step">
+														<p:outputPanel>
+															<h:outputText value="#{step.description}"
+																style="font-weight: bold; color:grey; font-size:10px;" />
+															<p:spacer width="10" />
+															<p:dataTable id="idSelectMultipleCO" var="det"
+																value="#{step.listStepDetail}"
+																styleClass="ui-datatable-blank">
+																<p:column width="62%"
+																	style="background-color:#ffffff;border: 1px solid #ffffff; background:none; ">
+																	<div align="left">
+																		<h:outputText value="#{det.transientProduct.name}"
+																			style="font-size:10px; color:grey;" />
+																	</div>
+																</p:column>
+																<p:column width="28%"
+																	style="background-color:#ffffff;border: 1px solid #ffffff; background:none; ">
+																	<div align="right">
+																		<h:outputText value="$ #{det.price}"
+																			style="font-size:10px; color:grey;" />
+																	</div>
+																</p:column>
+															</p:dataTable>
+														</p:outputPanel>
+													</p:repeat>
+													<hr style="margin-top: 0px; margin-bottom: 0px;" />
+													<table class="table table-md">
+														<thead>
+															<tr>
+																<th scope="col"><div align="left"
+																		style="font-size: 12px; color: red;">Subtotal</div></th>
+
+																<th scope="col"><div align="center"
+																		style="font-size: 12px;">
+
+																		<h:outputText value="#{detalle.cantidad}"
+																			style="font-size:12px;" />
+																	</div></th>
+
+																<th scope="col"><div align="right"
+																		style="font-size: 12px;">$#{detalle.precio}</div></th>
+
+
+															</tr>
+														</thead>
+													</table>
+													<div style="height: 10px;"></div>
+												</p:repeat>
+											</div>
+										</p:tab>
+									</p:accordionPanel>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:outputPanel>
+
+
+
+
+
+			<p:sticky id="idStcky" target="tb" />
+		</h:form>
+	</ui:define>
+</ui:composition>
