@@ -29,7 +29,7 @@ public class AdministrarPedido extends ConsultarFuncionesAPI{
 	private String generarFactura(Pedido pPedido){
 		StringBuilder builder = new StringBuilder();
 
-		//builder.append(" <div id='block1'> ");
+		builder.append(" <div style='font-family: Courier new; font-size: 10px;'> ");
 		builder.append(" 	<div id='logo'> ");
 		builder.append(" 		<h3> ");
 		builder.append(" 			<span style='font-size: 12px;'> RICES TO GO</span> ");
@@ -175,7 +175,7 @@ public class AdministrarPedido extends ConsultarFuncionesAPI{
 		builder.append(" <footer> ");
 		builder.append(" 	<span style='font-size: 11px;'>Desarrollado por black vulture IT solutions. </span> ");
 		builder.append(" </footer> ");
-		//builder.append(" </div> ");
+		builder.append(" </div> ");
 
 		return builder.toString();
 	}

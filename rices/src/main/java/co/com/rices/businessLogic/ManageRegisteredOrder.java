@@ -55,7 +55,7 @@ public class ManageRegisteredOrder extends ConsultarFuncionesAPI{
 	
 	private String generarFactura(Pedido pPedido){
 		StringBuilder builder = new StringBuilder();
-		builder.append(" <div style='font-family: sans-serif; font-size: 10px;'> ");
+		builder.append(" <div style='font-family: Courier new; font-size: 10px;'> ");
 		builder.append(" 	<div class='logo' style='margin-left: 40px;'>                       ");
 		builder.append("        <img src='http://ricestogo.com/rices/images/logo.png' alt='' /> ");
 		builder.append(" 	</div>                                   ");
