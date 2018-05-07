@@ -47,7 +47,7 @@ public class ConsultarPedido extends ConsultarFuncionesAPI{
 		builder.append(" 	</div> ");
 		builder.append(" 	<div id='company'> ");
 		builder.append(" 		<div> ");
-		builder.append(" 			<span style='font-size: 12px;'>Cll 14 Kra 27,</span> ");
+		builder.append(" 			<span style='font-size: 12px;'>Cabecera,</span> ");
 		builder.append(" 			<br />  ");
 		builder.append(" 			<span style='font-size: 12px;'>B/ga, Santander</span> ");
 		builder.append(" 		</div> ");
