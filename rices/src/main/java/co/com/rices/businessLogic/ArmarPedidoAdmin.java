@@ -73,6 +73,8 @@ public class ArmarPedidoAdmin extends ConsultarFuncionesAPI{
 			this.pedidoPersiste.setIva(new BigDecimal(0));
 			this.pedidoPersiste.setTotal(new BigDecimal(0));
 			this.pedidoPersiste.setEstado("R");
+			this.pedidoPersiste.setDescuento(new BigDecimal(0));
+			this.pedidoPersiste.setTotalDescuento(new BigDecimal(0));
 			//PRODUCTOS OFRECIDOS POR RICES
 			RiceMenu pRiceMenu = new RiceMenu();
 			pRiceMenu.setEstado("A");
@@ -262,6 +264,16 @@ public class ArmarPedidoAdmin extends ConsultarFuncionesAPI{
 				this.pedidoPersiste.setMultiplicador(valorMultiplica);
 				this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal().multiply(valorMultiplica));
 				this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().setScale(2, RoundingMode.HALF_DOWN));
+				this.pedidoPersiste.setTotalDescuento(this.pedidoPersiste.getSubtotal().subtract(this.pedidoPersiste.getTotal()));
+			}else if(this.pedidoPersiste.getTotalDescuento()!=null && this.pedidoPersiste.getTotalDescuento().compareTo(new BigDecimal(0))>0){
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal().subtract(this.pedidoPersiste.getTotalDescuento()));
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().setScale(2, RoundingMode.HALF_DOWN));
+				this.pedidoPersiste.setDescuento(new BigDecimal(0));
+			}else{
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getSubtotal());
+				this.pedidoPersiste.setTotal(this.pedidoPersiste.getTotal().setScale(2, RoundingMode.HALF_DOWN));
+				this.pedidoPersiste.setDescuento(new BigDecimal(0));
+				this.pedidoPersiste.setTotalDescuento(new BigDecimal(0));
 			}
 		}catch(Exception e){
 			IConstants.log.error(e.toString(),e);
@@ -286,6 +298,14 @@ public class ArmarPedidoAdmin extends ConsultarFuncionesAPI{
 
 			if(!error){
 				boolean exito = true;
+				if(this.pedidoPersiste.getDescuento()!=null && this.pedidoPersiste.getDescuento().compareTo(new BigDecimal(0))>0){
+					this.pedidoPersiste.setTotalDescuento(this.pedidoPersiste.getSubtotal().subtract(this.pedidoPersiste.getTotal()));
+				}else if(this.pedidoPersiste.getTotalDescuento()!=null && this.pedidoPersiste.getTotalDescuento().compareTo(new BigDecimal(0))>0){
+					this.pedidoPersiste.setDescuento(new BigDecimal(0));
+				}else{
+					this.pedidoPersiste.setDescuento(new BigDecimal(0));
+					this.pedidoPersiste.setTotalDescuento(new BigDecimal(0));
+				}
 				//REGISTRA EL PEDIDO
 				Integer idPedido =IInsertRices.savePurchaseOrder(this.pedidoPersiste);
 				if(idPedido!=null){

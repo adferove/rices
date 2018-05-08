@@ -348,25 +348,15 @@
 													value="#{armarPedidoAdmin.pedidoPersiste.subtotal}"
 													style="font-weight: bold; font-size:14px;" />
 
-												<p:outputLabel value="Iva:"
-													style="font-size:14px; color:grey;" />
-												<p:inputText value="#{armarPedidoAdmin.pedidoPersiste.iva}"
-													style="font-size:14px;" />
-
-												<p:outputLabel value="Domicilio:"
-													style="font-size:14px; color:grey;" />
-												<p:inputText style="font-size:14px;"
-													value="#{armarPedidoAdmin.pedidoPersiste.cargoDomicilio}" />
-
 												<p:outputLabel value="% de descuento:"
 													style="font-size:14px;  color:grey;" />
 												<p:inputText style="font-size:14px;"
 													value="#{armarPedidoAdmin.pedidoPersiste.descuento}" />
 
-												<p:outputLabel value="Total:"
+												<p:outputLabel value="Descuento:"
 													style="font-size:14px;  color:grey;" />
 												<p:inputText style="font-size:14px;"
-													value="#{armarPedidoAdmin.pedidoPersiste.total}" />
+													value="#{armarPedidoAdmin.pedidoPersiste.totalDescuento}" />
 
 												<div style="height: 10px;"></div>
 
@@ -374,8 +364,7 @@
 													<p:commandButton id="btnAplicar" icon="fa fa-money"
 														style="background-image: none; color: #fff; background-color: #c7578f; border-color: #c7578f; font-weight: normal;"
 														action="#{armarPedidoAdmin.actualizarTotal()}"
-														value="Actualizar"
-														update=":form:tbCupon, form:tb">
+														value="Actualizar" update=":form:tbCupon, form:tb">
 													</p:commandButton>
 												</div>
 												<p:blockUI block=":form" trigger="btnAplicar" />
@@ -435,6 +424,11 @@
 												style="font-size:14px;  color:grey;" />
 											<p:outputLabel style="font-size:14px;"
 												value="#{armarPedidoAdmin.pedidoPersiste.descuento}" />
+
+											<p:outputLabel value="Total descuento:"
+												style="font-size:14px;  color:grey;" />
+											<p:outputLabel style="font-size:14px;"
+												value="#{armarPedidoAdmin.pedidoPersiste.totalDescuento}" />
 
 											<p:outputLabel value="Total:"
 												style="font-size:14px;  color:grey;" />
@@ -713,6 +707,11 @@
 														style="font-size:14px;  color:grey;" />
 													<p:outputLabel style="font-size:14px;"
 														value="#{armarPedidoAdmin.pedidoPersiste.descuento}" />
+
+													<p:outputLabel value="Descuento:"
+														style="font-size:14px;  color:grey;" />
+													<p:outputLabel style="font-size:14px;"
+														value="$#{armarPedidoAdmin.pedidoPersiste.totalDescuento}" />
 
 													<p:outputLabel value="Total:"
 														style="font-size:14px;  color:grey;" />

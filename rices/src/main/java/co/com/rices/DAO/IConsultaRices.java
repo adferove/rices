@@ -123,7 +123,7 @@ public interface IConsultaRices {
 			StringBuilder builder=new StringBuilder();
 			builder.append("SELECT id_pedido, id_cliente, total_pedido, fecha_pedido, hora_pedido, ");
 			builder.append("       estado_pedido, descuento,subtotal_pedido, nombre_cliente,       ");
-			builder.append("       direccion_cliente, celular_cliente, codigo_ciudad               ");
+			builder.append("       direccion_cliente, celular_cliente, codigo_ciudad, total_dcto   ");
 			builder.append("FROM   rices.Pedidos                                                   ");
 			builder.append("WHERE  35 = 35                                                         ");
 			Map<Integer, Object> parametros=new HashMap<Integer,Object>();
@@ -157,6 +157,7 @@ public interface IConsultaRices {
 					pedido.setDireccionCliente(rs.getString("direccion_cliente"));
 					pedido.setCelularCliente(rs.getString("celular_cliente"));
 					pedido.setCodigoCiudad(rs.getInt("codigo_ciudad"));
+					pedido.setTotalDescuento(rs.getBigDecimal("total_dcto"));
 					resultados.add(pedido);
 				}
 			}catch(SQLException sq){
@@ -615,7 +616,7 @@ public interface IConsultaRices {
 			StringBuilder builder=new StringBuilder();
 			builder.append("SELECT id_pedido, id_cliente, total_pedido, fecha_pedido, hora_pedido, ");
 			builder.append("       estado_pedido, descuento,subtotal_pedido, nombre_cliente,       ");
-			builder.append("       direccion_cliente, celular_cliente, codigo_ciudad               ");
+			builder.append("       direccion_cliente, celular_cliente, codigo_ciudad, total_dcto   ");
 			builder.append("FROM   rices.Pedidos                                                   ");
 			builder.append("WHERE  35 = 35                                                         ");
 			Map<Integer, Object> parametros=new HashMap<Integer,Object>();
@@ -657,6 +658,7 @@ public interface IConsultaRices {
 					pedido.setDireccionCliente(rs.getString("direccion_cliente"));
 					pedido.setCelularCliente(rs.getString("celular_cliente"));
 					pedido.setCodigoCiudad(rs.getInt("codigo_ciudad"));
+					pedido.setTotalDescuento(rs.getBigDecimal("total_dcto"));
 					resultados.add(pedido);
 				}
 			}catch(SQLException sq){

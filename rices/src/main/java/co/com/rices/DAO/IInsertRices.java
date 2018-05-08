@@ -224,8 +224,9 @@ public interface IInsertRices {
 			builder.append(" INSERT INTO rices.pedidos(                                                ");
 			builder.append("         id_cliente, total_pedido, subtotal_pedido, cargo_domicilio,       ");
 			builder.append("         iva, fecha_pedido, hora_pedido, estado_pedido, descuento,         ");
-			builder.append("         nombre_cliente, direccion_cliente, celular_cliente, codigo_ciudad)");
-			builder.append(" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)                            ");
+			builder.append("         nombre_cliente, direccion_cliente, celular_cliente, codigo_ciudad,");
+			builder.append("         total_dcto)                                                       ");
+			builder.append(" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)                         ");
 			builder.append(" RETURNING id_pedido;                                                      ");
 			Conexion conexion    = null;
 			CallableStatement cs = null;
@@ -246,6 +247,7 @@ public interface IInsertRices {
 				cs.setObject(11, pPedido.getDireccionCliente().trim());
 				cs.setObject(12, pPedido.getCelularCliente());
 				cs.setObject(13, pPedido.getCodigoCiudad());
+				cs.setObject(14, pPedido.getTotalDescuento());
 				cs.execute();
 				rs = cs.getResultSet();
 				if(rs.next()){

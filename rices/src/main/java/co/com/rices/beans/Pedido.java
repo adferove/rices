@@ -22,6 +22,7 @@ public class Pedido implements Serializable{
 	private BigDecimal          iva;
 	private Cliente             cliente;
 	private BigDecimal          descuento;
+	private BigDecimal          totalDescuento;
 	private BigDecimal          multiplicador;
 	private CuponCliente        transientCuponCliente;
 	private List<DetallePedido> listadoDetalle;
@@ -153,6 +154,12 @@ public class Pedido implements Serializable{
 	}
 	public void setCityName(String cityName) {
 		this.cityName = cityName;
+	}
+	public BigDecimal getTotalDescuento() {
+		return totalDescuento;
+	}
+	public void setTotalDescuento(BigDecimal totalDescuento) {
+		this.totalDescuento = totalDescuento;
 	}
 	
 }
