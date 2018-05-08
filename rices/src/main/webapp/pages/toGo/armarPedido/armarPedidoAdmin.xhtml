@@ -4,7 +4,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	template="/templates/principalAdmin.xhtml" xmlns:o="http://omnifaces.org/ui">
+	template="/templates/principalAdmin.xhtml"
+	xmlns:o="http://omnifaces.org/ui">
 
 	<ui:define name="body">
 
@@ -370,10 +371,15 @@ function printPage(id)
 												<p:inputText style="font-size:14px;"
 													value="#{armarPedidoAdmin.pedidoPersiste.descuento}" />
 
-												<p:outputLabel value="Descuento:"
+												<p:outputLabel value="Descuento en $:"
 													style="font-size:14px;  color:grey;" />
 												<p:inputText style="font-size:14px;"
 													value="#{armarPedidoAdmin.pedidoPersiste.totalDescuento}" />
+
+												<p:outputLabel value="Total:"
+													style="font-size:14px;  color:grey;" />
+												<p:outputLabel style="font-size:14px;"
+													value="$#{armarPedidoAdmin.pedidoPersiste.total}" />
 
 												<div style="height: 10px;"></div>
 
@@ -440,12 +446,12 @@ function printPage(id)
 											<p:outputLabel value="% de descuento:"
 												style="font-size:14px;  color:grey;" />
 											<p:outputLabel style="font-size:14px;"
-												value="#{armarPedidoAdmin.pedidoPersiste.descuento}" />
+												value="#{armarPedidoAdmin.pedidoPersiste.descuento}%" />
 
 											<p:outputLabel value="Total descuento:"
 												style="font-size:14px;  color:grey;" />
 											<p:outputLabel style="font-size:14px;"
-												value="#{armarPedidoAdmin.pedidoPersiste.totalDescuento}" />
+												value="$#{armarPedidoAdmin.pedidoPersiste.totalDescuento}" />
 
 											<p:outputLabel value="Total:"
 												style="font-size:14px;  color:grey;" />
@@ -683,8 +689,8 @@ function printPage(id)
 											<div align="center">
 												<p:commandButton id="btnSalir"
 													style="background-image: none; color: #fff; background-color: #d9534f; border-color: #d43f3a; font-weight: normal;"
-													action="/pages/toGo/armarPedido/armarPedidoAdmin.xhtml?faces-redirect=true" ajax="false"
-													value="Salir" icon="fa fa-sign-out">
+													action="/pages/toGo/armarPedido/armarPedidoAdmin.xhtml?faces-redirect=true"
+													ajax="false" value="Salir" icon="fa fa-sign-out">
 												</p:commandButton>
 												<p:blockUI block=":form" trigger="btnSalir" />
 											</div>
@@ -717,7 +723,7 @@ function printPage(id)
 													<p:outputLabel value="% de descuento:"
 														style="font-size:14px;  color:grey;" />
 													<p:outputLabel style="font-size:14px;"
-														value="#{armarPedidoAdmin.pedidoPersiste.descuento}" />
+														value="#{armarPedidoAdmin.pedidoPersiste.descuento}%" />
 
 													<p:outputLabel value="Descuento:"
 														style="font-size:14px;  color:grey;" />
