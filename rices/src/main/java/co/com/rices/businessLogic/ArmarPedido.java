@@ -23,6 +23,7 @@ import co.com.rices.DAO.IQueryRices;
 import co.com.rices.DAO.IUpdateRices;
 import co.com.rices.beans.DetallePedido;
 import co.com.rices.beans.Pedido;
+import co.com.rices.general.EmailSender;
 import co.com.rices.objects.City;
 import co.com.rices.objects.Complement;
 import co.com.rices.objects.CouponCode;
@@ -380,6 +381,9 @@ public class ArmarPedido extends ConsultarFuncionesAPI{
 
 				if(exito){
 					this.pedidoPersiste.setCityName(this.mapCity.get(this.pedidoPersiste.getCodigoCiudad()));
+					String[] val = {this.pedidoPersiste.getNombreCliente(), this.pedidoPersiste.getCelularCliente(), this.pedidoPersiste.getDireccionCliente(), this.pedidoPersiste.getCityName()};
+					String[] sDestinatario = {"pedidos@ricestogo.com"};
+					EmailSender.sendEmail(this.getMensaje("asuntoPedido"), this.getMensajeParametros("cuerpoPedido", val), this.getMensaje("footer"), sDestinatario);
 					FacesContext context = FacesContext.getCurrentInstance();
 					HttpSession sesion = (HttpSession) context.getExternalContext().getSession(true);
 					sesion.removeAttribute("RiceProductInCart");
