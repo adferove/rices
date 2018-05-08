@@ -7,7 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
-import org.primefaces.context.RequestContext;
+import org.primefaces.PrimeFaces;
 
 import co.com.rices.ConsultarFuncionesAPI;
 import co.com.rices.IConstants;
@@ -152,10 +152,10 @@ public class AdministrarPedido extends ConsultarFuncionesAPI{
 		builder.append(" 		<tr role='row'> ");
 		builder.append(" 			<td role='gridcell'><label id='form:j_idt42'><span style='font-size: 12px;'>DESCUENTO:</span></label></td> ");
 		builder.append(" 			<td role='gridcell'><div align='right'> ");
-		builder.append(" 					<span style='font-size: 12px; font-weight: bold;'>");
-		if(pPedido.getDescuento()!=null){
-			builder.append(pPedido.getDescuento());
-			builder.append("                    %</span> ");
+		builder.append(" 					<span style='font-size: 12px; font-weight: bold;'>$");
+		if(pPedido.getTotalDescuento()!=null){
+			builder.append(pPedido.getTotalDescuento());
+			builder.append("                    </span> ");
 		}else{
 			builder.append("                    </span> ");
 		}
@@ -206,8 +206,11 @@ public class AdministrarPedido extends ConsultarFuncionesAPI{
 					this.listadoPedido.remove(pPedido);
 					this.mostrarMensajeGlobal("listaPedidoActualizada", "exito");
 					if(pPedido.getEstado().equals("D")){
-						RequestContext.getCurrentInstance().execute(" document.getElementById('block1').innerHTML=\"" + this.generarFactura(pPedido) + "\"");
-						RequestContext.getCurrentInstance().execute(" printPage('block1');");
+//						RequestContext.getCurrentInstance().execute(" document.getElementById('block1').innerHTML=\"" + this.generarFactura(pPedido) + "\"");
+//						RequestContext.getCurrentInstance().execute(" printPage('block1');");
+						PrimeFaces.current().executeScript(" document.getElementById('block1').innerHTML=\"" + this.generarFactura(pPedido) + "\"");
+						PrimeFaces.current().executeScript(" printPage('block1');");
+						
 					}
 				}
 			}

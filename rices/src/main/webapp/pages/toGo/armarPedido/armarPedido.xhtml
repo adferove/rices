@@ -147,9 +147,12 @@
 															styleClass="ui-panelgrid-blank">
 															<p:commandLink id="idSelectProduct" update=":form"
 																actionListener="#{armarPedido.seleccionarComplemento(producto)}">
-																<o:graphicImage rendered="#{producto.image!=null}"
-																	style="border-radius:10px;" value="#{producto.image}"
-																	dataURI="true" height="125px" width="140px" />
+
+																<img height="125px" width="140px"
+																	style="border-radius: 10px;"
+																	src="http://ricestogo.com/images/#{producto.imageName}.#{producto.mime}"
+																	alt="" />
+
 															</p:commandLink>
 															<p:blockUI block=":form" trigger="idSelectProduct" />
 															<p:outputPanel>
@@ -181,11 +184,10 @@
 									<p:outputPanel id="productDetail"
 										rendered="#{!armarPedido.showRiceMenu}">
 										<div align="center">
-											<o:graphicImage
-												rendered="#{armarPedido.mainProductSelected.image!=null}"
-												value="#{armarPedido.mainProductSelected.image}"
-												dataURI="true" height="250px" width="270px"
-												style="border-radius:10px;" />
+											<img height="250px" width="270px"
+												style="border-radius: 10px;"
+												src="http://ricestogo.com/images/#{armarPedido.mainProductSelected.imageName}.#{armarPedido.mainProductSelected.mime}"
+												alt="" />
 										</div>
 										<div align="left">
 											<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">

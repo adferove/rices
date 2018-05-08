@@ -11,16 +11,14 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.primefaces.PrimeFaces;
 
 import co.com.rices.ConsultarFuncionesAPI;
 import co.com.rices.IConstants;
 import co.com.rices.DAO.IInsertRices;
 import co.com.rices.DAO.IQueryRices;
-import co.com.rices.DAO.IUpdateRices;
 import co.com.rices.beans.DetallePedido;
 import co.com.rices.beans.Pedido;
 import co.com.rices.objects.City;
@@ -59,6 +57,209 @@ public class ArmarPedidoAdmin extends ConsultarFuncionesAPI{
 	private List<DetallePedido> listadoDetallePedido;
 	
 	private List<City> listCities;
+	
+	private String generarFactura(Pedido pPedido){
+		StringBuilder builder = new StringBuilder();
+		builder.append(" <div style='font-family: Courier new; font-size: 10px;'> ");
+		builder.append(" 	<div class='logo' style='margin-left: 40px;'>                       ");
+		builder.append("        <img src='http://ricestogo.com/rices/images/logo.png' alt='' /> ");
+		builder.append(" 	</div>                                   ");
+		builder.append(" 	<div id='logo'> ");
+		builder.append(" 		<h3> ");
+		builder.append(" 			<span style='font-size: 12px;'> RICES TO GO</span> ");
+		builder.append(" 		</h3> ");
+		builder.append(" 	</div> ");
+		builder.append(" 	<div id='company'> ");
+		builder.append(" 		<div> ");
+		builder.append(" 			<span style='font-size: 12px;'>Cabecera,</span> ");
+		builder.append(" 			<br />  ");
+		builder.append(" 			<span style='font-size: 12px;'>B/ga, Santander</span> ");
+		builder.append(" 		</div> ");
+		builder.append(" 		<div> ");
+		builder.append(" 			<span style='font-size: 12px;'>3016912772</span> ");
+		builder.append(" 		</div> ");
+		builder.append(" 		<div> ");
+		builder.append(" 			<span style='font-size: 12px;'>info@ricestogo.com</span> ");
+		builder.append(" 		</div> ");
+		builder.append(" 	</div> ");
+		builder.append(" 	<h3> ");
+		builder.append(" 		<span style='font-size: 12px;'>ORDEN # ");
+		builder.append(pPedido.getId());
+		builder.append("        </span> ");
+		builder.append(" 	</h3> ");
+		builder.append(" 	<table id='idCliente' role='grid'> ");
+		builder.append(" 		<tbody> ");
+		builder.append(" 			<tr role='row'> ");
+		builder.append(" 				<td role='gridcell'><label id='form:j_idt42'><span style='font-size: 12px;'>CLIENTE:</span></label></td> ");
+		builder.append(" 			</tr> ");
+		builder.append(" 			<tr role='row'> ");
+		builder.append(" 				<td role='gridcell'> ");
+		builder.append(" 					<div align='left'> ");
+		builder.append(" 						<span style='font-size: 12px; font-weight: bold;'>");
+		builder.append(pPedido.getNombreCliente());
+		builder.append("                        </span> ");
+		builder.append(" 					</div> ");
+		builder.append(" 				</td> ");
+		builder.append(" 			</tr> ");
+		builder.append(" 			<tr role='row'> ");
+		builder.append(" 				<td role='gridcell'><label id='form:j_idt42'><span style='font-size: 12px;'>DIRECCION:</span></label></td> ");
+		builder.append(" 			</tr> ");
+		builder.append(" 			<tr role='row'> ");
+		builder.append(" 				<td role='gridcell'><div align='left'> ");
+		builder.append(" 						<span style='font-size: 12px; font-weight: bold;'>");
+		builder.append(pPedido.getDireccionCliente()+", "+pPedido.getCityName());
+		builder.append("                        </span> ");
+		builder.append(" 					</div></td> ");
+		builder.append(" 			</tr> ");
+		builder.append(" 			<tr role='row'> ");
+		builder.append(" 				<td role='gridcell'><label id='form:j_idt42'><span style='font-size: 12px;'>FECHA:</span></label></td> ");
+		builder.append(" 			</tr> ");
+		builder.append(" 			<tr role='row'> ");
+		builder.append(" 				<td role='gridcell'><div align='left'> ");
+		builder.append(" 						<span style='font-size: 12px; font-weight: bold'>");
+		builder.append(this.fechaCorta(pPedido.getFecha())+" "+this.horaCorta(pPedido.getHora()));
+		builder.append("                        </span>");
+		builder.append(" 					</div></td> ");
+		builder.append(" 			</tr> ");
+		builder.append(" 			<tr role='row'> ");
+		builder.append(" 				<td role='gridcell'><label id='form:j_idt42'><span style='font-size: 12px;'>Tel/celular:</span></label></td> ");
+		builder.append(" 			</tr> ");
+		builder.append(" 			<tr role='row'> ");
+		builder.append(" 				<td role='gridcell'><div align='left'> ");
+		builder.append(" 						<span style='font-size: 12px; font-weight: bold'>");
+		builder.append(pPedido.getCelularCliente());
+		builder.append("                        </span> ");		
+		builder.append(" 					</div></td> ");
+		builder.append(" 			</tr> ");
+		builder.append(" 		</tbody> ");
+		builder.append(" 	</table> ");
+		builder.append(" <div style='height: 10px;'></div> ");
+		builder.append(" <table> ");
+		builder.append(" 	<thead> ");
+		builder.append(" 		<tr> ");
+		builder.append(" 			<th><div align='left'> ");
+		builder.append(" 					<span style='font-size: 12px;'>ITEM</span> ");
+		builder.append(" 				</div></th> ");
+		builder.append(" 			<th><div align='center'> ");
+		builder.append(" 					<span style='font-size: 12px;'>CANTIDAD</span> ");
+		builder.append(" 				</div></th> ");
+		builder.append(" 			<th><div align='right'> ");
+		builder.append(" 					<span style='font-size: 12px;'>VLR/UND</span> ");
+		builder.append(" 				</div></th> ");
+		builder.append(" 		</tr> ");
+		builder.append(" 	</thead> ");
+		builder.append(" 	<tbody> ");
+		for(DetallePedido d: pPedido.getListadoDetalle()){
+			builder.append(" 		<tr> ");
+			builder.append(" 			<td><div align='left'>");
+			builder.append(" 					<span style='font-size: 11px; font-weight: bold'>");
+			builder.append(d.getMainProduct().getName());
+			builder.append("                    </span> ");
+			builder.append(" 				</div></td> ");
+			builder.append(" 			<td><div align='center'> ");
+			builder.append(" 					<span style='font-size: 11px;'>");
+			builder.append(d.getCantidad());
+			builder.append("                    </span> ");
+			builder.append(" 				</div></td> ");
+			builder.append(" 			<td><div align='right'> ");
+			builder.append(" 					<span style='font-size: 11px;'>$");
+			builder.append(d.getMainProduct().getPrice());
+			builder.append("                    </span> ");
+			builder.append(" 				</div></td> ");
+			builder.append(" 		</tr> ");
+			for(ProductStep ps: d.getMainProduct().getListProductStep()){
+				if(ps.getListStepDetail()!=null && ps.getListStepDetail().size()>0){
+					builder.append(" 		<tr> ");
+					builder.append(" 			<td><div align='left'>");
+					builder.append(" 					<span style='font-size: 11px;'>");
+					builder.append(ps.getDescription());
+					builder.append("                    </span> ");
+					builder.append(" 				</div></td> ");
+					builder.append(" 		</tr> ");
+					for(StepDetail sd: ps.getListStepDetail()){
+						builder.append(" 		<tr> ");
+						builder.append(" 			<td><div align='left'>");
+						builder.append(" 					<span style='font-size: 11px;'>");
+						builder.append(sd.getTransientProduct().getName());
+						builder.append("                    </span> ");
+						builder.append(" 				</div></td> ");
+						builder.append(" 			<td><div align='center'> ");
+						builder.append(" 					<span style='font-size: 11px;'>");
+						builder.append(d.getCantidad());
+						builder.append("                    </span> ");
+						builder.append(" 				</div></td> ");
+						builder.append(" 			<td><div align='right'> ");
+						builder.append(" 					<span style='font-size: 11px;'>$");
+						builder.append(sd.getPrice());
+						builder.append("                    </span> ");
+						builder.append(" 				</div></td> ");
+						builder.append(" 		</tr> ");
+					}
+				}
+			}
+			builder.append(" 		<tr> ");
+			builder.append(" 			<td><div align='left'>");
+			builder.append(" 					<span style='font-size: 12px; font-weight: bold'>");
+			builder.append("Subtotal");
+			builder.append("                    </span> ");
+			builder.append(" 				</div></td> ");
+			builder.append(" 			<td><div align='center'> ");
+			builder.append(" 					<span style='font-size: 12px;'>");
+			builder.append("");
+			builder.append("                    </span> ");
+			builder.append(" 				</div></td> ");
+			builder.append(" 			<td><div align='right'> ");
+			builder.append(" 					<span style='font-size: 12px;'>$");
+			builder.append(d.getPrecio());
+			builder.append("                    </span> ");
+			builder.append(" 				</div></td> ");
+			builder.append(" 		</tr> ");
+		}		
+		builder.append(" 	</tbody> ");
+		builder.append(" </table> ");
+		builder.append(" <div style='height: 20px;'></div> ");
+		builder.append(" <table id='idTotales' role='grid'> ");
+		builder.append(" 	<tbody> ");
+		builder.append(" 		<tr role='row'> ");
+		builder.append(" 			<td role='gridcell'><label id='form:j_idt42'><span style='font-size: 12px;'>SUBTOTAL:</span></label></td> ");
+		builder.append(" 			<td role='gridcell'> ");
+		builder.append(" 				<div align='right'> ");
+		builder.append(" 					<span style='font-size: 12px; font-weight: bold;'>$");
+		builder.append(pPedido.getSubtotal());
+		builder.append("                    </span> ");
+		builder.append(" 				</div> ");
+		builder.append(" 			</td> ");
+		builder.append(" 		</tr> ");
+		builder.append(" 		<tr role='row'> ");
+		builder.append(" 			<td role='gridcell'><label id='form:j_idt42'><span style='font-size: 12px;'>DESCUENTO:</span></label></td> ");
+		builder.append(" 			<td role='gridcell'><div align='right'> ");
+		builder.append(" 					<span style='font-size: 12px; font-weight: bold;'>$");
+		if(pPedido.getTotalDescuento()!=null){
+			builder.append(pPedido.getTotalDescuento());
+			builder.append("                    </span> ");
+		}else{
+			builder.append("                    </span> ");
+		}
+		builder.append(" 				</div></td> ");
+		builder.append(" 		</tr> ");
+		builder.append(" 		<tr role='row'> ");
+		builder.append(" 			<td role='gridcell'><label id='form:j_idt42'><span style='font-size: 12px;'>GRAN TOTAL:</span></label></td> ");
+		builder.append(" 			<td role='gridcell'><div align='right'> ");
+		builder.append(" 					<span style='font-size: 12px; font-weight: bold'>$");
+		builder.append(pPedido.getTotal());
+		builder.append("                     </span> ");
+		builder.append(" 				</div></td> ");
+		builder.append(" 		</tr> ");
+		builder.append(" 	</tbody> ");
+		builder.append(" </table> ");
+		builder.append(" <div style='height: 10px;'></div> ");
+		builder.append(" <footer> ");
+		builder.append(" 	<span style='font-size: 11px;'>Desarrollado por black vulture IT solutions. </span> ");
+		builder.append(" </footer> ");
+		builder.append(" </div> ");
+
+		return builder.toString();
+	}
 		
 	@PostConstruct
 	public void init(){
@@ -72,7 +273,7 @@ public class ArmarPedidoAdmin extends ConsultarFuncionesAPI{
 			this.pedidoPersiste.setSubtotal(new BigDecimal(0));
 			this.pedidoPersiste.setIva(new BigDecimal(0));
 			this.pedidoPersiste.setTotal(new BigDecimal(0));
-			this.pedidoPersiste.setEstado("R");
+			this.pedidoPersiste.setEstado("D");
 			this.pedidoPersiste.setDescuento(new BigDecimal(0));
 			this.pedidoPersiste.setTotalDescuento(new BigDecimal(0));
 			//PRODUCTOS OFRECIDOS POR RICES
@@ -309,6 +510,9 @@ public class ArmarPedidoAdmin extends ConsultarFuncionesAPI{
 				//REGISTRA EL PEDIDO
 				Integer idPedido =IInsertRices.savePurchaseOrder(this.pedidoPersiste);
 				if(idPedido!=null){
+					this.pedidoPersiste.setId(idPedido);
+					this.pedidoPersiste.setFecha(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+					this.pedidoPersiste.setHora(new java.sql.Time(Calendar.getInstance().getTime().getTime()));
 					//REGISTRA DETALLE
 					for(DetallePedido dp: this.listadoDetallePedido){
 						dp.setIdpedido(idPedido);
@@ -326,23 +530,20 @@ public class ArmarPedidoAdmin extends ConsultarFuncionesAPI{
 							}
 						}
 					}
-					//SI UTILIZÓ CUPON LO INHABILITA
-					if(this.pedidoPersiste.getTransientCouponCode()!=null){
-						this.pedidoPersiste.getTransientCouponCode().setUsed("S");
-						IUpdateRices.updateCouponState(this.pedidoPersiste.getTransientCouponCode());
-					}
+
 				}else{
 					exito = false;
 					this.mostrarMensajeGlobal("noRegistraPedido", "error");
 				}
-
 				if(exito){
 					this.pedidoPersiste.setCityName(this.mapCity.get(this.pedidoPersiste.getCodigoCiudad()));
-					FacesContext context = FacesContext.getCurrentInstance();
-					HttpSession sesion = (HttpSession) context.getExternalContext().getSession(true);
-					sesion.removeAttribute("RiceProductInCart");
 					this.showSeleccionarProducto = false;
 					this.showPedidoRegistrado    = true;
+					this.pedidoPersiste.setListadoDetalle(this.listadoDetallePedido);
+//					RequestContext.getCurrentInstance().execute(" document.getElementById('block1').innerHTML=\"" + this.generarFactura(this.pedidoPersiste) + "\"");
+//					RequestContext.getCurrentInstance().execute(" printPage('block1');");
+					PrimeFaces.current().executeScript(" document.getElementById('block1').innerHTML=\"" + this.generarFactura(this.pedidoPersiste) + "\"");
+					PrimeFaces.current().executeScript(" printPage('block1');");
 				}else{
 					this.mostrarMensajeGlobal("noRegistraDetalle", "advertencia");
 				}

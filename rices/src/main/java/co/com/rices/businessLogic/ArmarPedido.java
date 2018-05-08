@@ -77,6 +77,7 @@ public class ArmarPedido extends ConsultarFuncionesAPI{
 			this.pedidoPersiste.setIva(new BigDecimal(0));
 			this.pedidoPersiste.setTotal(new BigDecimal(0));
 			this.pedidoPersiste.setEstado("R");
+			this.pedidoPersiste.setTotalDescuento(new BigDecimal(0));
 			//PRODUCTOS OFRECIDOS POR RICES
 			if(sesion.getAttribute("RicesListProducts")==null){
 				RiceMenu pRiceMenu = new RiceMenu();
@@ -344,6 +345,9 @@ public class ArmarPedido extends ConsultarFuncionesAPI{
 
 			if(!error){
 				boolean exito = true;
+				if(this.pedidoPersiste.getDescuento()!=null && this.pedidoPersiste.getDescuento().compareTo(new BigDecimal(0))>0){
+					this.pedidoPersiste.setTotalDescuento(this.pedidoPersiste.getSubtotal().subtract(this.pedidoPersiste.getTotal()));
+				}
 				//REGISTRA EL PEDIDO
 				Integer idPedido =IInsertRices.savePurchaseOrder(this.pedidoPersiste);
 				if(idPedido!=null){
