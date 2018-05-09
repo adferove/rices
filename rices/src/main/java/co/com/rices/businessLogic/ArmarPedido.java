@@ -382,7 +382,7 @@ public class ArmarPedido extends ConsultarFuncionesAPI{
 				if(exito){
 					this.pedidoPersiste.setCityName(this.mapCity.get(this.pedidoPersiste.getCodigoCiudad()));
 					String[] val = {this.pedidoPersiste.getNombreCliente(), this.pedidoPersiste.getCelularCliente(), this.pedidoPersiste.getDireccionCliente(), this.pedidoPersiste.getCityName()};
-					String[] sDestinatario = {"pedidos@ricestogo.com"};
+					String[] sDestinatario = {"ricestogo@gmail.com","DIEGOVARGASLOPEZ@hotmail.com","faugust@hotmail.com"};
 					EmailSender.sendEmail(this.getMensaje("asuntoPedido"), this.getMensajeParametros("cuerpoPedido", val), this.getMensaje("footer"), sDestinatario);
 					FacesContext context = FacesContext.getCurrentInstance();
 					HttpSession sesion = (HttpSession) context.getExternalContext().getSession(true);
